@@ -1,0 +1,15 @@
+@startuml product navigation and search
+left to right direction
+
+actor Cliente
+
+rectangle "Product Navigation and Search" {
+  usecase "UC-04: Ver catálogo de productos" as UC04
+  usecase "UC-05: Filtrar productos" as UC05
+  usecase "UC-06: Ver detalles de producto" as UC06
+}
+
+Cliente --> UC04
+Cliente --> UC05
+Cliente --> UC06
+@enduml

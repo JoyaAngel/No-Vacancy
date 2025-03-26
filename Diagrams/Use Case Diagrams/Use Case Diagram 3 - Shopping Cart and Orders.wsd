@@ -1,0 +1,19 @@
+@startuml shopping cart and orders
+
+left to right direction
+actor Cliente
+rectangle "Shopping Cart and Orders" {
+    usecase "UC-07: Agregar producto al carrito" as UC07
+    usecase "UC-08: Modificar cantidad en carrito" as UC08
+    usecase "UC-09: Eliminar producto del carrito" as UC09
+    usecase "UC-10: Registrar pedido" as UC10
+    usecase "UC-11: Recibir confirmación de compra" as UC11
+}
+
+Cliente --> UC07
+Cliente --> UC08
+Cliente --> UC09
+Cliente --> UC10
+Cliente --> UC11
+
+@enduml

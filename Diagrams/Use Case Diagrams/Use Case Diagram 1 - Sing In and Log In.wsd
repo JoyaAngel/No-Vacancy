@@ -1,0 +1,17 @@
+@startuml sing in and log in
+left to right direction
+
+actor Cliente
+actor Administrador
+
+rectangle "Sing In and Log In" {
+  usecase "UC-01: Registro de usuario" as UC01
+  usecase "UC-02: Inicio de sesión" as UC02
+  usecase "UC-03: Recuperar contraseña" as UC03
+}
+
+Cliente --> UC01
+Cliente --> UC02
+Cliente --> UC03
+Administrador --> UC02
+@enduml

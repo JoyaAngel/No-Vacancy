@@ -1,0 +1,19 @@
+@startuml order and review management
+
+left to right direction
+actor Cliente
+actor Administrador
+
+rectangle "Order and Review Management" {
+    usecase "UC-17: Ver historial de pedidos" as UC17
+    usecase "UC-18: Dejar reseña de producto" as UC18
+    usecase "UC-19: Calificar producto" as UC19
+}
+
+Cliente --> UC17
+Cliente --> UC18
+Cliente --> UC19
+
+Administrador --> UC17
+
+@enduml
