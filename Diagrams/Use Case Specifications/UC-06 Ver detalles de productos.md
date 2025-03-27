@@ -1,6 +1,6 @@
 | Sistema de Venta de Ropa |  |
 | :--------- | --------- |
-| Use Case Specification: UC-01 Registro de Usuario | Date: 2025-03-25 |
+| Use Case Specification: UC-06 Ver detalles de productos | Date: 2025-03-25 |
 
 # Sistema de Venta de Ropa
 # Use Case: UC-06 Ver detalles de productos
@@ -19,4 +19,15 @@
     1. El sistema muestra una lista de productos disponibles.
     2. El usuario selecciona un producto de la lista.
     3. El sistema muestra los detalles del producto seleccionado (nombre, descripción, precio, imágenes, disponibilidad y talla).
-    4. El usuario puede agregar el producto al carrito de compras o volver a la lista de productos.
+    4. El usuario puede agregar el producto al carrito (continua en el UC-07) de compras o volver a la lista de productos.
+ 
+## 5. Flujo alternativo
+
+## 6. Postcondiciones
+    6.1 El usuario puede ver los detalles del producto seleccionado.
+    6.2 El sistema actualiza la información del producto en la base de datos si es necesario.
+
+## 7. Excepciones
+    E1. Si el usuario decide cancelar la operación:
+        1. El sistema regresa a la lista de productos disponibles.
+        2. El flujo básico de eventos se detiene.

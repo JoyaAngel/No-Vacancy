@@ -1,9 +1,9 @@
 | Sistema de Venta de Ropa |  |
 | :--------- | --------- |
-| Use Case Specification: UC-01 Registro de Usuario | Date: 2025-03-25 |
+| Use Case Specification: UC-01 Registro de usuario | Date: 2025-03-25 |
 
 # Sistema de Venta de Ropa
-# Use Case: UC-01 Registro de Usuario
+# Use Case: UC-01 Registro de usuario
 
 ## 1. Descripción
     El sistema permite a los usuarios registrarse para crear una cuenta.

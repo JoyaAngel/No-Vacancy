@@ -1,6 +1,6 @@
 | Sistema de Venta de Ropa |  |
 | :--------- | --------- |
-| Use Case Specification: UC-07 | Date: 2025-03-25 |
+| Use Case Specification: UC-07 Agregar producto al carrito | Date: 2025-03-25 |
 
 # Sistema de Venta de Ropa
 # Use Case: UC-07 Agregar producto al carrito
@@ -22,4 +22,21 @@
     4. El usuario selecciona la cantidad deseada del producto.
     5. El usuario hace clic en el botón "Agregar al carrito".
     6. El sistema agrega el producto al carrito de compras y muestra un mensaje de confirmación.
-    7. El usuario puede continuar comprando o proceder al pago.
+    7. El usuario puede continuar agregando productos al carrito o proceder completar la compra.
+
+## 5. Flujo alternativo
+    5.1 Si el usuario intenta agregar un producto que no está disponible en la cantidad seleccionada:
+        1. El sistema muestra un mensaje de error y solicita al usuario que seleccione una cantidad diferente.
+        2. El usuario selecciona una cantidad diferente.
+        3. El Flujo básico de eventos continúa desde el paso 5.
+    5.2 Si el usuario decide cancelar la operación:
+        1. El sistema muestra un mensaje de confirmación de cancelación.
+        2. El usuario confirma la cancelación.
+        3. El sistema regresa a la lista de productos disponibles.
+
+## 6. Postcondiciones
+    6.1 El producto seleccionado se agrega al carrito de compras del usuario.
+    6.2 El sistema actualiza la cantidad total de productos en el carrito.
+    6.3 El sistema envia un correo electrónico de confirmación al usuario con los detalles del producto agregado al carrito.
+
+## 7. Excepciones
