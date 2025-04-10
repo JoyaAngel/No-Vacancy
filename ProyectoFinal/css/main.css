@@ -1,0 +1,39 @@
+.navbar-custom {
+    background-color: white;
+    box-shadow: none;
+    border-bottom: 1px solid #ddd;
+}
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.2rem;
+    text-align: center;
+    flex-grow: 1;
+}
+
+.navbar-left {
+    flex-shrink: 0; 
+}
+
+.navbar-right {
+    display: flex;
+    gap: 15px; 
+}
+
+.navbar-right i, .navbar-left i {
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.carousel-item {
+    height: 400px; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.carousel-item img {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+}
