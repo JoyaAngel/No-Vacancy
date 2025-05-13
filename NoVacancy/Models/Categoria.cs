@@ -2,14 +2,11 @@
 
 namespace NoVacancy.Models
 {
-    public class Talla
+    public class Categoria
     {
-
         [Key]
-        public int idTalla { get; set; }
-
+        public int idCategoria { get; set; }
         [Required]
-        public string? nombre { get; set; }
-
+        public string nombre { get; set; }
     }
 }

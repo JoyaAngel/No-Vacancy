@@ -5,10 +5,11 @@ namespace NoVacancy.Models
     public class Color
     {
 
+        [Key]
         public int idColor { get; set; }
 
         [Required]
-        public string? nombre { get; set; }
+        public string nombre { get; set; }
 
 
     }

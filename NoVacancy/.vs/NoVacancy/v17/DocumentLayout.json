@@ -3,20 +3,20 @@
   "WorkspaceRootPath": "C:\\laragon\\www\\No-Vacancy\\NoVacancy\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{15EC80C5-3A53-470C-B25C-E972A06479D1}|NoVacancy.csproj|c:\\laragon\\www\\no-vacancy\\novacancy\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{15EC80C5-3A53-470C-B25C-E972A06479D1}|NoVacancy.csproj|solutionrelative:views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{15EC80C5-3A53-470C-B25C-E972A06479D1}|NoVacancy.csproj|c:\\laragon\\www\\no-vacancy\\novacancy\\data\\novacancydbcontex.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{15EC80C5-3A53-470C-B25C-E972A06479D1}|NoVacancy.csproj|solutionrelative:data\\novacancydbcontex.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{15EC80C5-3A53-470C-B25C-E972A06479D1}|NoVacancy.csproj|c:\\laragon\\www\\no-vacancy\\novacancy\\views\\home\\privacy.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{15EC80C5-3A53-470C-B25C-E972A06479D1}|NoVacancy.csproj|solutionrelative:views\\home\\privacy.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{15EC80C5-3A53-470C-B25C-E972A06479D1}|NoVacancy.csproj|c:\\laragon\\www\\no-vacancy\\novacancy\\models\\detalle.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{15EC80C5-3A53-470C-B25C-E972A06479D1}|NoVacancy.csproj|solutionrelative:models\\detalle.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{15EC80C5-3A53-470C-B25C-E972A06479D1}|NoVacancy.csproj|c:\\laragon\\www\\no-vacancy\\novacancy\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
-      "RelativeMoniker": "D:0:0:{15EC80C5-3A53-470C-B25C-E972A06479D1}|NoVacancy.csproj|solutionrelative:wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+      "AbsoluteMoniker": "D:0:0:{15EC80C5-3A53-470C-B25C-E972A06479D1}|NoVacancy.csproj|c:\\laragon\\www\\no-vacancy\\novacancy\\models\\carritocabecera.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{15EC80C5-3A53-470C-B25C-E972A06479D1}|NoVacancy.csproj|solutionrelative:models\\carritocabecera.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{15EC80C5-3A53-470C-B25C-E972A06479D1}|NoVacancy.csproj|c:\\laragon\\www\\no-vacancy\\novacancy\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{15EC80C5-3A53-470C-B25C-E972A06479D1}|NoVacancy.csproj|solutionrelative:views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{15EC80C5-3A53-470C-B25C-E972A06479D1}|NoVacancy.csproj|c:\\laragon\\www\\no-vacancy\\novacancy\\models\\carritolinea.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{15EC80C5-3A53-470C-B25C-E972A06479D1}|NoVacancy.csproj|solutionrelative:models\\carritolinea.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,56 +26,59 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "Privacy.cshtml",
-              "DocumentMoniker": "C:\\laragon\\www\\No-Vacancy\\NoVacancy\\Views\\Home\\Privacy.cshtml",
-              "RelativeDocumentMoniker": "Views\\Home\\Privacy.cshtml",
-              "ToolTip": "C:\\laragon\\www\\No-Vacancy\\NoVacancy\\Views\\Home\\Privacy.cshtml",
-              "RelativeToolTip": "Views\\Home\\Privacy.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-05-05T01:09:23.522Z"
+              "Title": "Detalle.cs",
+              "DocumentMoniker": "C:\\laragon\\www\\No-Vacancy\\NoVacancy\\Models\\Detalle.cs",
+              "RelativeDocumentMoniker": "Models\\Detalle.cs",
+              "ToolTip": "C:\\laragon\\www\\No-Vacancy\\NoVacancy\\Models\\Detalle.cs",
+              "RelativeToolTip": "Models\\Detalle.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAALAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-13T02:29:14.443Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "C:\\laragon\\www\\No-Vacancy\\NoVacancy\\Views\\Home\\Index.cshtml",
-              "RelativeDocumentMoniker": "Views\\Home\\Index.cshtml",
-              "ToolTip": "C:\\laragon\\www\\No-Vacancy\\NoVacancy\\Views\\Home\\Index.cshtml",
-              "RelativeToolTip": "Views\\Home\\Index.cshtml",
-              "ViewState": "AgIAAB4AAAAAAAAAAAAAADMAAAAnAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-05-05T01:07:36.419Z",
+              "DocumentIndex": 3,
+              "Title": "CarritoLinea.cs",
+              "DocumentMoniker": "C:\\laragon\\www\\No-Vacancy\\NoVacancy\\Models\\CarritoLinea.cs",
+              "RelativeDocumentMoniker": "Models\\CarritoLinea.cs",
+              "ToolTip": "C:\\laragon\\www\\No-Vacancy\\NoVacancy\\Models\\CarritoLinea.cs",
+              "RelativeToolTip": "Models\\CarritoLinea.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-13T02:26:11.445Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "site.css",
-              "DocumentMoniker": "C:\\laragon\\www\\No-Vacancy\\NoVacancy\\wwwroot\\css\\site.css",
-              "RelativeDocumentMoniker": "wwwroot\\css\\site.css",
-              "ToolTip": "C:\\laragon\\www\\No-Vacancy\\NoVacancy\\wwwroot\\css\\site.css",
-              "RelativeToolTip": "wwwroot\\css\\site.css",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAG0AAAAeAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
-              "WhenOpened": "2025-05-05T00:46:25.383Z"
+              "Title": "CarritoCabecera.cs",
+              "DocumentMoniker": "C:\\laragon\\www\\No-Vacancy\\NoVacancy\\Models\\CarritoCabecera.cs",
+              "RelativeDocumentMoniker": "Models\\CarritoCabecera.cs",
+              "ToolTip": "C:\\laragon\\www\\No-Vacancy\\NoVacancy\\Models\\CarritoCabecera.cs",
+              "RelativeToolTip": "Models\\CarritoCabecera.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-13T01:58:51.27Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "_Layout.cshtml",
-              "DocumentMoniker": "C:\\laragon\\www\\No-Vacancy\\NoVacancy\\Views\\Shared\\_Layout.cshtml",
-              "RelativeDocumentMoniker": "Views\\Shared\\_Layout.cshtml",
-              "ToolTip": "C:\\laragon\\www\\No-Vacancy\\NoVacancy\\Views\\Shared\\_Layout.cshtml",
-              "RelativeToolTip": "Views\\Shared\\_Layout.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAkAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-05-05T00:39:43.213Z"
+              "DocumentIndex": 0,
+              "Title": "NoVacancyDbContex.cs",
+              "DocumentMoniker": "C:\\laragon\\www\\No-Vacancy\\NoVacancy\\Data\\NoVacancyDbContex.cs",
+              "RelativeDocumentMoniker": "Data\\NoVacancyDbContex.cs",
+              "ToolTip": "C:\\laragon\\www\\No-Vacancy\\NoVacancy\\Data\\NoVacancyDbContex.cs",
+              "RelativeToolTip": "Data\\NoVacancyDbContex.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAA0wBYAAAArAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-13T01:45:20.424Z",
+              "EditorCaption": ""
             }
           ]
         }

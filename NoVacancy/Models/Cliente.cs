@@ -8,10 +8,10 @@ namespace NoVacancy.Models
         public int idCliente { get; set; }
 
         [Required]
-        public string? nombre { get; set; }
+        public string nombre { get; set; }
 
         [Required]
-        public string? correo { get; set; }
+        public string correo { get; set; }
 
         [Required]
         public string constrasenia { get; set; }

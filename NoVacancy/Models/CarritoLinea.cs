@@ -3,18 +3,21 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace NoVacancy.Models
 {
-    public class Imagen
+    public class CarritoLinea
     {
 
         [Key]
-        public int idImagen { get; set; }
-        [Required]
-        public string? nombre { get; set; }
-        
+        [ForeignKey("CarritoCabecera")]
+        public int idCarrito { get; init; }
+        public CarritoCabecera Carrito { get; set; }
+
+        [Key]
         [ForeignKey("Producto")]
-        [Required]
         public int idProducto { get; set; }
         public Producto Producto { get; set; }
+
+        [Required]
+        public int cantidad { get; set; }
 
     }
 }

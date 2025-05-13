@@ -1,6 +1,12 @@
+using Microsoft.EntityFrameworkCore;
+using NoVacancy.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddDbContext<NoVacancyDbContex>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("NoVacancy")));
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
