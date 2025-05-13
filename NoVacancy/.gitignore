@@ -1,0 +1,54 @@
+# Archivos de configuración de usuario de Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.vsidx
+
+# Archivos de compilación
+bin/
+obj/
+[Bb]uild/
+[Bb]uilds/
+*.dll
+*.exe
+*.app
+*.log
+*.cache
+*.pdb
+*.mdb
+
+# Archivos de publicación
+*.publishsettings
+*.pubxml
+*.pubxml.user
+
+# Archivos de paquetes NuGet
+*.nupkg
+*.snupkg
+.nuget/
+packages/
+project.lock.json
+project.fragment.lock.json
+
+# Archivos de configuración de entorno
+.env
+.env.*
+
+# Archivos de configuración de IIS
+*.vspscc
+*.vssscc
+*.csproj.user
+*.vbproj.user
+
+# Archivos de sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Archivos de configuración de npm o Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
