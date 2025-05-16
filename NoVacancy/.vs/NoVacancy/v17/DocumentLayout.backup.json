@@ -3,12 +3,8 @@
   "WorkspaceRootPath": "C:\\laragon\\www\\No-Vacancy\\NoVacancy\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{15EC80C5-3A53-470C-B25C-E972A06479D1}|NoVacancy.csproj|c:\\laragon\\www\\no-vacancy\\novacancy\\data\\novacancydbcontex.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{15EC80C5-3A53-470C-B25C-E972A06479D1}|NoVacancy.csproj|solutionrelative:data\\novacancydbcontex.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{15EC80C5-3A53-470C-B25C-E972A06479D1}|NoVacancy.csproj|c:\\laragon\\www\\no-vacancy\\novacancy\\models\\carrito.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{15EC80C5-3A53-470C-B25C-E972A06479D1}|NoVacancy.csproj|solutionrelative:models\\carrito.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{15EC80C5-3A53-470C-B25C-E972A06479D1}|NoVacancy.csproj|c:\\laragon\\www\\no-vacancy\\novacancy\\models\\producto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{15EC80C5-3A53-470C-B25C-E972A06479D1}|NoVacancy.csproj|solutionrelative:models\\producto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,32 +14,19 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Carrito.cs",
-              "DocumentMoniker": "C:\\laragon\\www\\No-Vacancy\\NoVacancy\\Models\\Carrito.cs",
-              "RelativeDocumentMoniker": "Models\\Carrito.cs",
-              "ToolTip": "C:\\laragon\\www\\No-Vacancy\\NoVacancy\\Models\\Carrito.cs",
-              "RelativeToolTip": "Models\\Carrito.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAIAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-13T01:58:51.27Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "NoVacancyDbContex.cs",
-              "DocumentMoniker": "C:\\laragon\\www\\No-Vacancy\\NoVacancy\\Data\\NoVacancyDbContex.cs",
-              "RelativeDocumentMoniker": "Data\\NoVacancyDbContex.cs",
-              "ToolTip": "C:\\laragon\\www\\No-Vacancy\\NoVacancy\\Data\\NoVacancyDbContex.cs",
-              "RelativeToolTip": "Data\\NoVacancyDbContex.cs",
-              "ViewState": "AgIAABAAAAAAAAAAAAAYwBgAAAAsAAAAAAAAAA==",
+              "Title": "Producto.cs",
+              "DocumentMoniker": "C:\\laragon\\www\\No-Vacancy\\NoVacancy\\Models\\Producto.cs",
+              "RelativeDocumentMoniker": "Models\\Producto.cs",
+              "ToolTip": "C:\\laragon\\www\\No-Vacancy\\NoVacancy\\Models\\Producto.cs",
+              "RelativeToolTip": "Models\\Producto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAdAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-13T01:45:20.424Z",
+              "WhenOpened": "2025-05-16T03:28:56.776Z",
               "EditorCaption": ""
             }
           ]

@@ -7,9 +7,10 @@ namespace NoVacancy.Models
 
         [Key]
         public int idColor { get; set; }
-
         [Required]
-        public string nombre { get; set; }
+        public string? nombre { get; set; }
+        [Required]
+        public string? codigo { get; set; }
 
 
     }

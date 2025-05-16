@@ -14,7 +14,7 @@ namespace NoVacancy.Models
         [ForeignKey("Carrito")]
         [Required]
         public int idCarrito { get; set; }
-        public CarritoCabecera Carrito { get; set; }
+        public CarritoCabecera? Carrito { get; set; }
 
     }
 }

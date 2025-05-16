@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NoVacancy.Data;
 
@@ -10,9 +11,11 @@ using NoVacancy.Data;
 namespace NoVacancy.Migrations
 {
     [DbContext(typeof(NoVacancyDbContex))]
-    partial class NoVacancyDbContexModelSnapshot : ModelSnapshot
+    [Migration("20250516025848_TallaSeeder")]
+    partial class TallaSeeder
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -72,48 +75,6 @@ namespace NoVacancy.Migrations
                     b.HasKey("idCategoria");
 
                     b.ToTable("Categorias");
-
-                    b.HasData(
-                        new
-                        {
-                            idCategoria = 1,
-                            nombre = "Camisetas"
-                        },
-                        new
-                        {
-                            idCategoria = 2,
-                            nombre = "Pantalones"
-                        },
-                        new
-                        {
-                            idCategoria = 3,
-                            nombre = "Vestidos"
-                        },
-                        new
-                        {
-                            idCategoria = 4,
-                            nombre = "Faldas"
-                        },
-                        new
-                        {
-                            idCategoria = 5,
-                            nombre = "Chaquetas"
-                        },
-                        new
-                        {
-                            idCategoria = 6,
-                            nombre = "Ropa interior"
-                        },
-                        new
-                        {
-                            idCategoria = 7,
-                            nombre = "Zapatos"
-                        },
-                        new
-                        {
-                            idCategoria = 8,
-                            nombre = "Accesorios"
-                        });
                 });
 
             modelBuilder.Entity("NoVacancy.Models.Cliente", b =>

@@ -10,7 +10,7 @@ namespace NoVacancy.Models
 
         [ForeignKey("Cliente")]
         public int idCliente { get; set; }
-        public Cliente Cliente { get; set; }
+        public Cliente? Cliente { get; set; }
 
     }
 }

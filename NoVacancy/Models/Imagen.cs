@@ -14,7 +14,7 @@ namespace NoVacancy.Models
         [ForeignKey("Producto")]
         [Required]
         public int idProducto { get; set; }
-        public Producto Producto { get; set; }
+        public Producto? Producto { get; set; }
 
     }
 }

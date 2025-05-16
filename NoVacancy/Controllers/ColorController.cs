@@ -1,83 +1,68 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using NoVacancy.Models;
+using NoVacancy.Data;
 
 namespace NoVacancy.Controllers
 {
-    public class ColorController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class ColorController : ControllerBase
     {
-        // GET: ColorController
-        public ActionResult Index()
+        private readonly NoVacancyDbContex _context;
+        public ColorController(NoVacancyDbContex context)
         {
-            return View();
+            _context = context;
         }
 
-        // GET: ColorController/Details/5
-        public ActionResult Details(int id)
+        // GET: api/Color
+        [HttpGet]
+        public IActionResult GetColores()
         {
-            return View();
+            var colores = _context.Colores.ToList();
+            return Ok(colores);
         }
 
-        // GET: ColorController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: ColorController/Create
+        // POST: api/Color
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public IActionResult Create([FromBody] Color color)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            _context.Colores.Add(color);
+            _context.SaveChanges();
+            return Ok(color);
         }
 
-        // GET: ColorController/Edit/5
-        public ActionResult Edit(int id)
+        // PUT: api/Color/{id}
+        [HttpPut("{id}")]
+        public IActionResult Update(int id, [FromBody] Color color)
         {
-            return View();
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var existingColor = _context.Colores.Find(id);
+            if (existingColor == null)
+                return NotFound();
+
+            existingColor.nombre = color.nombre;
+            existingColor.codigo = color.codigo;
+
+            _context.SaveChanges();
+            return NoContent();
         }
 
-        // POST: ColorController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        // DELETE: api/Color/{id}
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+            var color = _context.Colores.Find(id);
+            if (color == null)
+                return NotFound();
 
-        // GET: ColorController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: ColorController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            _context.Colores.Remove(color);
+            _context.SaveChanges();
+            return NoContent();
         }
     }
 }

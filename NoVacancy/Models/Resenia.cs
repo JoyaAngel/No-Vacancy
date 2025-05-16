@@ -9,14 +9,14 @@ namespace NoVacancy.Models
         [Key]
         public int idResenia { get; set; }
         [Required]
-        public string resenia { get; set; }
+        public string? resenia { get; set; }
         [Required]
         public int calificacion { get; set; }
 
         [ForeignKey("Producto")]
         [Required]
         public int idProducto { get; set; }
-        public Producto Producto { get; set; }
+        public Producto? Producto { get; set; }
 
     }
 }

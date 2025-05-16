@@ -11,6 +11,6 @@ namespace NoVacancy.Models
 
         [ForeignKey("Pedido")]
         public int idPedido { get; set; }
-        public Pedido Pedido { get; set; }
+        public Pedido? Pedido { get; set; }
     }
 }

@@ -7,6 +7,6 @@ namespace NoVacancy.Models
         [Key]
         public int idCategoria { get; set; }
         [Required]
-        public string nombre { get; set; }
+        public string? nombre { get; set; }
     }
 }
