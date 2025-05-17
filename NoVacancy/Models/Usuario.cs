@@ -1,11 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace NoVacancy.Models
 {
-    public class Cliente
+    public class Usuario
     {
 
-        public int idCliente { get; set; }
+        public int idUsuario { get; set; }
 
         [Required]
         public string? nombre { get; set; }
@@ -15,6 +15,9 @@ namespace NoVacancy.Models
 
         [Required]
         public string? constrasenia { get; set; }
+
+        [Required]
+        public string? rol { get; set; }
 
     }
 }

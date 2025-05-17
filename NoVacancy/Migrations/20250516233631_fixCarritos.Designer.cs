@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NoVacancy.Data;
 
@@ -10,9 +11,11 @@ using NoVacancy.Data;
 namespace NoVacancy.Migrations
 {
     [DbContext(typeof(NoVacancyDbContex))]
-    partial class NoVacancyDbContexModelSnapshot : ModelSnapshot
+    [Migration("20250516233631_fixCarritos")]
+    partial class fixCarritos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

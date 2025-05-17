@@ -8,9 +8,9 @@ namespace NoVacancy.Models
         [Key]
         public int idCarrito { get; init; }
 
-        [ForeignKey("Cliente")]
-        public int idCliente { get; set; }
-        public Cliente? Cliente { get; set; }
+        [ForeignKey("Usuario")]
+        public int idUsuario { get; set; }
+        public Usuario? Usuario{ get; set; }
 
     }
 }

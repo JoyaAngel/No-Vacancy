@@ -1,8 +1,8 @@
 [
   {
-    "ContainingType": "NoVacancy.Controllers.CategoriaController",
-    "Method": "GetCategorias",
-    "RelativePath": "api/Categoria",
+    "ContainingType": "NoVacancy.Controllers.CarritoCabeceraController",
+    "Method": "GetCarritosCabecera",
+    "RelativePath": "api/CarritoCabecera",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -10,53 +10,84 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "NoVacancy.Controllers.CategoriaController",
+    "ContainingType": "NoVacancy.Controllers.CarritoCabeceraController",
     "Method": "Create",
-    "RelativePath": "api/Categoria",
+    "RelativePath": "api/CarritoCabecera",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "categoria",
-        "Type": "NoVacancy.Models.Categoria",
+        "Name": "carritoCabecera",
+        "Type": "NoVacancy.Models.CarritoCabecera",
         "IsRequired": true
       }
     ],
     "ReturnTypes": []
   },
   {
-    "ContainingType": "NoVacancy.Controllers.CategoriaController",
-    "Method": "Update",
-    "RelativePath": "api/Categoria/{id}",
-    "HttpMethod": "PUT",
+    "ContainingType": "NoVacancy.Controllers.CarritoLineaApiController",
+    "Method": "GetCarrito",
+    "RelativePath": "api/CarritoLineaApi",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NoVacancy.Controllers.CarritoLineaApiController",
+    "Method": "Add",
+    "RelativePath": "api/CarritoLineaApi/Add",
+    "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      },
-      {
-        "Name": "categoria",
-        "Type": "NoVacancy.Models.Categoria",
+        "Name": "model",
+        "Type": "NoVacancy.Models.CarritoLinea",
         "IsRequired": true
       }
     ],
     "ReturnTypes": []
   },
   {
-    "ContainingType": "NoVacancy.Controllers.CategoriaController",
+    "ContainingType": "NoVacancy.Controllers.CarritoLineaApiController",
+    "Method": "Clear",
+    "RelativePath": "api/CarritoLineaApi/Clear",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NoVacancy.Controllers.CarritoLineaApiController",
     "Method": "Delete",
-    "RelativePath": "api/Categoria/{id}",
+    "RelativePath": "api/CarritoLineaApi/Delete/{idProducto}",
     "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "id",
+        "Name": "idProducto",
         "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NoVacancy.Controllers.CarritoLineaApiController",
+    "Method": "Update",
+    "RelativePath": "api/CarritoLineaApi/Update",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "model",
+        "Type": "NoVacancy.Models.CarritoLinea",
         "IsRequired": true
       }
     ],
@@ -113,6 +144,115 @@
     "ContainingType": "NoVacancy.Controllers.ColorController",
     "Method": "Delete",
     "RelativePath": "api/Color/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NoVacancy.Controllers.DetalleController",
+    "Method": "GetDetalles",
+    "RelativePath": "api/Detalle",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[NoVacancy.Models.Detalle, NoVacancy, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "NoVacancy.Controllers.DetalleController",
+    "Method": "CreateDetalle",
+    "RelativePath": "api/Detalle",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "detalle",
+        "Type": "NoVacancy.Models.Detalle",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "NoVacancy.Models.Detalle",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "NoVacancy.Controllers.DetalleController",
+    "Method": "GetDetalle",
+    "RelativePath": "api/Detalle/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "NoVacancy.Models.Detalle",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "NoVacancy.Controllers.DetalleController",
+    "Method": "UpdateDetalle",
+    "RelativePath": "api/Detalle/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "detalle",
+        "Type": "NoVacancy.Models.Detalle",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NoVacancy.Controllers.DetalleController",
+    "Method": "DeleteDetalle",
+    "RelativePath": "api/Detalle/{id}",
     "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
@@ -192,6 +332,85 @@
     "ContainingType": "NoVacancy.Controllers.ImagenController",
     "Method": "Delete",
     "RelativePath": "api/Imagen/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NoVacancy.Controllers.PedidoController",
+    "Method": "GetAll",
+    "RelativePath": "api/Pedido",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NoVacancy.Controllers.PedidoController",
+    "Method": "Create",
+    "RelativePath": "api/Pedido",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "pedido",
+        "Type": "NoVacancy.Models.Pedido",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NoVacancy.Controllers.PedidoController",
+    "Method": "Get",
+    "RelativePath": "api/Pedido/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NoVacancy.Controllers.PedidoController",
+    "Method": "Update",
+    "RelativePath": "api/Pedido/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "pedido",
+        "Type": "NoVacancy.Models.Pedido",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NoVacancy.Controllers.PedidoController",
+    "Method": "Delete",
+    "RelativePath": "api/Pedido/{id}",
     "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,

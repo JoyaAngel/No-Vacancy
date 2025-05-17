@@ -5,132 +5,131 @@ using Microsoft.EntityFrameworkCore;
 
 namespace NoVacancy.Controllers
 {
-    public class ClienteController : Controller
+    public class UsuarioController : Controller
     {
         private readonly NoVacancyDbContex _context;
 
-        public ClienteController(NoVacancyDbContex context)
+        public UsuarioController(NoVacancyDbContex context)
         {
             _context = context;
         }
 
-        // GET: ClienteController
+        // GET: UsuarioController
         public async Task<IActionResult> Index()
         {
-            var clientes = await _context.Clientes.ToListAsync();
-            return View(clientes);
+            var usuarios = await _context.Usuarios.ToListAsync();
+            return View(usuarios);
         }
 
-        // GET: ClienteController/Details/5
+        // GET: UsuarioController/Details/5
         public async Task<IActionResult> Details(int id)
         {
-            var cliente = await _context.Clientes.FindAsync(id);
-            if (cliente == null)
+            var usuario = await _context.Usuarios.FindAsync(id);
+            if (usuario == null)
                 return NotFound();
-            return View(cliente);
+            return View(usuario);
         }
 
-        // GET: ClienteController/Register
+        // GET: UsuarioController/Register
         public IActionResult Register()
         {
             return View();
         }
 
-        // POST: ClienteController/Register
+        // POST: UsuarioController/Register
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register([Bind("nombre,correo,constrasenia")] Cliente cliente)
+        public async Task<IActionResult> Register([Bind("nombre,correo,constrasenia,rol")] Usuario usuario)
         {
             if (ModelState.IsValid)
             {
-                if (await _context.Clientes.AnyAsync(c => c.correo == cliente.correo))
+                if (await _context.Usuarios.AnyAsync(u => u.correo == usuario.correo))
                 {
                     ModelState.AddModelError("correo", "El correo ya está registrado.");
-                    return View(cliente);
+                    return View(usuario);
                 }
-                _context.Add(cliente);
+                _context.Add(usuario);
                 await _context.SaveChangesAsync();
-                // Aquí podrías iniciar sesión automáticamente si lo deseas
-                return RedirectToAction("Login");
+                return RedirectToAction("Index");
             }
-            return View(cliente);
+            return View(usuario);
         }
 
-        // GET: ClienteController/Login
+        // GET: UsuarioController/Login
         public IActionResult Login()
         {
             return View();
         }
 
-        // POST: ClienteController/Login
+        // POST: UsuarioController/Login
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(string correo, string constrasenia)
         {
-            var cliente = await _context.Clientes.FirstOrDefaultAsync(c => c.correo == correo && c.constrasenia == constrasenia);
-            if (cliente != null)
+            var usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.correo == correo && u.constrasenia == constrasenia);
+            if (usuario != null)
             {
                 // Aquí puedes guardar la sesión del usuario
-                HttpContext.Session.SetInt32("ClienteId", cliente.idCliente);
+                HttpContext.Session.SetInt32("UsuarioId", usuario.idUsuario);
                 return RedirectToAction("Index", "Home");
             }
             ModelState.AddModelError("", "Correo o contraseña incorrectos.");
             return View();
         }
 
-        // GET: ClienteController/Edit/5
+        // GET: UsuarioController/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
-            var cliente = await _context.Clientes.FindAsync(id);
-            if (cliente == null)
+            var usuario = await _context.Usuarios.FindAsync(id);
+            if (usuario == null)
                 return NotFound();
-            return View(cliente);
+            return View(usuario);
         }
 
-        // POST: ClienteController/Edit/5
+        // POST: UsuarioController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("idCliente,nombre,correo,constrasenia")] Cliente cliente)
+        public async Task<IActionResult> Edit(int id, [Bind("idUsuario,nombre,correo,constrasenia")] Usuario usuario)
         {
-            if (id != cliente.idCliente)
+            if (id != usuario.idUsuario)
                 return NotFound();
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(cliente);
+                    _context.Update(usuario);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!_context.Clientes.Any(e => e.idCliente == id))
+                    if (!_context.Usuarios.Any(e => e.idUsuario == id))
                         return NotFound();
                     else
                         throw;
                 }
             }
-            return View(cliente);
+            return View(usuario);
         }
 
-        // GET: ClienteController/Delete/5
+        // GET: UsuarioController/Delete/5
         public async Task<IActionResult> Delete(int id)
         {
-            var cliente = await _context.Clientes.FindAsync(id);
-            if (cliente == null)
+            var usuario = await _context.Usuarios.FindAsync(id);
+            if (usuario == null)
                 return NotFound();
-            return View(cliente);
+            return View(usuario);
         }
 
-        // POST: ClienteController/Delete/5
+        // POST: UsuarioController/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var cliente = await _context.Clientes.FindAsync(id);
-            if (cliente != null)
+            var usuario = await _context.Usuarios.FindAsync(id);
+            if (usuario != null)
             {
-                _context.Clientes.Remove(cliente);
+                _context.Usuarios.Remove(usuario);
                 await _context.SaveChangesAsync();
             }
             return RedirectToAction(nameof(Index));

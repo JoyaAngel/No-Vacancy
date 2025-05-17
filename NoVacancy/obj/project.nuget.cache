@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "KSECLIBBJ5c=",
+  "dgSpecHash": "JGi8oDQcjn8=",
   "success": true,
-  "projectFilePath": "C:\\laragon\\www\\No-Vacancy\\NoVacancy\\NoVacancy.csproj",
+  "projectFilePath": "C:\\Users\\PC WHITE WOLF\\Documents\\Escuela\\Sexto semestre\\Desarrollo de aplicaciones web\\No-Vacancy\\NoVacancy\\NoVacancy.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\PC WHITE WOLF\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\PC WHITE WOLF\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",

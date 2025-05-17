@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NoVacancy.Data;
 
@@ -10,9 +11,11 @@ using NoVacancy.Data;
 namespace NoVacancy.Migrations
 {
     [DbContext(typeof(NoVacancyDbContex))]
-    partial class NoVacancyDbContexModelSnapshot : ModelSnapshot
+    [Migration("20250516203508_Usuario")]
+    partial class Usuario
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,7 +39,7 @@ namespace NoVacancy.Migrations
 
                     b.HasIndex("idUsuario");
 
-                    b.ToTable("CarritosCabecera");
+                    b.ToTable("Carritos");
                 });
 
             modelBuilder.Entity("NoVacancy.Models.CarritoLinea", b =>
@@ -54,7 +57,7 @@ namespace NoVacancy.Migrations
 
                     b.HasIndex("idProducto");
 
-                    b.ToTable("CarritosLineas");
+                    b.ToTable("CarritoLinea");
                 });
 
             modelBuilder.Entity("NoVacancy.Models.Categoria", b =>

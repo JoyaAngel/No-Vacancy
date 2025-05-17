@@ -6,9 +6,10 @@ public class NoVacancyDbContex : DbContext
 {
     public NoVacancyDbContex(DbContextOptions<NoVacancyDbContex> options) : base(options) { }
     
-    public DbSet<CarritoCabecera> Carritos { get; set; }
+    public DbSet<CarritoCabecera> CarritosCabecera { get; set; }
+    public DbSet<CarritoLinea> CarritosLineas { get; set; }
     public DbSet<Categoria> Categorias { get; set; }
-    public DbSet<Cliente> Clientes { get; set; }
+    public DbSet<Usuario> Usuarios { get; set; }
     public DbSet<Color> Colores { get; set; }
     public DbSet<Imagen> Imagenes { get; set; }
     public DbSet<Pedido> Pedidos { get; set; }
@@ -25,9 +26,9 @@ public class NoVacancyDbContex : DbContext
             .HasKey(c => new { c.idCarrito});
 
         modelBuilder.Entity<CarritoCabecera>()
-            .HasOne(c => c.Cliente)
+            .HasOne(c => c.Usuario)
             .WithMany()
-            .HasForeignKey(c => c.idCliente)
+            .HasForeignKey(c => c.idUsuario)
             .OnDelete(DeleteBehavior.Cascade);
 
         // Configuración de CarritoLinea
@@ -46,12 +47,12 @@ public class NoVacancyDbContex : DbContext
             .HasForeignKey(cl => cl.idProducto)
             .OnDelete(DeleteBehavior.Cascade);
 
-        // Configuración de Cliente
-        modelBuilder.Entity<Cliente>()
-            .HasKey(c => c.idCliente);
+        // Configuración de Usuario
+        modelBuilder.Entity<Usuario>()
+            .HasKey(u => u.idUsuario);
 
-        modelBuilder.Entity<Cliente>()
-            .HasIndex(c => c.correo)
+        modelBuilder.Entity<Usuario>()
+            .HasIndex(u => u.correo)
             .IsUnique();
 
         // Configuración de Producto
