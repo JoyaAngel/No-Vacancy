@@ -97,17 +97,17 @@
       </div>
     </div>
   
-    <!-- Botones -->
+    <!-- Botón Confirmar pedido -->
     <div class="container my-4">
-        <div class="row justify-content-between">
-          <div class="col">
-            <button class="btn btn-dark w-100">Solicitar factura</button>
-          </div>
-          <div class="col">
-            <button class="btn btn-dark w-100">Confirmar pedido</button>
-          </div>
+      <div class="row">
+        <div class="col">
+          <button class="btn btn-dark w-100" data-bs-toggle="modal" data-bs-target="#confirmModal">
+            Confirmar pedido
+          </button>
         </div>
       </div>
+    </div>
+
 
 
   <!-- Footer -->
@@ -129,6 +129,28 @@
       </div>
     </div>
   </footer>
+
+    <!-- Modal de confirmación -->
+  <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        
+        <div class="modal-header">
+          <h5 class="modal-title" id="confirmModalLabel">¿Deseas solicitar factura?</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        
+        <div class="modal-body text-center">
+          <p>Selecciona una opción:</p>
+          <div class="d-flex justify-content-around">
+            <button class="btn btn-outline-dark" onclick="window.location.href='invoice.html'">Sí</button>
+            <button class="btn btn-dark" onclick="alert('Pedido confirmado sin factura.')">No</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
 
 </body>
 </html>
