@@ -1,15 +1,27 @@
 ﻿using NoVacancy.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace NoVacancy.Data;
-public class NoVacancyDbContex : DbContext
+
+/*
+ * 
+ * NOTA IMPORTANTÍSIMA:
+ * C.Id (con la I mayúscula) hace referencia
+ * al ID del Usuario, Identity la maneja así,
+ * y además es un String, no un int
+ * 
+ * Maldigo a Identity
+ * 
+ */
+public class NoVacancyDbContex : IdentityDbContext
 {
     public NoVacancyDbContex(DbContextOptions<NoVacancyDbContex> options) : base(options) { }
     
     public DbSet<CarritoCabecera> CarritosCabecera { get; set; }
     public DbSet<CarritoLinea> CarritosLineas { get; set; }
     public DbSet<Categoria> Categorias { get; set; }
-    public DbSet<Usuario> Usuarios { get; set; }
+    //public DbSet<Usuario> Usuarios { get; set; }
     public DbSet<Color> Colores { get; set; }
     public DbSet<Imagen> Imagenes { get; set; }
     public DbSet<Pedido> Pedidos { get; set; }
@@ -28,7 +40,7 @@ public class NoVacancyDbContex : DbContext
         modelBuilder.Entity<CarritoCabecera>()
             .HasOne(c => c.Usuario)
             .WithMany()
-            .HasForeignKey(c => c.idUsuario)
+            .HasForeignKey(c => c.Id)
             .OnDelete(DeleteBehavior.Cascade);
 
         // Configuración de CarritoLinea
@@ -48,11 +60,13 @@ public class NoVacancyDbContex : DbContext
             .OnDelete(DeleteBehavior.Cascade);
 
         // Configuración de Usuario
+        /*
         modelBuilder.Entity<Usuario>()
-            .HasKey(u => u.idUsuario);
+            .HasKey(u => u.Id);
+        */
 
         modelBuilder.Entity<Usuario>()
-            .HasIndex(u => u.correo)
+            .HasIndex(u => u.Email)
             .IsUnique();
 
         // Configuración de Producto

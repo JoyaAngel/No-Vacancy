@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\PC WHITE WOLF\\Documents\\Escuela\\Sexto semestre\\Desarrollo de aplicaciones web\\No-Vacancy\\NoVacancy\\NoVacancy.csproj": {}
+    "C:\\Users\\ninet\\No-Vacancy\\NoVacancy\\NoVacancy.csproj": {}
   },
   "projects": {
-    "C:\\Users\\PC WHITE WOLF\\Documents\\Escuela\\Sexto semestre\\Desarrollo de aplicaciones web\\No-Vacancy\\NoVacancy\\NoVacancy.csproj": {
+    "C:\\Users\\ninet\\No-Vacancy\\NoVacancy\\NoVacancy.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\PC WHITE WOLF\\Documents\\Escuela\\Sexto semestre\\Desarrollo de aplicaciones web\\No-Vacancy\\NoVacancy\\NoVacancy.csproj",
+        "projectUniqueName": "C:\\Users\\ninet\\No-Vacancy\\NoVacancy\\NoVacancy.csproj",
         "projectName": "NoVacancy",
-        "projectPath": "C:\\Users\\PC WHITE WOLF\\Documents\\Escuela\\Sexto semestre\\Desarrollo de aplicaciones web\\No-Vacancy\\NoVacancy\\NoVacancy.csproj",
-        "packagesPath": "C:\\Users\\PC WHITE WOLF\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\PC WHITE WOLF\\Documents\\Escuela\\Sexto semestre\\Desarrollo de aplicaciones web\\No-Vacancy\\NoVacancy\\obj\\",
+        "projectPath": "C:\\Users\\ninet\\No-Vacancy\\NoVacancy\\NoVacancy.csproj",
+        "packagesPath": "C:\\Users\\ninet\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\ninet\\No-Vacancy\\NoVacancy\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\PC WHITE WOLF\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\ninet\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -26,7 +26,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -51,6 +50,14 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "dependencies": {
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[9.0.4, )"
+            },
+            "Microsoft.AspNetCore.Identity.UI": {
+              "target": "Package",
+              "version": "[9.0.5, )"
+            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[9.0.4, )"
@@ -103,7 +110,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.203/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.202/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

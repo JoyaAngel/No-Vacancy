@@ -1,23 +1,17 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
 
 namespace NoVacancy.Models
 {
-    public class Usuario
+    public class Usuario : IdentityUser
     {
-
-        public int idUsuario { get; set; }
+        [Required]
+        public string Nombre { get; set; }
 
         [Required]
-        public string? nombre { get; set; }
+        public string Rol { get; set; }
 
-        [Required]
-        public string? correo { get; set; }
-
-        [Required]
-        public string? constrasenia { get; set; }
-
-        [Required]
-        public string? rol { get; set; }
-
+        // Puedes agregar otras propiedades personalizadas
+        // como FechaRegistro, EsPremium, etc.
     }
 }

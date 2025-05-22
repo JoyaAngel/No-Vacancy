@@ -9,7 +9,7 @@ namespace NoVacancy.Models
         public int idCarrito { get; init; }
 
         [ForeignKey("Usuario")]
-        public int idUsuario { get; set; }
+        public String Id { get; set; }
         public Usuario? Usuario{ get; set; }
 
     }
