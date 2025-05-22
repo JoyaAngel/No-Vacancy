@@ -11,7 +11,5 @@ namespace NoVacancy.Models
         [Required]
         public string Rol { get; set; }
 
-        // Puedes agregar otras propiedades personalizadas
-        // como FechaRegistro, EsPremium, etc.
     }
 }
