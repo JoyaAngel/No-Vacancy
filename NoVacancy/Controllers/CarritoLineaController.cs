@@ -25,8 +25,8 @@ namespace NoVacancy.Controllers
             return View(carritoLineas);
         }
 
-        private readonly NoVacancyDbContex _context;
-        public CarritoLineaController(NoVacancyDbContex context)
+        private readonly NoVacancyDbContext _context;
+        public CarritoLineaController(NoVacancyDbContext context)
         {
             _context = context;
         }

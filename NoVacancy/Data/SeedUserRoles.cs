@@ -29,8 +29,9 @@ namespace NoVacancy.Data
                 {
                     UserName = adminEmail,
                     Email = adminEmail,
-                    Nombre = "Admin"
-                    
+                    Nombre = "Admin",
+                    Rol = "Administrador"
+
                 };
 
                 var result = await userManager.CreateAsync(user, password);

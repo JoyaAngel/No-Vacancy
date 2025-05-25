@@ -3,18 +3,20 @@ using NoVacancy.Models;
 using NoVacancy.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using NoVacancy.ViewModels; //Separar las vistas de los modelos.
+
 
 namespace NoVacancy.Controllers
 {
     public class UsuarioController : Controller
     {
-        private readonly NoVacancyDbContex _context;
+        private readonly NoVacancyDbContext _context;
 
         //Servicios de identity
         private readonly SignInManager<Usuario> _signInManager;
         private readonly UserManager<Usuario> _userManager;
 
-        public UsuarioController(NoVacancyDbContex context, SignInManager<Usuario> signInManager, UserManager<Usuario> userManager)
+        public UsuarioController(NoVacancyDbContext context, SignInManager<Usuario> signInManager, UserManager<Usuario> userManager)
         {
             _context = context;
             _signInManager = signInManager;
@@ -24,7 +26,7 @@ namespace NoVacancy.Controllers
         // GET: UsuarioController
         public async Task<IActionResult> Index()
         {
-            var usuarios = _userManager.Users.ToList(); // No necesita await
+            var usuarios = _userManager.Users.ToList(); 
             return View(usuarios);
         }
 
@@ -51,37 +53,42 @@ namespace NoVacancy.Controllers
         // POST: UsuarioController/Register
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register([Bind("nombre,Email,constrasenia,rol")] Usuario usuario)
+        public async Task<IActionResult> Register(RegistroUsuarioViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var existe = await _userManager.FindByEmailAsync(usuario.Email);
+                var existe = await _userManager.FindByEmailAsync(model.Email);
                 if (existe != null)
                 {
                     ModelState.AddModelError("Email", "El correo ya está registrado.");
-                    return View(usuario);
+                    return View(model);
                 }
 
-                // Crear usuario con Identity
-                var result = await _userManager.CreateAsync(usuario, usuario.PasswordHash);
+                var usuario = new Usuario
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    Nombre = model.Nombre,
+                    Rol = model.Rol
+                };
+
+                var result = await _userManager.CreateAsync(usuario, model.Password);
 
                 if (result.Succeeded)
                 {
-                    // Asignar rol si lo tiene
-                    if (!string.IsNullOrEmpty(usuario.Rol))
-                        await _userManager.AddToRoleAsync(usuario, usuario.Rol);
+                    if (!string.IsNullOrEmpty(model.Rol))
+                        await _userManager.AddToRoleAsync(usuario, model.Rol);
 
                     return RedirectToAction(nameof(Index));
                 }
 
-                // Errores de validación de Identity
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
 
-            return View(usuario);
+            return View(model);
         }
 
 

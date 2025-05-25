@@ -9,8 +9,8 @@ namespace NoVacancy.Controllers
 
     public class CarritoCabeceraController : ControllerBase
     {
-        readonly NoVacancyDbContex _context;
-        public CarritoCabeceraController(NoVacancyDbContex context)
+        readonly NoVacancyDbContext _context;
+        public CarritoCabeceraController(NoVacancyDbContext context)
         {
             _context = context;
         }

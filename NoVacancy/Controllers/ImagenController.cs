@@ -10,8 +10,8 @@ namespace NoVacancy.Controllers
 
     public class ImagenController : ControllerBase
     {
-        private readonly NoVacancyDbContex _context;
-        public ImagenController(NoVacancyDbContex context)
+        private readonly NoVacancyDbContext _context;
+        public ImagenController(NoVacancyDbContext context)
         {
             _context = context;
         }

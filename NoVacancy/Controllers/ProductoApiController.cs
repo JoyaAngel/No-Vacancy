@@ -9,8 +9,8 @@ namespace NoVacancy.Controllers
     [ApiController]
     public class ProductoApiController : ControllerBase
     {
-        private readonly NoVacancyDbContex _context;
-        public ProductoApiController(NoVacancyDbContex context)
+        private readonly NoVacancyDbContext _context;
+        public ProductoApiController(NoVacancyDbContext context)
         {
             _context = context;
         }

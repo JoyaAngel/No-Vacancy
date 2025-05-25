@@ -21,8 +21,8 @@ namespace NoVacancy.Controllers
     [ApiController]
     public class CarritoLineaApiController : ControllerBase
     {
-        private readonly NoVacancyDbContex _context;
-        public CarritoLineaApiController(NoVacancyDbContex context)
+        private readonly NoVacancyDbContext _context;
+        public CarritoLineaApiController(NoVacancyDbContext context)
         {
             _context = context;
         }

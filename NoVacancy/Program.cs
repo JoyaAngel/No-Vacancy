@@ -5,7 +5,7 @@ using NoVacancy.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddDbContext<NoVacancyDbContex>(options =>
+builder.Services.AddDbContext<NoVacancyDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("NoVacancy")));
 
 builder.Services.AddControllersWithViews();
@@ -15,7 +15,7 @@ builder.Services.AddDefaultIdentity<Usuario>(options =>
 {
     options.SignIn.RequireConfirmedAccount = false;
 })
-.AddEntityFrameworkStores<NoVacancyDbContex>();
+.AddEntityFrameworkStores<NoVacancyDbContext>();
 
 builder.Services.AddControllersWithViews();
 
