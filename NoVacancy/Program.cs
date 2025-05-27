@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using NoVacancy.Data;
 using NoVacancy.Models;
@@ -11,22 +12,32 @@ builder.Services.AddDbContext<NoVacancyDbContext>(options =>
 builder.Services.AddControllersWithViews();
 
 //Añadir identity
-builder.Services.AddDefaultIdentity<Usuario>(options =>
-{
-    options.SignIn.RequireConfirmedAccount = false;
-})
-.AddEntityFrameworkStores<NoVacancyDbContext>();
+builder.Services.AddIdentity<Usuario, IdentityRole>()
+    .AddEntityFrameworkStores<NoVacancyDbContext>()
+    .AddDefaultTokenProviders();
 
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
+//Usar seeder.
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    await SeedUserRoles.Initialize(services);
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
 }
+
 app.UseRouting();
+
+//Identity.
+app.UseAuthorization();
+app.UseAuthentication();
 
 app.MapStaticAssets();
 
@@ -35,8 +46,6 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
-//Identity.
-app.UseAuthorization();
-app.UseAuthentication();
+
 
 app.Run();
