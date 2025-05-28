@@ -2,14 +2,16 @@ using Microsoft.AspNetCore.Mvc;
 using NoVacancy.Models;
 using NoVacancy.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace NoVacancy.Controllers
 {
+    [Authorize(Roles = "Administrador")]
     public class ProductoController : Controller
     {
-        private readonly NoVacancyDbContex _context;
+        private readonly NoVacancyDbContext _context;
 
-        public ProductoController(NoVacancyDbContex context)
+        public ProductoController(NoVacancyDbContext context)
         {
             _context = context;
         }
@@ -48,6 +50,7 @@ namespace NoVacancy.Controllers
         // POST: ProductoController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Create([Bind("nombre,cantidad,limite,descripcion,precio,idTalla,idCategoria,idColor")] Producto producto)
         {
             if (ModelState.IsValid)

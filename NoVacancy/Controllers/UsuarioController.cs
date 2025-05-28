@@ -2,31 +2,45 @@
 using NoVacancy.Models;
 using NoVacancy.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using NoVacancy.ViewModels; //Separar las vistas de los modelos.
+
 
 namespace NoVacancy.Controllers
 {
     public class UsuarioController : Controller
     {
-        private readonly NoVacancyDbContex _context;
+        private readonly NoVacancyDbContext _context;
 
-        public UsuarioController(NoVacancyDbContex context)
+        //Servicios de identity
+        private readonly SignInManager<Usuario> _signInManager;
+        private readonly UserManager<Usuario> _userManager;
+
+        public UsuarioController(NoVacancyDbContext context, SignInManager<Usuario> signInManager, UserManager<Usuario> userManager)
         {
             _context = context;
+            _signInManager = signInManager;
+            _userManager = userManager;
         }
 
         // GET: UsuarioController
         public async Task<IActionResult> Index()
         {
-            var usuarios = await _context.Usuarios.ToListAsync();
+            var usuarios = _userManager.Users.ToList(); 
             return View(usuarios);
         }
 
-        // GET: UsuarioController/Details/5
-        public async Task<IActionResult> Details(int id)
+
+        // GET: UsuarioController/Details/{id}
+        public async Task<IActionResult> Details(string id)
         {
-            var usuario = await _context.Usuarios.FindAsync(id);
+            if (string.IsNullOrEmpty(id))
+                return NotFound();
+
+            var usuario = await _userManager.FindByIdAsync(id);
             if (usuario == null)
                 return NotFound();
+
             return View(usuario);
         }
 
@@ -39,21 +53,44 @@ namespace NoVacancy.Controllers
         // POST: UsuarioController/Register
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register([Bind("nombre,correo,constrasenia,rol")] Usuario usuario)
+        public async Task<IActionResult> Register(RegistroUsuarioViewModel model)
         {
             if (ModelState.IsValid)
             {
-                if (await _context.Usuarios.AnyAsync(u => u.correo == usuario.correo))
+                var existe = await _userManager.FindByEmailAsync(model.Email);
+                if (existe != null)
                 {
-                    ModelState.AddModelError("correo", "El correo ya está registrado.");
-                    return View(usuario);
+                    ModelState.AddModelError("Email", "El correo ya está registrado.");
+                    return View(model);
                 }
-                _context.Add(usuario);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Index");
+
+                var usuario = new Usuario
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    Nombre = model.Nombre,
+                    Rol = model.Rol
+                };
+
+                var result = await _userManager.CreateAsync(usuario, model.Password);
+
+                if (result.Succeeded)
+                {
+                    if (!string.IsNullOrEmpty(model.Rol))
+                        await _userManager.AddToRoleAsync(usuario, model.Rol);
+
+                    return RedirectToAction(nameof(Index));
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
             }
-            return View(usuario);
+
+            return View(model);
         }
+
 
         // GET: UsuarioController/Login
         public IActionResult Login()
@@ -61,78 +98,96 @@ namespace NoVacancy.Controllers
             return View();
         }
 
-        // POST: UsuarioController/Login
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(string correo, string constrasenia)
         {
-            var usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.correo == correo && u.constrasenia == constrasenia);
+            var usuario = await _userManager.FindByEmailAsync(correo);
             if (usuario != null)
             {
-                // Aquí puedes guardar la sesión del usuario
-                HttpContext.Session.SetInt32("UsuarioId", usuario.idUsuario);
-                return RedirectToAction("Index", "Home");
+                var result = await _signInManager.PasswordSignInAsync(usuario, constrasenia, isPersistent: false, lockoutOnFailure: false);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
             }
-            ModelState.AddModelError("", "Correo o contraseña incorrectos.");
+
+            ViewBag.Error = "Correo o contraseña incorrectos.";
             return View();
         }
 
-        // GET: UsuarioController/Edit/5
-        public async Task<IActionResult> Edit(int id)
+        // GET: UsuarioController/Edit/{Id}
+        public async Task<IActionResult> Edit(String id)
         {
-            var usuario = await _context.Usuarios.FindAsync(id);
+            var usuario = await _userManager.FindByIdAsync(id);
             if (usuario == null)
                 return NotFound();
             return View(usuario);
         }
 
-        // POST: UsuarioController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("idUsuario,nombre,correo,constrasenia")] Usuario usuario)
+        public async Task<IActionResult> Edit(string id, [Bind("Id,nombre,Email,rol")] Usuario usuarioEditado)
         {
-            if (id != usuario.idUsuario)
+            if (id != usuarioEditado.Id)
                 return NotFound();
+
+            var usuario = await _userManager.FindByIdAsync(id);
+            if (usuario == null)
+                return NotFound();
+
             if (ModelState.IsValid)
             {
-                try
+                usuario.Nombre = usuarioEditado.Nombre;
+                usuario.Email = usuarioEditado.Email;
+                usuario.UserName = usuarioEditado.Email;
+                usuario.Rol = usuarioEditado.Rol;
+
+                var result = await _userManager.UpdateAsync(usuario);
+
+                if (result.Succeeded)
                 {
-                    _context.Update(usuario);
-                    await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateConcurrencyException)
+
+                foreach (var error in result.Errors)
                 {
-                    if (!_context.Usuarios.Any(e => e.idUsuario == id))
-                        return NotFound();
-                    else
-                        throw;
+                    ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
-            return View(usuario);
+
+            return View(usuarioEditado);
         }
 
-        // GET: UsuarioController/Delete/5
-        public async Task<IActionResult> Delete(int id)
+
+        // GET: UsuarioController/Delete/{id}
+        public async Task<IActionResult> Delete(string id)
         {
-            var usuario = await _context.Usuarios.FindAsync(id);
+            var usuario = await _userManager.FindByIdAsync(id);
             if (usuario == null)
                 return NotFound();
             return View(usuario);
         }
 
-        // POST: UsuarioController/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var usuario = await _context.Usuarios.FindAsync(id);
+            var usuario = await _userManager.FindByIdAsync(id);
             if (usuario != null)
             {
-                _context.Usuarios.Remove(usuario);
-                await _context.SaveChangesAsync();
+                await _userManager.DeleteAsync(usuario);
             }
             return RedirectToAction(nameof(Index));
+        }
+
+        // POST: UsuarioController/Logout
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
         }
     }
 }

@@ -9,9 +9,9 @@ namespace NoVacancy.Controllers
     [ApiController]
     public class DetalleController : ControllerBase
     {
-        private readonly NoVacancyDbContex _context;
+        private readonly NoVacancyDbContext _context;
 
-        public DetalleController(NoVacancyDbContex context)
+        public DetalleController(NoVacancyDbContext context)
         {
             _context = context;
         }

@@ -1,0 +1,31 @@
+@{
+    ViewData["Title"] = "Registro";
+}
+
+<!-- Tabs -->
+<nav class="nav nav-pills justify-content-center my-4">
+    <a class="nav-link active" href="#">Registrarse</a>
+    <a class="nav-link" href="@Url.Action("Login", "Usuario")">Iniciar sesión</a>
+</nav>
+
+<!-- Formulario de registro -->
+<div class="container my-5 form-container">
+    <h4 class="fw-bold">Registro de usuario</h4>
+    <p>¿Ya tienes una cuenta? <a href="@Url.Action("Login", "Usuario")">Inicia sesión</a></p>
+
+    <form>
+        <div class="mb-3">
+            <label class="form-label">Nombre de usuario</label>
+            <input type="text" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Correo electrónico</label>
+            <input type="email" class="form-control">
+        </div>
+        <div class="mb-4">
+            <label class="form-label">Contraseña</label>
+            <input type="password" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-dark w-100">Registrarse</button>
+    </form>
+</div>

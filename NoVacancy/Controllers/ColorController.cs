@@ -8,8 +8,8 @@ namespace NoVacancy.Controllers
     [ApiController]
     public class ColorController : ControllerBase
     {
-        private readonly NoVacancyDbContex _context;
-        public ColorController(NoVacancyDbContex context)
+        private readonly NoVacancyDbContext _context;
+        public ColorController(NoVacancyDbContext context)
         {
             _context = context;
         }
