@@ -19,22 +19,16 @@ namespace NoVacancy.Controllers
 {
     public class CarritoLineaController : Controller
     {
-        public IActionResult Shopping_cart()
-        {
-            var carritoLineas = new List<CarritoLinea>(); // Replace with actual data retrieval logic
-            return View(carritoLineas);
-        }
-
         private readonly NoVacancyDbContext _context;
         public CarritoLineaController(NoVacancyDbContext context)
         {
             _context = context;
         }
 
-        // GET: CarritoLinea/ShoppingCart
-        public async Task<IActionResult> ShoppingCart()
+        // GET: CarritoLinea/Shopping_cart
+        public async Task<IActionResult> Shopping_cart()
         {
-            string? usuarioId = HttpContext.Session.GetString("Id");
+            string? usuarioId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
             if (usuarioId == null)
                 return RedirectToAction("Login", "Usuario");
 
@@ -47,14 +41,14 @@ namespace NoVacancy.Controllers
                 .Include(l => l.Producto)
                 .ToListAsync();
 
-            return View("~/Views/Home/Shopping_cart.cshtml", lineas);
+            return View("Shopping_cart", lineas);
         }
 
         // POST: CarritoLinea/Add
         [HttpPost]
         public async Task<IActionResult> Add(int idProducto, int cantidad = 1)
         {
-            string? usuarioId = HttpContext.Session.GetString("Id");
+            string? usuarioId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
             if (usuarioId == null)
                 return RedirectToAction("Login", "Usuario");
 
@@ -86,7 +80,7 @@ namespace NoVacancy.Controllers
         [HttpPost]
         public async Task<IActionResult> Update(int idProducto, int cantidad)
         {
-            string? usuarioId = HttpContext.Session.GetString("Id");
+            string? usuarioId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
             if (usuarioId == null)
                 return RedirectToAction("Login", "Usuario");
 
@@ -109,7 +103,7 @@ namespace NoVacancy.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(int idProducto)
         {
-            string? usuarioId = HttpContext.Session.GetString("Id");
+            string? usuarioId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
             if (usuarioId == null)
                 return RedirectToAction("Login", "Usuario");
 
@@ -131,7 +125,7 @@ namespace NoVacancy.Controllers
         [HttpPost]
         public async Task<IActionResult> Clear()
         {
-            string? usuarioId = HttpContext.Session.GetString("Id");
+            string? usuarioId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
             if (usuarioId == null)
                 return RedirectToAction("Login", "Usuario");
 

@@ -1,29 +1,31 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\ninet\\No-Vacancy\\NoVacancy\\",
+  "WorkspaceRootPath": "C:\\Users\\PC WHITE WOLF\\Documents\\Escuela\\Sexto semestre\\Desarrollo de aplicaciones web\\No-Vacancy\\NoVacancy\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\ninet\\No-Vacancy\\NoVacancy\\Migrations\\20250522212848_SeedUserRoles.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Migrations\\20250522212848_SeedUserRoles.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{15EC80C5-3A53-470C-B25C-E972A06479D1}|NoVacancy.csproj|c:\\users\\pc white wolf\\documents\\escuela\\sexto semestre\\desarrollo de aplicaciones web\\no-vacancy\\novacancy\\controllers\\carritolineacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{15EC80C5-3A53-470C-B25C-E972A06479D1}|NoVacancy.csproj|solutionrelative:controllers\\carritolineacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{15EC80C5-3A53-470C-B25C-E972A06479D1}|NoVacancy.csproj|c:\\users\\ninet\\no-vacancy\\novacancy\\data\\seeduserroles.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{15EC80C5-3A53-470C-B25C-E972A06479D1}|NoVacancy.csproj|c:\\users\\pc white wolf\\documents\\escuela\\sexto semestre\\desarrollo de aplicaciones web\\no-vacancy\\novacancy\\data\\seeduserroles.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{15EC80C5-3A53-470C-B25C-E972A06479D1}|NoVacancy.csproj|solutionrelative:data\\seeduserroles.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{15EC80C5-3A53-470C-B25C-E972A06479D1}|NoVacancy.csproj|c:\\users\\ninet\\no-vacancy\\novacancy\\models\\usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{15EC80C5-3A53-470C-B25C-E972A06479D1}|NoVacancy.csproj|solutionrelative:models\\usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\PC WHITE WOLF\\AppData\\Local\\Temp\\bxustl0s..sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\ninet\\source\\repos\\FarmaciaApp\\FarmaciaApp\\Data\\SeedUsersRoles.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\PC WHITE WOLF\\Documents\\Escuela\\Sexto semestre\\Desarrollo de aplicaciones web\\No-Vacancy\\NoVacancy\\Migrations\\20250527230222_DbContext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Migrations\\20250527230222_DbContext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{15EC80C5-3A53-470C-B25C-E972A06479D1}|NoVacancy.csproj|c:\\users\\ninet\\no-vacancy\\novacancy\\controllers\\usuariocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{15EC80C5-3A53-470C-B25C-E972A06479D1}|NoVacancy.csproj|solutionrelative:controllers\\usuariocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{15EC80C5-3A53-470C-B25C-E972A06479D1}|NoVacancy.csproj|c:\\users\\pc white wolf\\documents\\escuela\\sexto semestre\\desarrollo de aplicaciones web\\no-vacancy\\novacancy\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{15EC80C5-3A53-470C-B25C-E972A06479D1}|NoVacancy.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\ninet\\No-Vacancy\\NoVacancy\\Migrations\\20250522210940_CustomIdentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Migrations\\20250522210940_CustomIdentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\PC WHITE WOLF\\AppData\\Local\\Temp\\bxustl0s..sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|CodeFrame"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\PC WHITE WOLF\\AppData\\Local\\Temp\\bxustl0s..sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|ResultFrame"
     }
   ],
   "DocumentGroupContainers": [
@@ -33,8 +35,12 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 2,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
@@ -42,79 +48,63 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "20250522212848_SeedUserRoles.cs",
-              "DocumentMoniker": "C:\\Users\\ninet\\No-Vacancy\\NoVacancy\\Migrations\\20250522212848_SeedUserRoles.cs",
-              "RelativeDocumentMoniker": "Migrations\\20250522212848_SeedUserRoles.cs",
-              "ToolTip": "C:\\Users\\ninet\\No-Vacancy\\NoVacancy\\Migrations\\20250522212848_SeedUserRoles.cs",
-              "RelativeToolTip": "Migrations\\20250522212848_SeedUserRoles.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Title": "CarritoLineaController.cs",
+              "DocumentMoniker": "C:\\Users\\PC WHITE WOLF\\Documents\\Escuela\\Sexto semestre\\Desarrollo de aplicaciones web\\No-Vacancy\\NoVacancy\\Controllers\\CarritoLineaController.cs",
+              "RelativeDocumentMoniker": "Controllers\\CarritoLineaController.cs",
+              "ToolTip": "C:\\Users\\PC WHITE WOLF\\Documents\\Escuela\\Sexto semestre\\Desarrollo de aplicaciones web\\No-Vacancy\\NoVacancy\\Controllers\\CarritoLineaController.cs",
+              "RelativeToolTip": "Controllers\\CarritoLineaController.cs",
+              "ViewState": "AgIAABMAAAAAAAAAAAAiwBUAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-22T21:28:48.941Z",
+              "WhenOpened": "2025-05-27T23:07:18.149Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "Usuario.cs",
-              "DocumentMoniker": "C:\\Users\\ninet\\No-Vacancy\\NoVacancy\\Models\\Usuario.cs",
-              "RelativeDocumentMoniker": "Models\\Usuario.cs",
-              "ToolTip": "C:\\Users\\ninet\\No-Vacancy\\NoVacancy\\Models\\Usuario.cs",
-              "RelativeToolTip": "Models\\Usuario.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-22T21:27:39.657Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "SeedUserRoles.cs",
-              "DocumentMoniker": "C:\\Users\\ninet\\No-Vacancy\\NoVacancy\\Data\\SeedUserRoles.cs",
-              "RelativeDocumentMoniker": "Data\\SeedUserRoles.cs",
-              "ToolTip": "C:\\Users\\ninet\\No-Vacancy\\NoVacancy\\Data\\SeedUserRoles.cs",
-              "RelativeToolTip": "Data\\SeedUserRoles.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB8AAAAkAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-22T21:23:18.987Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "SeedUsersRoles.cs",
-              "DocumentMoniker": "C:\\Users\\ninet\\source\\repos\\FarmaciaApp\\FarmaciaApp\\Data\\SeedUsersRoles.cs",
-              "RelativeDocumentMoniker": "..\\..\\source\\repos\\FarmaciaApp\\FarmaciaApp\\Data\\SeedUsersRoles.cs",
-              "ToolTip": "C:\\Users\\ninet\\source\\repos\\FarmaciaApp\\FarmaciaApp\\Data\\SeedUsersRoles.cs",
-              "RelativeToolTip": "..\\..\\source\\repos\\FarmaciaApp\\FarmaciaApp\\Data\\SeedUsersRoles.cs",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAAACgAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-22T21:21:14.666Z",
+              "Title": "SQLQuery1.sql ",
+              "DocumentMoniker": "C:\\Users\\PC WHITE WOLF\\AppData\\Local\\Temp\\bxustl0s..sql",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\AppData\\Local\\Temp\\bxustl0s..sql",
+              "ToolTip": "SQLQuery1.sql *",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2025-05-27T23:01:04.769Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "UsuarioController.cs",
-              "DocumentMoniker": "C:\\Users\\ninet\\No-Vacancy\\NoVacancy\\Controllers\\UsuarioController.cs",
-              "RelativeDocumentMoniker": "Controllers\\UsuarioController.cs",
-              "ToolTip": "C:\\Users\\ninet\\No-Vacancy\\NoVacancy\\Controllers\\UsuarioController.cs",
-              "RelativeToolTip": "Controllers\\UsuarioController.cs",
-              "ViewState": "AgIAAAgAAAAAAAAAAAAxwBgAAAAsAAAAAAAAAA==",
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\PC WHITE WOLF\\Documents\\Escuela\\Sexto semestre\\Desarrollo de aplicaciones web\\No-Vacancy\\NoVacancy\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\PC WHITE WOLF\\Documents\\Escuela\\Sexto semestre\\Desarrollo de aplicaciones web\\No-Vacancy\\NoVacancy\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-22T21:13:26.475Z",
+              "WhenOpened": "2025-05-27T22:45:39.262Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "SeedUserRoles.cs",
+              "DocumentMoniker": "C:\\Users\\PC WHITE WOLF\\Documents\\Escuela\\Sexto semestre\\Desarrollo de aplicaciones web\\No-Vacancy\\NoVacancy\\Data\\SeedUserRoles.cs",
+              "RelativeDocumentMoniker": "Data\\SeedUserRoles.cs",
+              "ToolTip": "C:\\Users\\PC WHITE WOLF\\Documents\\Escuela\\Sexto semestre\\Desarrollo de aplicaciones web\\No-Vacancy\\NoVacancy\\Data\\SeedUserRoles.cs",
+              "RelativeToolTip": "Data\\SeedUserRoles.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACYAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-27T22:43:59.736Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "20250522210940_CustomIdentity.cs",
-              "DocumentMoniker": "C:\\Users\\ninet\\No-Vacancy\\NoVacancy\\Migrations\\20250522210940_CustomIdentity.cs",
-              "RelativeDocumentMoniker": "Migrations\\20250522210940_CustomIdentity.cs",
-              "ToolTip": "C:\\Users\\ninet\\No-Vacancy\\NoVacancy\\Migrations\\20250522210940_CustomIdentity.cs",
-              "RelativeToolTip": "Migrations\\20250522210940_CustomIdentity.cs",
+              "DocumentIndex": 3,
+              "Title": "20250527230222_DbContext.cs",
+              "DocumentMoniker": "C:\\Users\\PC WHITE WOLF\\Documents\\Escuela\\Sexto semestre\\Desarrollo de aplicaciones web\\No-Vacancy\\NoVacancy\\Migrations\\20250527230222_DbContext.cs",
+              "RelativeDocumentMoniker": "Migrations\\20250527230222_DbContext.cs",
+              "ToolTip": "C:\\Users\\PC WHITE WOLF\\Documents\\Escuela\\Sexto semestre\\Desarrollo de aplicaciones web\\No-Vacancy\\NoVacancy\\Migrations\\20250527230222_DbContext.cs",
+              "RelativeToolTip": "Migrations\\20250527230222_DbContext.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-22T21:09:40.375Z",
+              "WhenOpened": "2025-05-27T23:02:22.931Z",
               "EditorCaption": ""
             }
           ]

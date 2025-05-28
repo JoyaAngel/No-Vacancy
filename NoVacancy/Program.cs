@@ -11,12 +11,13 @@ builder.Services.AddDbContext<NoVacancyDbContext>(options =>
 
 builder.Services.AddControllersWithViews();
 
-//Añadir identity
+//Aï¿½adir identity
 builder.Services.AddIdentity<Usuario, IdentityRole>()
     .AddEntityFrameworkStores<NoVacancyDbContext>()
     .AddDefaultTokenProviders();
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddSession();
 
 var app = builder.Build();
 
@@ -34,6 +35,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseRouting();
+app.UseSession();
 
 //Identity.
 app.UseAuthorization();

@@ -38,15 +38,16 @@ namespace NoVacancy.Controllers
             return View();
         }
 
-        public IActionResult Register()
-        {
-            return View();
-        }
+        // Eliminar o comentar los métodos Login y Register, ya que ahora se usan desde UsuarioController.
+        // public IActionResult Register()
+        // {
+        //     return View();
+        // }
 
-        public IActionResult Login()
-        {
-            return View();
-        }
+        // public IActionResult Login()
+        // {
+        //     return View();
+        // }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

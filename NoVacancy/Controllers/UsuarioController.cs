@@ -112,7 +112,7 @@ namespace NoVacancy.Controllers
                 }
             }
 
-            ModelState.AddModelError(string.Empty, "Correo o contraseña incorrectos.");
+            ViewBag.Error = "Correo o contraseña incorrectos.";
             return View();
         }
 
@@ -179,6 +179,15 @@ namespace NoVacancy.Controllers
                 await _userManager.DeleteAsync(usuario);
             }
             return RedirectToAction(nameof(Index));
+        }
+
+        // POST: UsuarioController/Logout
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
         }
     }
 }
