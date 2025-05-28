@@ -11,12 +11,18 @@ builder.Services.AddDbContext<NoVacancyDbContext>(options =>
 
 builder.Services.AddControllersWithViews();
 
-//A�adir identity
+//Agregar identity
 builder.Services.AddIdentity<Usuario, IdentityRole>()
     .AddEntityFrameworkStores<NoVacancyDbContext>()
     .AddDefaultTokenProviders();
 
-builder.Services.AddControllersWithViews();
+
+//Filtro global de autorización.
+builder.Services.AddControllersWithViews(options =>
+{
+    options.Filters.Add(new Microsoft.AspNetCore.Mvc.Authorization.AuthorizeFilter());
+});
+
 builder.Services.AddSession();
 
 var app = builder.Build();
@@ -38,8 +44,8 @@ app.UseRouting();
 app.UseSession();
 
 //Identity.
-app.UseAuthorization();
 app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapStaticAssets();
 

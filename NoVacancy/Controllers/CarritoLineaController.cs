@@ -3,6 +3,7 @@ using NoVacancy.Models;
 using NoVacancy.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 
 /*
  * 
@@ -46,6 +47,7 @@ namespace NoVacancy.Controllers
 
         // POST: CarritoLinea/Add
         [HttpPost]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Add(int idProducto, int cantidad = 1)
         {
             string? usuarioId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
@@ -78,6 +80,7 @@ namespace NoVacancy.Controllers
 
         // POST: CarritoLinea/Update
         [HttpPost]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Update(int idProducto, int cantidad)
         {
             string? usuarioId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
