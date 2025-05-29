@@ -23,7 +23,8 @@ namespace NoVacancy.Data
             string adminEmail = "admin@novacancy.com";
             string password = "Admin123UmDelta!";
 
-            if (await userManager.FindByEmailAsync(adminEmail) == null)
+            var adminUser = await userManager.FindByEmailAsync(adminEmail);
+            if (adminUser == null)
             {
                 var user = new Usuario
                 {
@@ -37,6 +38,14 @@ namespace NoVacancy.Data
                 var result = await userManager.CreateAsync(user, password);
                 if (result.Succeeded)
                     await userManager.AddToRoleAsync(user, "Administrador");
+            }
+            else
+            {
+                // Asegura que el usuario admin tenga el rol Administrador aunque ya exista
+                if (!await userManager.IsInRoleAsync(adminUser, "Administrador"))
+                {
+                    await userManager.AddToRoleAsync(adminUser, "Administrador");
+                }
             }
         }
 

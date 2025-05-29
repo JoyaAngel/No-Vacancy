@@ -19,6 +19,12 @@ builder.Services.AddIdentity<Usuario, IdentityRole>()
 builder.Services.AddControllersWithViews();
 builder.Services.AddSession();
 
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Usuario/Login";
+    options.AccessDeniedPath = "/Usuario/Login";
+});
+
 var app = builder.Build();
 
 //Usar seeder.
@@ -38,8 +44,8 @@ app.UseRouting();
 app.UseSession();
 
 //Identity.
-app.UseAuthorization();
 app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapStaticAssets();
 

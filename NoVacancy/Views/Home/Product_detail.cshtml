@@ -1,38 +1,212 @@
+@using System.Text.Json
 @{
 	ViewData["Title"] = "Product Detail";
+	var colores = ViewBag.Colores;
+	var imagenesPorColor = ViewBag.ImagenesPorColor as Dictionary<int, List<NoVacancy.Models.Imagen>>;
+	string nombre = ViewBag.Nombre;
+	string descripcion = ViewBag.Descripcion;
+	double precio = ViewBag.Precio;
+	string categoria = ViewBag.Categoria;
 }
 
-<!-- Producto -->
 <div class="container my-5">
 	<div class="row align-items-center">
 		<!-- Imagen -->
 		<div class="col-md-6 text-center">
-			<img src="img/playera_negra.png" alt="Playera negra" class="img-fluid">
+			<div id="imagen-producto">
+				<!-- Imagen principal, cambia con el color y miniaturas -->
+			</div>
+			<div id="miniaturas" class="d-flex justify-content-center gap-2 mt-3"></div>
 		</div>
 
 		<!-- Detalles del producto -->
 		<div class="col-md-6">
-			<h4 class="fw-bold">Playera basic</h4>
-			<p class="text-muted">Playera 100% de algodón.<br>Cómoda para cualquier situación</p>
-			<p class="fw-semibold">$200.00</p>
-			<p class="mb-1">Color: <strong>Negro</strong></p>
-			<p>Elige la talla:</p>
-
-			<!-- Tallas -->
-			<div class="mb-3">
-				<button class="size-btn">S</button>
-				<button class="size-btn">M</button>
-				<button class="size-btn active">G</button>
-				<button class="size-btn">XL</button>
+			<h4 class="fw-bold">@nombre</h4>
+			<p class="text-muted">@descripcion</p>
+			<p class="fw-semibold" id="precio-producto" style="display:none"></p>
+			<p class="mb-1">Categoría: <strong>@categoria</strong></p>
+			<p class="mb-1">Color:</p>
+			<div class="mb-3 d-flex gap-2" id="color-options">
+				@foreach (var color in colores)
+				{
+					<button type="button" class="color-btn" style="width:32px;height:32px;border-radius:50%;border:2px solid #ccc;background:@color.Color.codigo" data-color-id="@color.Color.idColor" title="@color.Color.nombre"></button>
+				}
 			</div>
-
+			<p>Elige la talla:</p>
+			<div class="mb-3 d-flex gap-2" id="talla-options">
+				<!-- Aquí se llenarán las tallas según el color -->
+			</div>
+			<div id="stock-info" class="mb-2" style="display:none"></div>
+			<div class="mb-2">Total: <span id="total-producto">$0.00</span></div>
 			<!-- Cantidad y carrito -->
 			<div class="d-flex align-items-center">
-				<button class="qty-btn">−</button>
-				<span class="mx-2">1</span>
-				<button class="qty-btn">+</button>
+				<button class="qty-btn" id="btn-restar">−</button>
+				<span class="mx-2" id="cantidad-seleccionada">1</span>
+				<button class="qty-btn" id="btn-sumar">+</button>
 				<button class="ms-3 add-to-cart">Añadir al carrito</button>
 			</div>
 		</div>
 	</div>
 </div>
+
+@section Scripts {
+<script>
+	const colores = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(colores));
+	const imagenesPorColor = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(imagenesPorColor));
+	const variantes = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(@ViewBag.Variantes));
+	let colorSeleccionado = colores[0].Color.idColor;
+	let tallaSeleccionada = null;
+	let cantidad = 1;
+	let imagenActual = null;
+
+	function mostrarImagen(colorId, index = 0) {
+		const imagenes = imagenesPorColor[colorId];
+		const cont = document.getElementById('imagen-producto');
+		const miniaturas = document.getElementById('miniaturas');
+		if (imagenes && imagenes.length > 0) {
+			imagenActual = index;
+			cont.innerHTML = `<img src='/images/productos/${imagenes[index].nombre}' class='img-fluid' style='max-height:450px' alt='Imagen producto'>`;
+			miniaturas.innerHTML = '';
+			imagenes.forEach((img, i) => {
+				miniaturas.innerHTML += `<img src='/images/productos/${img.nombre}' class='miniatura-img' data-index='${i}' style='width:64px;height:64px;object-fit:cover;border-radius:8px;cursor:pointer;border:${i===index?'2px solid #000':'2px solid #ccc'}'>`;
+			});
+			// Evento click para miniaturas
+			miniaturas.querySelectorAll('.miniatura-img').forEach(img => {
+				img.addEventListener('click', function() {
+					mostrarImagen(colorId, parseInt(this.getAttribute('data-index')));
+				});
+			});
+		} else {
+			imagenActual = 0;
+			cont.innerHTML = `<img src='/images/default-150x150.png' class='img-fluid' alt='Sin imagen'>`;
+			miniaturas.innerHTML = '';
+		}
+	}
+	function mostrarTallas(colorId) {
+		const color = colores.find(c => c.Color.idColor === colorId);
+		const tallas = color ? color.Tallas : [];
+		const cont = document.getElementById('talla-options');
+		cont.innerHTML = '';
+		tallas.forEach(t => {
+			cont.innerHTML += `<button class='size-btn' data-talla-id='${t.idTalla}'>${t.nombre}</button>`;
+		});
+		if (tallas.length === 1) {
+			tallaSeleccionada = tallas[0].idTalla;
+			setTimeout(() => {
+				actualizarSeleccionTalla();
+				mostrarStockYPrecio();
+			}, 0);
+		} else {
+			tallaSeleccionada = null;
+			actualizarSeleccionTalla();
+			document.getElementById('stock-info').style.display = 'none';
+			document.getElementById('precio-producto').style.display = 'none';
+		}
+	}
+	function actualizarSeleccionColor() {
+		document.querySelectorAll('.color-btn').forEach(btn => {
+			if (parseInt(btn.getAttribute('data-color-id')) === colorSeleccionado) {
+				btn.style.border = '3px solid #000';
+			} else {
+				btn.style.border = '2px solid #ccc';
+			}
+		});
+	}
+	function actualizarSeleccionTalla() {
+		document.querySelectorAll('.size-btn').forEach(btn => {
+			if (parseInt(btn.getAttribute('data-talla-id')) === tallaSeleccionada) {
+				btn.classList.add('active');
+				btn.style.background = '#000';
+				btn.style.color = '#fff';
+			} else {
+				btn.classList.remove('active');
+				btn.style.background = '';
+				btn.style.color = '';
+			}
+		});
+	}
+	function mostrarStockYPrecio() {
+		if (!colorSeleccionado || !tallaSeleccionada) return;
+		const variante = variantes.find(v => v.idColor === colorSeleccionado && v.idTalla === tallaSeleccionada);
+		if (variante) {
+			document.getElementById('stock-info').style.display = '';
+			let info = `Stock: ${variante.cantidad}`;
+			if (variante.limite !== undefined && variante.limite !== null) {
+				info += ` | Límite de compra: ${variante.limite}`;
+			}
+			document.getElementById('stock-info').innerText = info;
+			document.getElementById('precio-producto').style.display = '';
+			document.getElementById('precio-producto').innerText = `$${variante.precio.toFixed(2)}`;
+			actualizarCantidad(1, variante.cantidad, variante.limite);
+		} else {
+			document.getElementById('stock-info').style.display = 'none';
+			document.getElementById('precio-producto').style.display = 'none';
+			actualizarCantidad(1, 1, 1);
+		}
+	}
+	function actualizarCantidad(nuevaCantidad, maxStock, maxLimite) {
+		let max = maxStock;
+		if (maxLimite !== undefined && maxLimite !== null) {
+			max = Math.min(maxStock, maxLimite);
+		}
+		cantidad = Math.max(1, Math.min(nuevaCantidad, max));
+		document.getElementById('cantidad-seleccionada').innerText = cantidad;
+		actualizarTotal();
+	}
+	function actualizarTotal() {
+		if (!colorSeleccionado || !tallaSeleccionada) {
+			document.getElementById('total-producto').innerText = '$0.00';
+			return;
+		}
+		const variante = variantes.find(v => v.idColor === colorSeleccionado && v.idTalla === tallaSeleccionada);
+		if (variante) {
+			const total = cantidad * variante.precio;
+			document.getElementById('total-producto').innerText = `$${total.toFixed(2)}`;
+		} else {
+			document.getElementById('total-producto').innerText = '$0.00';
+		}
+	}
+	document.addEventListener('DOMContentLoaded', function() {
+		mostrarImagen(colorSeleccionado);
+		mostrarTallas(colorSeleccionado);
+		actualizarSeleccionColor();
+		// Color selection
+		document.querySelectorAll('.color-btn').forEach(btn => {
+			btn.addEventListener('click', function() {
+				colorSeleccionado = parseInt(this.getAttribute('data-color-id'));
+				tallaSeleccionada = null;
+				mostrarImagen(colorSeleccionado);
+				mostrarTallas(colorSeleccionado);
+				actualizarSeleccionColor();
+				actualizarSeleccionTalla();
+				document.getElementById('stock-info').style.display = 'none';
+				document.getElementById('precio-producto').style.display = 'none';
+				cantidad = 1;
+				actualizarTotal();
+			});
+		});
+		// Talla selection
+		document.getElementById('talla-options').addEventListener('click', function(e) {
+			if (e.target.classList.contains('size-btn')) {
+				tallaSeleccionada = parseInt(e.target.getAttribute('data-talla-id'));
+				actualizarSeleccionTalla();
+				mostrarStockYPrecio();
+			}
+		});
+		document.getElementById('btn-restar').addEventListener('click', function() {
+			if (!colorSeleccionado || !tallaSeleccionada) return;
+			const variante = variantes.find(v => v.idColor === colorSeleccionado && v.idTalla === tallaSeleccionada);
+			if (variante) {
+				actualizarCantidad(cantidad - 1, variante.cantidad, variante.limite);
+			}
+		});
+		document.getElementById('btn-sumar').addEventListener('click', function() {
+			if (!colorSeleccionado || !tallaSeleccionada) return;
+			const variante = variantes.find(v => v.idColor === colorSeleccionado && v.idTalla === tallaSeleccionada);
+			if (variante) {
+				actualizarCantidad(cantidad + 1, variante.cantidad, variante.limite);
+			}
+		});
+	});
+</script>
+}

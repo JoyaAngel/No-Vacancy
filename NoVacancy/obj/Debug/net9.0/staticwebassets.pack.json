@@ -8249,6 +8249,62 @@
       "PackagePath": "staticwebassets\\images\\playera_negra.png"
     },
     {
+      "Id": "C:\\Users\\PC WHITE WOLF\\Documents\\Escuela\\Sexto semestre\\Desarrollo de aplicaciones web\\No-Vacancy\\NoVacancy\\wwwroot\\images\\productos\\.gitkeep",
+      "PackagePath": "staticwebassets\\images\\productos\\.gitkeep"
+    },
+    {
+      "Id": "C:\\Users\\PC WHITE WOLF\\Documents\\Escuela\\Sexto semestre\\Desarrollo de aplicaciones web\\No-Vacancy\\NoVacancy\\wwwroot\\images\\productos\\producto_10_595fb7e5-7387-4061-900e-b4ca112a7bb9_2.jpg",
+      "PackagePath": "staticwebassets\\images\\productos\\producto_10_595fb7e5-7387-4061-900e-b4ca112a7bb9_2.jpg"
+    },
+    {
+      "Id": "C:\\Users\\PC WHITE WOLF\\Documents\\Escuela\\Sexto semestre\\Desarrollo de aplicaciones web\\No-Vacancy\\NoVacancy\\wwwroot\\images\\productos\\producto_10_62c616e6-2865-4cef-9223-03b64c02f9a8_1.webp",
+      "PackagePath": "staticwebassets\\images\\productos\\producto_10_62c616e6-2865-4cef-9223-03b64c02f9a8_1.webp"
+    },
+    {
+      "Id": "C:\\Users\\PC WHITE WOLF\\Documents\\Escuela\\Sexto semestre\\Desarrollo de aplicaciones web\\No-Vacancy\\NoVacancy\\wwwroot\\images\\productos\\producto_10_dea106d4-8fe5-453f-b0b8-ca49d3049696_3.png",
+      "PackagePath": "staticwebassets\\images\\productos\\producto_10_dea106d4-8fe5-453f-b0b8-ca49d3049696_3.png"
+    },
+    {
+      "Id": "C:\\Users\\PC WHITE WOLF\\Documents\\Escuela\\Sexto semestre\\Desarrollo de aplicaciones web\\No-Vacancy\\NoVacancy\\wwwroot\\images\\productos\\producto_11_062bd39d-3f0d-4296-99b9-c3f9a227326f_playera_negra.png",
+      "PackagePath": "staticwebassets\\images\\productos\\producto_11_062bd39d-3f0d-4296-99b9-c3f9a227326f_playera_negra.png"
+    },
+    {
+      "Id": "C:\\Users\\PC WHITE WOLF\\Documents\\Escuela\\Sexto semestre\\Desarrollo de aplicaciones web\\No-Vacancy\\NoVacancy\\wwwroot\\images\\productos\\producto_11_98b433e0-684b-4f23-95d8-f039e4a54410_playera_blanca.webp",
+      "PackagePath": "staticwebassets\\images\\productos\\producto_11_98b433e0-684b-4f23-95d8-f039e4a54410_playera_blanca.webp"
+    },
+    {
+      "Id": "C:\\Users\\PC WHITE WOLF\\Documents\\Escuela\\Sexto semestre\\Desarrollo de aplicaciones web\\No-Vacancy\\NoVacancy\\wwwroot\\images\\productos\\producto_1_59146661-03fa-4b47-9a8a-c1676e33a4a9_EnderLilies.jpg",
+      "PackagePath": "staticwebassets\\images\\productos\\producto_1_59146661-03fa-4b47-9a8a-c1676e33a4a9_EnderLilies.jpg"
+    },
+    {
+      "Id": "C:\\Users\\PC WHITE WOLF\\Documents\\Escuela\\Sexto semestre\\Desarrollo de aplicaciones web\\No-Vacancy\\NoVacancy\\wwwroot\\images\\productos\\producto_2_252d94b7-ad4b-4074-a65e-ae051a0be3fb_EnderLilies.jpg",
+      "PackagePath": "staticwebassets\\images\\productos\\producto_2_252d94b7-ad4b-4074-a65e-ae051a0be3fb_EnderLilies.jpg"
+    },
+    {
+      "Id": "C:\\Users\\PC WHITE WOLF\\Documents\\Escuela\\Sexto semestre\\Desarrollo de aplicaciones web\\No-Vacancy\\NoVacancy\\wwwroot\\images\\productos\\producto_2_68ec233b-cbaa-4184-8224-de609d772b42_farmaciapp.png",
+      "PackagePath": "staticwebassets\\images\\productos\\producto_2_68ec233b-cbaa-4184-8224-de609d772b42_farmaciapp.png"
+    },
+    {
+      "Id": "C:\\Users\\PC WHITE WOLF\\Documents\\Escuela\\Sexto semestre\\Desarrollo de aplicaciones web\\No-Vacancy\\NoVacancy\\wwwroot\\images\\productos\\producto_3_1172b46e-6dab-4ff6-ac23-7a0058886bb3_EnderLilies.jpg",
+      "PackagePath": "staticwebassets\\images\\productos\\producto_3_1172b46e-6dab-4ff6-ac23-7a0058886bb3_EnderLilies.jpg"
+    },
+    {
+      "Id": "C:\\Users\\PC WHITE WOLF\\Documents\\Escuela\\Sexto semestre\\Desarrollo de aplicaciones web\\No-Vacancy\\NoVacancy\\wwwroot\\images\\productos\\producto_5_f8d04b24-2467-4db5-ad7e-1e62104c72eb_EnderLilies.jpg",
+      "PackagePath": "staticwebassets\\images\\productos\\producto_5_f8d04b24-2467-4db5-ad7e-1e62104c72eb_EnderLilies.jpg"
+    },
+    {
+      "Id": "C:\\Users\\PC WHITE WOLF\\Documents\\Escuela\\Sexto semestre\\Desarrollo de aplicaciones web\\No-Vacancy\\NoVacancy\\wwwroot\\images\\productos\\producto_6_dd0ce77b-578c-4476-a7ce-c2d578d5da0d_EnderLilies.jpg",
+      "PackagePath": "staticwebassets\\images\\productos\\producto_6_dd0ce77b-578c-4476-a7ce-c2d578d5da0d_EnderLilies.jpg"
+    },
+    {
+      "Id": "C:\\Users\\PC WHITE WOLF\\Documents\\Escuela\\Sexto semestre\\Desarrollo de aplicaciones web\\No-Vacancy\\NoVacancy\\wwwroot\\images\\productos\\producto_8_6a544a03-6f45-4c6d-b1e1-80144dfa8302_producto3.jpg",
+      "PackagePath": "staticwebassets\\images\\productos\\producto_8_6a544a03-6f45-4c6d-b1e1-80144dfa8302_producto3.jpg"
+    },
+    {
+      "Id": "C:\\Users\\PC WHITE WOLF\\Documents\\Escuela\\Sexto semestre\\Desarrollo de aplicaciones web\\No-Vacancy\\NoVacancy\\wwwroot\\images\\productos\\producto_9_8de11172-1bbc-43b3-b4b5-9fb362a02fc1_playera_negra.png",
+      "PackagePath": "staticwebassets\\images\\productos\\producto_9_8de11172-1bbc-43b3-b4b5-9fb362a02fc1_playera_negra.png"
+    },
+    {
       "Id": "C:\\Users\\PC WHITE WOLF\\Documents\\Escuela\\Sexto semestre\\Desarrollo de aplicaciones web\\No-Vacancy\\NoVacancy\\wwwroot\\js\\site.js",
       "PackagePath": "staticwebassets\\js\\site.js"
     },

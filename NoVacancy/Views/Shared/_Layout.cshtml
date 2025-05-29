@@ -47,6 +47,15 @@
                        title="Carrito de compras">
                         <i class="bi bi-cart fs-4"></i>
                     </a>
+                    <!-- INICIO OPCIÓN TEMPORAL AGREGAR PRODUCTO -->
+                    @* Solo visible para usuarios autenticados *@
+                    @if (User.Identity != null && User.Identity.IsAuthenticated)
+                    {
+                        <a class="nav-link ms-3 btn btn-outline-dark px-3 py-1" href="@Url.Action("Create", "Producto")">
+                            <i class="bi bi-plus-circle"></i> Agregar producto
+                        </a>
+                    }
+                    <!-- FIN OPCIÓN TEMPORAL AGREGAR PRODUCTO -->
                 </div>
             </div>
         </nav>
