@@ -3,7 +3,8 @@ using NoVacancy.Models;
 using NoVacancy.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
-using NoVacancy.ViewModels; //Separar las vistas de los modelos.
+using NoVacancy.ViewModels;
+using Microsoft.AspNetCore.Authorization; //Separar las vistas de los modelos.
 
 
 namespace NoVacancy.Controllers
@@ -24,6 +25,7 @@ namespace NoVacancy.Controllers
         }
 
         // GET: UsuarioController
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             var usuarios = _userManager.Users.ToList(); 
@@ -32,6 +34,7 @@ namespace NoVacancy.Controllers
 
 
         // GET: UsuarioController/Details/{id}
+        [AllowAnonymous]
         public async Task<IActionResult> Details(string id)
         {
             if (string.IsNullOrEmpty(id))
@@ -45,14 +48,17 @@ namespace NoVacancy.Controllers
         }
 
         // GET: UsuarioController/Register
+        [AllowAnonymous]
         public IActionResult Register()
         {
             return View();
         }
 
+
         // POST: UsuarioController/Register
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public async Task<IActionResult> Register(RegistroUsuarioViewModel model)
         {
             if (ModelState.IsValid)
@@ -93,6 +99,7 @@ namespace NoVacancy.Controllers
 
 
         // GET: UsuarioController/Login
+        [AllowAnonymous]
         public IActionResult Login()
         {
             return View();
@@ -100,6 +107,7 @@ namespace NoVacancy.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(string correo, string constrasenia)
         {
             var usuario = await _userManager.FindByEmailAsync(correo);
@@ -184,6 +192,7 @@ namespace NoVacancy.Controllers
         // POST: UsuarioController/Logout
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();

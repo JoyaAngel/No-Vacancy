@@ -17,6 +17,7 @@ builder.Services.AddIdentity<Usuario, IdentityRole>()
     .AddDefaultTokenProviders();
 
 
+
 //Filtro global de autorización.
 builder.Services.AddControllersWithViews(options =>
 {
@@ -24,6 +25,7 @@ builder.Services.AddControllersWithViews(options =>
 });
 
 builder.Services.AddSession();
+
 
 var app = builder.Build();
 
