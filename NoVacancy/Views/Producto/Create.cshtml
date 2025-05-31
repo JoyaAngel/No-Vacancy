@@ -63,35 +63,53 @@
                             </div>
                         </div>
                         <div class="col-12">
-                            <label class="form-label fw-bold">Talla</label>
-                            <select name="idTalla[0]" class="form-select" aria-label="Talla">
-                                <option selected disabled>Elige una talla</option>
-                                @if (ViewBag.Tallas != null)
-                                {
-                                    foreach (var talla in ViewBag.Tallas)
-                                    {
-                                        <option value="@talla.idTalla">@talla.nombre</option>
-                                    }
-                                }
-                            </select>
+                            <label class="form-label fw-bold">Tallas</label>
+                            <div class="tallas-dinamicas" id="tallas-dinamicas-0" style="margin-bottom:2.5rem;">
+                                <div id="tallaCardsContainer-0">
+                                    <div class="talla-card p-3 mb-3">
+                                        <div class="row g-3 align-items-center">
+                                            <div class="col-md-4 col-12">
+                                                <label class="form-label mb-1">Talla</label>
+                                                <select class="form-select talla-select" name="idTalla[0][]" onchange="actualizarOpcionesTallas(0)">
+                                                    <option selected disabled>Elige una talla</option>
+                                                    @if (ViewBag.Tallas != null)
+                                                    {
+                                                        foreach (var talla in ViewBag.Tallas)
+                                                        {
+                                                            <option value="@talla.idTalla">@talla.nombre</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div class="col-md-4 col-12">
+                                                <label class="form-label mb-1">Stock</label>
+                                                <input name="cantidad[0][]" class="form-control form-control-sm" placeholder="Stock" type="number" min="0" />
+                                            </div>
+                                            <div class="col-md-4 col-12">
+                                                <label class="form-label mb-1">Límite</label>
+                                                <div class="d-flex align-items-center">
+                                                    <input type="checkbox" class="form-check-input me-1" onchange="toggleLimiteTalla(this)" title="¿Limitar compra?" />
+                                                    <input name="limite[0][]" class="form-control form-control-sm input-limite" placeholder="Límite" type="number" min="1" style="width: 80px; display: none; margin-left: 4px;" />
+                                                </div>
+                                            </div>
+                                            <div class="col-12 d-flex justify-content-end align-items-center">
+                                                <button type="button" class="btn btn-outline-danger btn-xs d-flex align-items-center justify-content-center btn-talla-remove ms-2" style="width:24px;height:24px;" onclick="eliminarTalla(this)" title="Eliminar talla">
+                                                    <span class="bi bi-dash"></span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-end mt-2">
+                                    <button type="button" class="btn btn-add-talla-icon d-flex align-items-center justify-content-center" onclick="agregarTalla(0)" title="Agregar talla">
+                                        <span class="bi bi-plus"></span>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-12">
                             <label class="form-label fw-bold">Precio</label>
                             <input name="Precio[0]" class="form-control" placeholder="Precio" />
-                        </div>
-                        <div class="col-12">
-                            <label class="form-label fw-bold">Stock</label>
-                            <input name="cantidad[0]" class="form-control" placeholder="Stock disponible" type="number"
-                                min="0" />
-                        </div>
-                        <div class="col-12">
-                            <input type="checkbox" id="toggleLimite-0" onchange="toggleLimiteInput(0)" />
-                            <label for="toggleLimite-0" class="form-label ms-2">¿Agregar límite de compra?</label>
-                        </div>
-                        <div class="col-12" id="limiteContainer-0" style="display:none;">
-                            <label class="form-label fw-bold">Límite de compra</label>
-                            <input name="limite[0]" class="form-control" placeholder="Límite por cliente" type="number"
-                                min="1" />
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-bold">Multimedia</label><br>
@@ -241,35 +259,156 @@
             if (toggleLimite) toggleLimite.setAttribute('onchange', `toggleLimiteInput(${newIdx})`);
             container.appendChild(clone);
         }
+
+        function agregarTalla(idx) {
+            const container = document.getElementById(`tallaCardsContainer-${idx}`);
+            // Clonar la primera tarjeta como plantilla
+            const plantilla = container.querySelector('.talla-card');
+            const nueva = plantilla.cloneNode(true);
+            // Limpiar valores
+            nueva.querySelectorAll('input, select').forEach(el => {
+                if (el.type === 'checkbox' || el.type === 'radio') {
+                    el.checked = false;
+                } else if (el.type === 'file') {
+                    el.value = '';
+                } else {
+                    el.value = '';
+                }
+                if (el.name && el.name.includes('[]')) {
+                    // No hacer nada, los names ya están bien
+                }
+                if (el.classList.contains('input-limite')) {
+                    el.style.display = 'none';
+                }
+            });
+            // Mostrar botón eliminar en la nueva tarjeta
+            const btnRemove = nueva.querySelector('.btn-talla-remove');
+            btnRemove.style.display = 'flex';
+            btnRemove.onclick = function() { eliminarTalla(btnRemove); };
+            container.appendChild(nueva);
+            actualizarOpcionesTallas(idx);
+            actualizarBotonesTalla(idx);
+        }
+        function eliminarTalla(btn) {
+            const card = btn.closest('.talla-card');
+            if (card) card.remove();
+            actualizarBotonesTalla(0);
+        }
+        function actualizarBotonesTalla(idx) {
+            const container = document.getElementById(`tallaCardsContainer-${idx}`);
+            const cards = container.querySelectorAll('.talla-card');
+            cards.forEach((card, i) => {
+                const btnRemove = card.querySelector('.btn-talla-remove');
+                if (btnRemove) {
+                    btnRemove.style.display = (i === 0) ? 'none' : 'flex';
+                }
+            });
+        }
+        // Llama a actualizarBotonesTalla al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            actualizarBotonesTalla(0);
+        });
+        function toggleLimiteTalla(checkbox) {
+            const inputLimite = checkbox.parentElement.querySelector('input[type="number"].input-limite');
+            if (inputLimite) {
+                inputLimite.style.display = checkbox.checked ? 'inline-block' : 'none';
+                if (!checkbox.checked) inputLimite.value = '';
+            }
+        }
+        // ...existing code...
     </script>
 }
 
 <style>
     .form-section {
         max-width: 600px;
-        margin: 2rem auto;
+        margin: 2.5rem auto 2rem auto;
+        padding: 2.5rem 2rem 2rem 2rem;
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.06);
     }
-
-    .btn-upload {
-        background-color: black;
-        color: white;
+    .form-section > .mb-3, .form-section > div, .form-section > button, .form-section > hr {
+        margin-bottom: 1.5rem !important;
     }
-
-    .form-control-color {
-        padding: 0;
+    .tallas-dinamicas {
+        margin-bottom: 2.5rem !important;
+    }
+    .talla-card {
+        background: #f9fbfd;
         border-radius: 8px;
-        border: 1px solid #ccc;
+        border: 1px solid #e3e7ed;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+        transition: box-shadow 0.2s, border-color 0.2s;
+        margin-bottom: 1.5rem !important;
+        padding: 1.2rem 1rem !important;
+    }
+    .talla-card:focus-within {
+        box-shadow: 0 0 0 2px #a5d8ff;
+        border-color: #74c0fc;
+    }
+    .talla-header {
         background: none;
-    }
-
-    .form-control[type="text"] {
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
-
-    .variante-divider {
         border: none;
-        border-top: 2px dashed #bbb;
-        margin: 24px 0 16px 0;
+        margin-bottom: 1rem !important;
+        font-size: 1.1rem;
+        font-weight: 700;
+    }
+    .form-label {
+        margin-bottom: 0.3rem !important;
+    }
+    .form-control, .form-select {
+        min-height: 44px;
+        font-size: 1rem;
+    }
+    .btn {
+        min-height: 44px;
+        font-size: 1rem;
+    }
+    hr {
+        margin-top: 2.5rem;
+        margin-bottom: 2rem;
+    }
+    .btn-xs {
+        padding: 0;
+        font-size: 1.1rem;
+        min-height: 0;
+        min-width: 0;
+        height: 24px;
+        width: 24px;
+        line-height: 1;
+    }
+    /* Responsive: apilar campos de talla en móvil */
+    @@media screen and (max-width: 768px) {
+        .talla-card .row > div {
+            margin-bottom: 1rem;
+        }
+    }
+
+    .talla-card .btn-talla-remove {
+        display: none !important;
+    }
+    .talla-card:not(:first-child) .btn-talla-remove {
+        display: flex !important;
+    }
+
+    .btn-add-talla-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: rgba(180, 180, 180, 0.12);
+        color: #888;
+        border: none;
+        box-shadow: none;
+        transition: background 0.2s, color 0.2s;
+        font-size: 1.5rem;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .btn-add-talla-icon:hover, .btn-add-talla-icon:focus {
+        background: rgba(180, 180, 180, 0.22);
+        color: #444;
     }
 </style>

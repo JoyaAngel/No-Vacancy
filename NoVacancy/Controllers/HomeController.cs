@@ -65,7 +65,7 @@ namespace NoVacancy.Controllers
             ViewBag.Descripcion = variantes.First().descripcion;
             ViewBag.Precio = variantes.First().precio;
             ViewBag.Categoria = variantes.First().Categoria?.nombre;
-            ViewBag.Variantes = variantes.Select(v => new { v.idColor, v.idTalla, v.cantidad, v.precio, v.limite }).ToList();
+            ViewBag.Variantes = variantes.Select(v => new { v.idProducto, v.idColor, v.idTalla, v.cantidad, v.precio, v.limite }).ToList();
             return View();
         }
 

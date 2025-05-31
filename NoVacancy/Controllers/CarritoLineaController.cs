@@ -3,6 +3,7 @@ using NoVacancy.Models;
 using NoVacancy.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using NoVacancy.ViewModels;
 
 /*
  * 
@@ -34,14 +35,47 @@ namespace NoVacancy.Controllers
 
             var carrito = await _context.CarritosCabecera.FirstOrDefaultAsync(c => c.Id == usuarioId);
             if (carrito == null)
-                return View(new List<CarritoLinea>());
+                return View(new List<CarritoLineaViewModel>());
 
             var lineas = await _context.CarritosLineas
                 .Where(l => l.idCarrito == carrito.idCarrito)
                 .Include(l => l.Producto)
+                .ThenInclude(p => p.Color)
+                .Include(l => l.Producto)
+                .ThenInclude(p => p.Talla)
                 .ToListAsync();
 
-            return View("Shopping_cart", lineas);
+            // Obtener ids de productos
+            var productoIds = lineas.Select(l => l.idProducto).ToList();
+            // Obtener imágenes asociadas a los productos
+            var imagenes = await _context.Imagenes
+                .Where(img => productoIds.Contains(img.idProducto))
+                .GroupBy(img => img.idProducto)
+                .Select(g => new { idProducto = g.Key, Imagen = g.FirstOrDefault() })
+                .ToListAsync();
+
+            var viewModel = lineas.Select(linea => {
+                var imgObj = imagenes.FirstOrDefault(i => i.idProducto == linea.idProducto)?.Imagen;
+                // Fallback: si no hay imagen para la variante, busca una imagen de otro producto con el mismo nombre
+                if (imgObj == null && linea.Producto != null && !string.IsNullOrEmpty(linea.Producto.nombre))
+                {
+                    var productoConImagen = _context.Productos
+                        .Where(p => p.nombre == linea.Producto.nombre)
+                        .Join(_context.Imagenes, p => p.idProducto, im => im.idProducto, (p, im) => im)
+                        .FirstOrDefault();
+                    if (productoConImagen != null)
+                        imgObj = productoConImagen;
+                }
+                return new CarritoLineaViewModel
+                {
+                    CarritoLinea = linea,
+                    ImagenPrincipal = imgObj != null ? $"/images/productos/{imgObj.nombre}" : "/images/default-150x150.png",
+                    Color = linea.Producto?.Color?.nombre ?? "-",
+                    Talla = linea.Producto?.Talla?.nombre ?? "-"
+                };
+            }).ToList();
+
+            return View("Shopping_cart", viewModel);
         }
 
         // POST: CarritoLinea/Add
@@ -59,6 +93,19 @@ namespace NoVacancy.Controllers
                 _context.CarritosCabecera.Add(carrito);
                 await _context.SaveChangesAsync();
             }
+
+            // Validar que el producto existe
+            var producto = await _context.Productos.FirstOrDefaultAsync(p => p.idProducto == idProducto);
+            if (producto == null)
+            {
+                // Log y mensaje de error
+                System.Diagnostics.Debug.WriteLine($"[CarritoLineaController] Producto con id {idProducto} no existe.");
+                TempData["Error"] = "El producto seleccionado no existe.";
+                return RedirectToAction("Shopping_cart");
+            }
+
+            // Log de depuración
+            System.Diagnostics.Debug.WriteLine($"[CarritoLineaController] idCarrito: {carrito.idCarrito}, idProducto: {idProducto}, cantidad: {cantidad}");
 
             var linea = await _context.CarritosLineas.FirstOrDefaultAsync(l => l.idCarrito == carrito.idCarrito && l.idProducto == idProducto);
             if (linea != null)

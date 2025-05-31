@@ -6,13 +6,9 @@ namespace NoVacancy.Models
     public class CarritoLinea
     {
 
-        [Key]
-        [ForeignKey("CarritoCabecera")]
-        public int idCarrito { get; init; }
+        public int idCarrito { get; set; }
         public CarritoCabecera? Carrito { get; set; }
 
-        [Key]
-        [ForeignKey("Producto")]
         public int idProducto { get; set; }
         public Producto? Producto { get; set; }
 

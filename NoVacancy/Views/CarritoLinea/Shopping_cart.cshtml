@@ -1,3 +1,4 @@
+@model List<NoVacancy.ViewModels.CarritoLineaViewModel>
 <div class="container my-5">
 	<h3 class="fw-bold mb-4">Tu carrito</h3>
 
@@ -8,54 +9,60 @@
 		<div class="col-md-3 text-end">Total</div>
 	</div>
 
-	<!-- Producto 1 -->
-	<div class="row align-items-center mb-4">
-		<div class="col-md-6 d-flex">
-			<img src="img/playera_negra.png" style="width: 80px; height: 80px; object-fit: cover;" alt="Playera negra" class="me-3">
-			<div>
-				<div class="fw-bold">Playera basic</div>
-				<div class="text-muted">$200.00</div>
-				<div class="text-muted">Color: Negro</div>
-				<div class="text-muted">Talla: L</div>
+	@{
+		double total = 0;
+	}
+	@if (Model != null && Model.Count > 0)
+	{
+		foreach (var item in Model)
+		{
+			double subtotal = (item.CarritoLinea.Producto?.precio ?? 0) * item.CarritoLinea.cantidad;
+			total += subtotal;
+			var color = item.CarritoLinea.Producto?.Color?.nombre ?? "-";
+			var talla = item.CarritoLinea.Producto?.Talla?.nombre ?? "-";
+			var imagen = item.ImagenPrincipal;
+			<div class="row align-items-center mb-4">
+				<div class="col-md-6 d-flex">
+					<img src="@imagen" style="width: 80px; height: 80px; object-fit: cover;" alt="@item.CarritoLinea.Producto?.nombre" class="me-3">
+					<div>
+						<div class="fw-bold">@item.CarritoLinea.Producto?.nombre</div>
+						<div class="text-muted">$@String.Format("{0:0.00}", item.CarritoLinea.Producto?.precio ?? 0)</div>
+						<div class="text-muted">Color: @item.Color</div>
+						<div class="text-muted">Talla: @item.Talla</div>
+					</div>
+				</div>
+				<div class="col-md-3 text-center">
+					<div class="d-flex justify-content-center align-items-center">
+						<form asp-action="Update" asp-controller="CarritoLinea" method="post" class="d-inline">
+							<input type="hidden" name="idProducto" value="@item.CarritoLinea.idProducto" />
+							<input type="hidden" name="cantidad" value="@(item.CarritoLinea.cantidad - 1)" />
+							<button class="qty-btn" type="submit" @(item.CarritoLinea.cantidad <= 1 ? "disabled" : "")>−</button>
+						</form>
+						<span class="mx-2">@item.CarritoLinea.cantidad</span>
+						<form asp-action="Update" asp-controller="CarritoLinea" method="post" class="d-inline">
+							<input type="hidden" name="idProducto" value="@item.CarritoLinea.idProducto" />
+							<input type="hidden" name="cantidad" value="@(item.CarritoLinea.cantidad + 1)" />
+							<button class="qty-btn" type="submit">+</button>
+						</form>
+						<form asp-action="Delete" asp-controller="CarritoLinea" method="post" class="d-inline ms-3">
+							<input type="hidden" name="idProducto" value="@item.CarritoLinea.idProducto" />
+							<button type="submit" class="btn btn-link p-0 delete-icon" title="Eliminar" style="color: #dc3545;"><i class="bi bi-trash"></i></button>
+						</form>
+					</div>
+				</div>
+				<div class="col-md-3 text-end fw-bold">$@String.Format("{0:0.00}", subtotal)</div>
 			</div>
-		</div>
-		<div class="col-md-3 text-center">
-			<div class="d-flex justify-content-center align-items-center">
-				<button class="qty-btn">−</button>
-				<span class="mx-2">1</span>
-				<button class="qty-btn">+</button>
-				<i class="bi bi-trash ms-3 delete-icon"></i>
-			</div>
-		</div>
-		<div class="col-md-3 text-end fw-bold">$200.00</div>
-	</div>
-
-	<!-- Producto 2 -->
-	<div class="row align-items-center mb-4">
-		<div class="col-md-6 d-flex">
-			<img src="img/playera_blanca.webp" style="width: 80px; height: 80px; object-fit: cover;" alt="Playera blanca" class="me-3">
-			<div>
-				<div class="fw-bold">Playera basic</div>
-				<div class="text-muted">$200.00</div>
-				<div class="text-muted">Color: Blanco</div>
-				<div class="text-muted">Talla: XL</div>
-			</div>
-		</div>
-		<div class="col-md-3 text-center">
-			<div class="d-flex justify-content-center align-items-center">
-				<button class="qty-btn">−</button>
-				<span class="mx-2">2</span>
-				<button class="qty-btn">+</button>
-				<i class="bi bi-trash ms-3 delete-icon"></i>
-			</div>
-		</div>
-		<div class="col-md-3 text-end fw-bold">$400.00</div>
-	</div>
+		}
+	}
+	else
+	{
+		<div class="alert alert-info">Tu carrito está vacío.</div>
+	}
 
 	<!-- Total -->
 	<div class="row justify-content-end mb-3">
 		<div class="col-md-3 text-end fw-bold">
-			Total: $600.00 MXN
+			Total: $@String.Format("{0:0.00}", total) MXN
 		</div>
 	</div>
 

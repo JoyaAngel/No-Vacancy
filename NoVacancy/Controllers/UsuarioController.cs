@@ -79,7 +79,26 @@ namespace NoVacancy.Controllers
                     if (!string.IsNullOrEmpty(model.Rol))
                         await _userManager.AddToRoleAsync(usuario, model.Rol);
 
-                    return RedirectToAction(nameof(Index));
+                    // Crear CarritoCabecera si el usuario es Cliente
+                    if (model.Rol == "Cliente")
+                    {
+                        var carrito = new CarritoCabecera
+                        {
+                            Id = usuario.Id
+                        };
+                        _context.CarritosCabecera.Add(carrito);
+                        await _context.SaveChangesAsync();
+                    }
+
+                    // Iniciar sesión automáticamente
+                    await _signInManager.SignInAsync(usuario, isPersistent: false);
+
+                    // Redirección inteligente
+                    var returnUrl = Request.Query["ReturnUrl"].FirstOrDefault();
+                    if (!string.IsNullOrEmpty(returnUrl))
+                        return Redirect(returnUrl);
+                    else
+                        return RedirectToAction("Index", "Home");
                 }
 
                 foreach (var error in result.Errors)

@@ -62,30 +62,37 @@ namespace NoVacancy.Controllers
             List<string> idColor, // Cambiado de List<int> a List<string>
             List<string> nuevoColor,
             List<string> nuevoCodigo,
-            List<int> idTalla,
             List<decimal> Precio,
             List<int> cantidad,
             List<int?> limite
         )
         {
             // Validación de datos recibidos
-            if (idColor == null || idTalla == null || Precio == null || cantidad == null || limite == null)
+            if (idColor == null || Precio == null || cantidad == null || limite == null)
             {
                 return BadRequest("Faltan datos requeridos para crear productos.");
             }
-            System.Diagnostics.Debug.WriteLine($"idColor: {idColor?.Count ?? 0}, idTalla: {idTalla?.Count ?? 0}, Precio: {Precio?.Count ?? 0}, cantidad: {cantidad?.Count ?? 0}, limite: {limite?.Count ?? 0}");
+            System.Diagnostics.Debug.WriteLine($"idColor: {idColor?.Count ?? 0}, Precio: {Precio?.Count ?? 0}, cantidad: {cantidad?.Count ?? 0}, limite: {limite?.Count ?? 0}");
             if (idColor != null && idColor.Count > 0) System.Diagnostics.Debug.WriteLine($"idColor[0]: {idColor[0]}");
-            if (idTalla != null && idTalla.Count > 0) System.Diagnostics.Debug.WriteLine($"idTalla[0]: {idTalla[0]}");
             if (Precio != null && Precio.Count > 0) System.Diagnostics.Debug.WriteLine($"Precio[0]: {Precio[0]}");
             if (cantidad != null && cantidad.Count > 0) System.Diagnostics.Debug.WriteLine($"cantidad[0]: {cantidad[0]}");
             if (limite != null && limite.Count > 0) System.Diagnostics.Debug.WriteLine($"limite[0]: {limite[0]}");
             var files = Request.Form.Files;
             var productosInsertados = new List<Producto>();
-            int variantes = new[] { idColor?.Count ?? 0, idTalla?.Count ?? 0, Precio?.Count ?? 0, cantidad?.Count ?? 0, limite?.Count ?? 0 }.Max();
+            // Recopila todas las imágenes subidas
+            var imagenesGlobales = new List<IFormFile>();
+            foreach (var file in files)
+            {
+                if (file.Name.StartsWith("Imagenes["))
+                {
+                    imagenesGlobales.Add(file);
+                }
+            }
+            // Usar la cantidad de colores como referencia para variantes
+            int variantes = idColor?.Count ?? 0;
             for (int i = 0; i < variantes; i++)
             {
                 if ((idColor == null || i >= idColor.Count) ||
-                    (idTalla == null || i >= idTalla.Count) ||
                     (Precio == null || i >= Precio.Count) ||
                     (cantidad == null || i >= cantidad.Count) ||
                     (limite == null || i >= limite.Count))
@@ -110,48 +117,50 @@ namespace NoVacancy.Controllers
                 {
                     continue; // Si no es válido, saltar
                 }
-                var producto = new Producto
+                // Obtener todas las tallas seleccionadas para esta variante
+                var tallasSeleccionadas = Request.Form[$"idTalla[{i}]"];
+                if (string.IsNullOrEmpty(tallasSeleccionadas.ToString()) || tallasSeleccionadas.Count == 0)
                 {
-                    nombre = Titulo,
-                    descripcion = Descripcion,
-                    idCategoria = CategoriaId,
-                    idColor = colorId,
-                    idTalla = idTalla[i],
-                    precio = (double)Precio[i],
-                    cantidad = cantidad[i],
-                    limite = limite[i]
-                };
-                _context.Productos.Add(producto);
-                await _context.SaveChangesAsync();
-                productosInsertados.Add(producto);
-                // Guardar imágenes asociadas a esta variante
-                var imagenesVariante = new List<IFormFile>();
-                foreach (var file in files)
-                {
-                    if (file.Name == $"Imagenes[{i}]")
-                    {
-                        imagenesVariante.Add(file);
-                    }
+                    continue; // No hay tallas seleccionadas para esta variante
                 }
-                foreach (var img in imagenesVariante)
+                foreach (var tallaStr in tallasSeleccionadas)
                 {
-                    if (img != null && img.Length > 0)
+                    if (!int.TryParse(tallaStr, out int tallaId)) continue;
+                    var producto = new Producto
                     {
-                        var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/productos");
-                        if (!Directory.Exists(uploadsFolder))
-                            Directory.CreateDirectory(uploadsFolder);
-                        var uniqueFileName = $"producto_{producto.idProducto}_{Guid.NewGuid()}_{Path.GetFileName(img.FileName)}";
-                        var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        nombre = Titulo,
+                        descripcion = Descripcion,
+                        idCategoria = CategoriaId,
+                        idColor = colorId,
+                        idTalla = tallaId,
+                        precio = (double)Precio[i],
+                        cantidad = cantidad[i],
+                        limite = limite[i]
+                    };
+                    _context.Productos.Add(producto);
+                    await _context.SaveChangesAsync();
+                    productosInsertados.Add(producto);
+                    // Asocia todas las imágenes a cada producto
+                    foreach (var img in imagenesGlobales)
+                    {
+                        if (img != null && img.Length > 0)
                         {
-                            await img.CopyToAsync(stream);
+                            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/productos");
+                            if (!Directory.Exists(uploadsFolder))
+                                Directory.CreateDirectory(uploadsFolder);
+                            var uniqueFileName = $"producto_{producto.idProducto}_{Guid.NewGuid()}_{Path.GetFileName(img.FileName)}";
+                            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                            using (var stream = new FileStream(filePath, FileMode.Create))
+                            {
+                                await img.CopyToAsync(stream);
+                            }
+                            var imagen = new Imagen
+                            {
+                                nombre = uniqueFileName,
+                                idProducto = producto.idProducto
+                            };
+                            _context.Imagenes.Add(imagen);
                         }
-                        var imagen = new Imagen
-                        {
-                            nombre = uniqueFileName,
-                            idProducto = producto.idProducto
-                        };
-                        _context.Imagenes.Add(imagen);
                     }
                 }
             }

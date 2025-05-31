@@ -1,3 +1,4 @@
+@model NoVacancy.ViewModels.RegistroUsuarioViewModel
 @{
     ViewData["Title"] = "Registro";
 }
@@ -13,19 +14,33 @@
     <h4 class="fw-bold">Registro de usuario</h4>
     <p>¿Ya tienes una cuenta? <a href="@Url.Action("Login", "Usuario")">Inicia sesión</a></p>
 
-    <form>
+    @using (Html.BeginForm("Register", "Usuario", FormMethod.Post, new { @ReturnUrl = Context.Request.Query["ReturnUrl"] }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.Hidden("ReturnUrl", Context.Request.Query["ReturnUrl"])
         <div class="mb-3">
-            <label class="form-label">Nombre de usuario</label>
-            <input type="text" class="form-control">
+            <label class="form-label">Nombre</label>
+            @Html.TextBoxFor(m => m.Nombre, new { @class = "form-control", required = "required" })
+            @Html.ValidationMessageFor(m => m.Nombre, "", new { @class = "text-danger" })
         </div>
         <div class="mb-3">
             <label class="form-label">Correo electrónico</label>
-            <input type="email" class="form-control">
+            @Html.TextBoxFor(m => m.Email, new { @class = "form-control", type = "email", required = "required" })
+            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
         </div>
         <div class="mb-4">
             <label class="form-label">Contraseña</label>
-            <input type="password" class="form-control">
+            @Html.PasswordFor(m => m.Password, new { @class = "form-control", required = "required" })
+            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+        </div>
+        <div class="mb-4">
+            <label class="form-label">Rol</label>
+            @Html.DropDownListFor(m => m.Rol, new SelectList(new[] { "Cliente" }), "Selecciona un rol", new { @class = "form-control", required = "required" })
+            @Html.ValidationMessageFor(m => m.Rol, "", new { @class = "text-danger" })
         </div>
         <button type="submit" class="btn btn-dark w-100">Registrarse</button>
-    </form>
+    }
+    @section Scripts {
+        @await Html.PartialAsync("_ValidationScriptsPartial")
+    }
 </div>
