@@ -21,8 +21,60 @@ namespace NoVacancy.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            // Productos más comprados
+            var productosMasComprados = await _context.CarritosLineas
+                .GroupBy(cl => cl.idProducto)
+                .Select(g => new {
+                    idProducto = g.Key,
+                    TotalComprado = g.Sum(x => x.cantidad)
+                })
+                .OrderByDescending(x => x.TotalComprado)
+                .Take(3)
+                .ToListAsync();
+
+            var productosCompradosIds = productosMasComprados.Select(x => x.idProducto).ToList();
+            var productosComprados = await _context.Productos
+                .Where(p => productosCompradosIds.Contains(p.idProducto))
+                .Include(p => p.Color)
+                .Include(p => p.Talla)
+                .Include(p => p.Categoria)
+                .ToListAsync();
+            var imagenesComprados = await _context.Imagenes
+                .Where(i => productosCompradosIds.Contains(i.idProducto))
+                .ToListAsync();
+
+            // Productos mejor calificados
+            var productosMejorCalificados = await _context.Resenias
+                .GroupBy(r => r.idProducto)
+                .Select(g => new {
+                    idProducto = g.Key,
+                    Promedio = g.Average(x => x.calificacion)
+                })
+                .OrderByDescending(x => x.Promedio)
+                .Take(3)
+                .ToListAsync();
+            var productosCalificadosIds = productosMejorCalificados.Select(x => x.idProducto).ToList();
+            var productosCalificados = await _context.Productos
+                .Where(p => productosCalificadosIds.Contains(p.idProducto))
+                .Include(p => p.Color)
+                .Include(p => p.Talla)
+                .Include(p => p.Categoria)
+                .ToListAsync();
+            var imagenesCalificados = await _context.Imagenes
+                .Where(i => productosCalificadosIds.Contains(i.idProducto))
+                .ToListAsync();
+
+            ViewBag.ProductosMasComprados = productosComprados.Select(p => new {
+                Producto = p,
+                Imagen = imagenesComprados.FirstOrDefault(i => i.idProducto == p.idProducto)?.nombre
+            }).ToList();
+            ViewBag.ProductosMejorCalificados = productosCalificados.Select(p => new {
+                Producto = p,
+                Imagen = imagenesCalificados.FirstOrDefault(i => i.idProducto == p.idProducto)?.nombre
+            }).ToList();
+
             return View();
         }
 

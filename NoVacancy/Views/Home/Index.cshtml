@@ -1,48 +1,55 @@
 ﻿@{
 	ViewData["Title"] = "Home Page";
+	var productosMasComprados = ViewBag.ProductosMasComprados as IEnumerable<dynamic>;
+	var productosMejorCalificados = ViewBag.ProductosMejorCalificados as IEnumerable<dynamic>;
 }
 
 <section>
 	<div class="container mt-5">
-		<h1 id="cabecera">Colecciones</h1>
+		<h1 id="cabecera">Más comprados</h1>
 		<br>
 		<div class="row">
-
-			<div class="col-md-4">
-				<div class="card">
-					<img src="~/images/playera_negra.png" class="card-img-top" alt="Producto 1">
-					<div class="card-body">
-						<h5 class="card-title">Playera Negra</h5>
-						<p class="card-text">$25.00</p>
-						<a href="@Url.Action("Product_detail", "Home")" class="px-3 text-muted text-decoration-none">Ver más -></a>
+			@if (productosMasComprados != null)
+			{
+				foreach (var item in productosMasComprados)
+				{
+					<div class="col-md-4 mb-4">
+						<div class="card">
+							<img src="~/images/productos/@item.Imagen" class="card-img-top" alt="@item.Producto.nombre">
+							<div class="card-body">
+								<h5 class="card-title">@item.Producto.nombre</h5>
+								<p class="card-text">$@item.Producto.precio.ToString("0.00")</p>
+								<a href="@Url.Action("Product_detail", "Home", new { nombre = item.Producto.nombre })" class="px-3 text-muted text-decoration-none">Ver más -></a>
+							</div>
+						</div>
 					</div>
-				</div>
-			</div>
+				}
+			}
+		</div>
+	</div>
+</section>
 
-
-			<div class="col-md-4">
-				<div class="card">
-					<img src="~/images/playera_blanca.webp" class="card-img-top" alt="Producto 1">
-					<div class="card-body">
-						<h5 class="card-title">Playera Blanca</h5>
-						<p class="card-text">$29.00</p>
-						<a href="@Url.Action("Product_detail", "Home")" class="px-3 text-muted text-decoration-none">Ver más -></a>
+<section>
+	<div class="container mt-5">
+		<h1 id="cabecera">Mejor calificados</h1>
+		<br>
+		<div class="row">
+			@if (productosMejorCalificados != null)
+			{
+				foreach (var item in productosMejorCalificados)
+				{
+					<div class="col-md-4 mb-4">
+						<div class="card">
+							<img src="~/images/productos/@item.Imagen" class="card-img-top" alt="@item.Producto.nombre">
+							<div class="card-body">
+								<h5 class="card-title">@item.Producto.nombre</h5>
+								<p class="card-text">$@item.Producto.precio.ToString("0.00")</p>
+								<a href="@Url.Action("Product_detail", "Home", new { nombre = item.Producto.nombre })" class="px-3 text-muted text-decoration-none">Ver más -></a>
+							</div>
+						</div>
 					</div>
-				</div>
-			</div>
-
-
-			<div class="col-md-4">
-				<div class="card">
-					<img src="~/images/playera_negra.png" class="card-img-top" alt="Producto 1">
-					<div class="card-body">
-						<h5 class="card-title">Playera Negra 2</h5>
-						<p class="card-text">$25.00</p>
-						<a href="@Url.Action("Product_detail", "Home")" class="px-3 text-muted text-decoration-none">Ver más -></a>
-					</div>
-				</div>
-			</div>
-
+				}
+			}
 		</div>
 	</div>
 </section>

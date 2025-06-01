@@ -57,6 +57,20 @@ namespace NoVacancy.Controllers
             _context.Set<Detalle>().Add(detalle);
             await _context.SaveChangesAsync();
 
+            // Restar stock de los productos comprados (asegura que el producto esté actualizado desde la base de datos)
+            foreach (var linea in lineas)
+            {
+                var productoDb = await _context.Productos.FirstOrDefaultAsync(p => p.idProducto == linea.idProducto);
+                if (productoDb != null)
+                {
+                    productoDb.cantidad -= linea.cantidad;
+                    if (productoDb.cantidad < 0)
+                        productoDb.cantidad = 0;
+                    _context.Productos.Update(productoDb);
+                }
+            }
+            await _context.SaveChangesAsync();
+
             return Ok(pedido);
         }
 

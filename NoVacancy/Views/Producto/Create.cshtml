@@ -92,7 +92,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-12 d-flex justify-content-end align-items-center">
-                                                <button type="button" class="btn btn-outline-danger btn-xs d-flex align-items-center justify-content-center btn-talla-remove ms-2" style="width:24px;height:24px;" onclick="eliminarTalla(this)" title="Eliminar talla">
+                                                <button type="button" class="btn btn-outline-danger btn-xs d-flex align-items-center justify-content-center btn-talla-remove ms-2" style="width:24px;height:24px;" onclick="eliminarTalla(this, 0)" title="Eliminar talla">
                                                     <span class="bi bi-dash"></span>
                                                 </button>
                                             </div>
@@ -198,13 +198,10 @@
             clone.setAttribute('data-idx', newIdx);
             // Actualiza los names e ids de los campos de la variante clonada
             Array.from(clone.querySelectorAll('input, select, textarea, label, div, span')).forEach(el => {
-                // Cambia los names de la variante
                 if (el.name) {
                     el.name = el.name.replace(/Variantes\[\d+\]/g, `Variantes[${newIdx}]`);
-                    // Para tallas dentro de la variante
                     el.name = el.name.replace(/Tallas\[\d+\]/g, 'Tallas[0]');
                 }
-                // Cambia los ids
                 if (el.id) {
                     el.id = el.id.replace(/(-|_)(\d+)$/, `$1${newIdx}`);
                 }
@@ -212,7 +209,6 @@
                     el.htmlFor = el.htmlFor.replace(/(-|_)(\d+)$/, `$1${newIdx}`);
                 }
             });
-            // Limpia los valores de los inputs
             Array.from(clone.querySelectorAll('input, select, textarea')).forEach(el => {
                 if (el.type === 'checkbox' || el.type === 'radio') {
                     el.checked = false;
@@ -225,7 +221,6 @@
                     el.style.display = 'none';
                 }
             });
-            // Limpia los contenedores y previews
             const colorExtra = clone.querySelector(`#colorExtraContainer-${newIdx}`);
             if (colorExtra) colorExtra.style.display = 'none';
             const colorPreview = clone.querySelector(`#colorPreview-${newIdx}`);
@@ -239,8 +234,10 @@
             if (colorSelect) colorSelect.setAttribute('onchange', `mostrarNuevoColor(this, ${newIdx})`);
             const fileUpload = clone.querySelector(`#fileUpload-${newIdx}`);
             if (fileUpload) fileUpload.setAttribute('onchange', `previewImages(event, ${newIdx})`);
+            // ACTUALIZA el botón de agregar talla para que use el índice correcto
+            const btnAddTalla = clone.querySelector('.btn-add-talla-icon');
+            if (btnAddTalla) btnAddTalla.setAttribute('onclick', `agregarTalla(${newIdx})`);
             container.appendChild(clone);
-            // Actualiza los names de las tallas de la nueva variante
             actualizarNamesTallas(newIdx);
         }
 
@@ -269,7 +266,7 @@
             });
             const btnRemove = nueva.querySelector('.btn-talla-remove');
             btnRemove.style.display = 'flex';
-            btnRemove.onclick = function() { eliminarTalla(btnRemove); };
+            btnRemove.onclick = function() { eliminarTalla(this, idxVariante); };
             container.appendChild(nueva);
             actualizarNamesTallas(idxVariante);
             actualizarOpcionesTallas(idxVariante);
@@ -288,10 +285,10 @@
                 });
             });
         }
-        function eliminarTalla(btn) {
+        function eliminarTalla(btn, idxVariante) {
             const card = btn.closest('.talla-card');
             if (card) card.remove();
-            actualizarBotonesTalla(0);
+            actualizarBotonesTalla(idxVariante);
         }
         function actualizarBotonesTalla(idx) {
             const container = document.getElementById(`tallaCardsContainer-${idx}`);
