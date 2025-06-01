@@ -141,31 +141,9 @@ public class NoVacancyDbContext : IdentityDbContext<Usuario>
         modelBuilder.Entity<Talla>()
             .HasKey(t => t.idTalla);
 
-        // Seeder de tallas promedio
-        modelBuilder.Entity<Talla>().HasData(
-            new Talla { idTalla = 1, nombre = "XS" },
-            new Talla { idTalla = 2, nombre = "S" },
-            new Talla { idTalla = 3, nombre = "M" },
-            new Talla { idTalla = 4, nombre = "L" },
-            new Talla { idTalla = 5, nombre = "XL" },
-            new Talla { idTalla = 6, nombre = "XXL" }
-        );
-
         // Configuración de Categoria
         modelBuilder.Entity<Categoria>()
             .HasKey(c => c.idCategoria);
-
-        // Seeder de categorías para tienda de ropa
-        modelBuilder.Entity<Categoria>().HasData(
-            new Categoria { idCategoria = 1, nombre = "Camisetas" },
-            new Categoria { idCategoria = 2, nombre = "Pantalones" },
-            new Categoria { idCategoria = 3, nombre = "Vestidos" },
-            new Categoria { idCategoria = 4, nombre = "Faldas" },
-            new Categoria { idCategoria = 5, nombre = "Chaquetas" },
-            new Categoria { idCategoria = 6, nombre = "Ropa interior" },
-            new Categoria { idCategoria = 7, nombre = "Zapatos" },
-            new Categoria { idCategoria = 8, nombre = "Accesorios" }
-        );
 
         // Configuración de Color
         modelBuilder.Entity<Color>()

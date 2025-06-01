@@ -1,10 +1,19 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NoVacancy.Models;
+using NoVacancy.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace NoVacancy.Controllers
 {
     public class ReseniaController : Controller
     {
+        private readonly NoVacancyDbContext _context;
+        public ReseniaController(NoVacancyDbContext context)
+        {
+            _context = context;
+        }
+
         // GET: ReseniaController
         public ActionResult Index()
         {
@@ -18,24 +27,29 @@ namespace NoVacancy.Controllers
         }
 
         // GET: ReseniaController/Create
-        public ActionResult Create()
+        public async Task<IActionResult> Create(int idProducto)
         {
-            return View();
+            var producto = await _context.Productos.FindAsync(idProducto);
+            if (producto == null) return NotFound();
+            var model = new Resenia { idProducto = idProducto };
+            ViewBag.ProductoNombre = producto.nombre;
+            return View(model);
         }
 
         // POST: ReseniaController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<IActionResult> Create(Resenia model)
         {
-            try
+            if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                _context.Resenias.Add(model);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Historial", "Pedido");
             }
-            catch
-            {
-                return View();
-            }
+            var producto = await _context.Productos.FindAsync(model.idProducto);
+            ViewBag.ProductoNombre = producto?.nombre;
+            return View(model);
         }
 
         // GET: ReseniaController/Edit/5

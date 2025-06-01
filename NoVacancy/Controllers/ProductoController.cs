@@ -206,8 +206,7 @@ namespace NoVacancy.Controllers
                     ViewBag.Tallas = _context.Tallas.ToList();
                     ViewBag.Colores = _context.Colores.ToList();
                     return View(model);
-                }
-                return RedirectToAction(nameof(Index));
+                }                return RedirectToAction("Store", "Home");
             }
             catch (Exception ex)
             {
