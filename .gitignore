@@ -1,6 +1,115 @@
-﻿################################################################################
-# Este archivo .gitignore ha sido creado automáticamente por Microsoft(R) Visual Studio.
-################################################################################
+﻿# This .gitignore file is based on the Visual Studio template
+# and includes common exclusions for .NET Core projects.
 
-/NoVacancy/SQLQuery1.sql
+# Ignorar resultados de compilación
+[Dd]ebug/
+[Rr]elease/
+[Aa]rm64/
+[Aa]rm/
+[Xx]64/
+[Xx]86/
+[Ww]in32/
+[Bb]in/
+[Oo]bj/
+[Cc]s.json
+# Carpetas de paquetes NuGet
+packages/
+# Archivos de la solución (Visual Studio)
+*.suo
+*.user
+*.userprefs
+*.sln.docstates
+# Archivos de caché del IDE (Visual Studio)
+.vs/
+# Archivos generados por Visual Studio Code
+.vscode/
+# Carpeta de publicación (cuando publicas tu app)
+Publish/
+
+# Archivos de configuración que contienen información sensible o específica del entorno
+# Es buena práctica no versionar configuraciones que cambian por entorno
+# Si usas User Secrets, estos no se versionan por defecto, lo cual es bueno.
+# Si tienes archivos appsettings.Development.json, etc., y contienen
+# secretos, asegúrate de que no se versionan o usa variables de entorno.
+# appsettings*.json # Descomentar si quieres ignorar todos los appsettings,
+                    # pero generalmente querrás versionar el base.
+# appsettings.Development.json # Descomentar si quieres ignorar solo el de desarrollo
+
+# Archivos de caché de herramientas .NET
+.editorconfig
+.dotnet/
+*.nupkg
+*.snk
+# Archivos de cobertura de código
+*.coverage
+*.coveragexml
+
+# Archivos de bases de datos locales
+*.mdf
+*.ldf
+*.sdf
 *.db
+
+# Archivos generados por paquetes/herramientas específicos
+# Azure
+.azure/
+
+# Rider IDE
+.idea/
+*.iml
+
+# NCrunch
+*.ncrunch*
+*.ncrunchproject
+*.ncrunchsolutions
+
+# Resharper
+_ReSharper*/
+*.resharper
+
+# Test files
+TestResults/
+*.trx
+
+# Visual Studio Profiler
+*.psess
+*.vsp
+*.vspx
+
+# Git de Windows (posibles archivos de bloqueo)
+*.gitattributes
+*.gitkeep
+
+# Logs
+*.log
+[Ll]ogs/
+
+# Archivos de contenedores Docker
+docker-compose.vs.debug.yml
+docker-compose.vs.release.yml
+
+# Archivos temporales
+*.~
+*.tmp
+*.bak
+*.old
+
+# NPM / Frontend (si integras frontend en tu proyecto ASP.NET Core)
+node_modules/
+npm-debug.log
+yarn-error.log
+.yarn/
+build/ # Directorio de salida de frontend (si usas un pipeline de build)
+
+# Otros archivos generados por el OS
+.DS_Store # macOS
+Thumbs.db # Windows
+desktop.ini # Windows
+
+# Archivos de compilación de Blazor WebAssembly / SPA con Blazor
+wwwroot/dist/ # Si Blazor WebAssembly o SPA genera archivos en wwwroot/dist/
+
+# Ignorar archivos del proyecto que no deben ser versionados
+# Si tienes proyectos que no deben ser versionados en subdirectorios
+# por ejemplo, proyectos de pruebas que no quieres en el repo principal
+# MyProject.Tests/

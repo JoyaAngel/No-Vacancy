@@ -70,6 +70,12 @@ namespace NoVacancy.Controllers
                         .ToList();
                 }
             }
+            var productoIds = variantes.Select(v => v.idProducto).ToList();
+            var resenias = await _context.Resenias
+                .Where(r => productoIds.Contains(r.idProducto))
+                .Include(r => r.Producto)
+                .ToListAsync();
+            ViewBag.Resenias = resenias;
             ViewBag.Colores = colores;
             ViewBag.ImagenesPorColor = imagenesPorColor;
             ViewBag.Nombre = nombre;
@@ -95,7 +101,15 @@ namespace NoVacancy.Controllers
             var productosVM = new List<ProductoTiendaViewModel>();
             foreach (var producto in productosUnicos)
             {
+                // Buscar imágenes para el idProducto
                 var imagenes = await _context.Imagenes.Where(i => i.idProducto == producto.idProducto).ToListAsync();
+                // Si no hay imágenes, buscar imágenes de cualquier producto con el mismo nombre
+                if (imagenes == null || imagenes.Count == 0)
+                {
+                    // Buscar ids de productos con el mismo nombre
+                    var idsMismoNombre = productos.Where(p => p.nombre == producto.nombre).Select(p => p.idProducto).ToList();
+                    imagenes = await _context.Imagenes.Where(i => idsMismoNombre.Contains(i.idProducto)).ToListAsync();
+                }
                 productosVM.Add(new ProductoTiendaViewModel
                 {
                     Producto = producto,

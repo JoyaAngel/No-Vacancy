@@ -41,6 +41,7 @@ using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     await SeedUserRoles.Initialize(services);
+    SeederDB.SeedAll(services); // Llama al seeder general
 }
 
 // Configure the HTTP request pipeline.
