@@ -5132,23 +5132,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\PC WHITE WOLF\\.nuget\\packages\\": {},
+    "C:\\Users\\lalo0\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\PC WHITE WOLF\\Documents\\Escuela\\Sexto semestre\\Desarrollo de aplicaciones web\\No-Vacancy\\NoVacancy\\NoVacancy.csproj",
+      "projectUniqueName": "C:\\Users\\lalo0\\OneDrive\\Desktop\\No-Vacancy\\NoVacancy\\NoVacancy.csproj",
       "projectName": "NoVacancy",
-      "projectPath": "C:\\Users\\PC WHITE WOLF\\Documents\\Escuela\\Sexto semestre\\Desarrollo de aplicaciones web\\No-Vacancy\\NoVacancy\\NoVacancy.csproj",
-      "packagesPath": "C:\\Users\\PC WHITE WOLF\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\PC WHITE WOLF\\Documents\\Escuela\\Sexto semestre\\Desarrollo de aplicaciones web\\No-Vacancy\\NoVacancy\\obj\\",
+      "projectPath": "C:\\Users\\lalo0\\OneDrive\\Desktop\\No-Vacancy\\NoVacancy\\NoVacancy.csproj",
+      "packagesPath": "C:\\Users\\lalo0\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\lalo0\\OneDrive\\Desktop\\No-Vacancy\\NoVacancy\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\PC WHITE WOLF\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\lalo0\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -5242,7 +5242,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.203/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.201/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
