@@ -9,6 +9,11 @@
 		<div class="col-md-3 text-end">Total</div>
 	</div>
 
+	@if (TempData["Error"] != null)
+	{
+		<div class="alert alert-danger">@TempData["Error"]</div>
+	}
+
 	@{
 		double total = 0;
 	}
@@ -21,6 +26,7 @@
 			var color = item.CarritoLinea.Producto?.Color?.nombre ?? "-";
 			var talla = item.CarritoLinea.Producto?.Talla?.nombre ?? "-";
 			var imagen = item.ImagenPrincipal;
+			int? limite = item.CarritoLinea.Producto?.limite;
 			<div class="row align-items-center mb-4">
 				<div class="col-md-6 d-flex">
 					<img src="@imagen" style="width: 80px; height: 80px; object-fit: cover;" alt="@item.CarritoLinea.Producto?.nombre" class="me-3">
@@ -29,6 +35,10 @@
 						<div class="text-muted">$@String.Format("{0:0.00}", item.CarritoLinea.Producto?.precio ?? 0)</div>
 						<div class="text-muted">Color: @item.Color</div>
 						<div class="text-muted">Talla: @item.Talla</div>
+						@if (limite.HasValue)
+						{
+							<div class="text-danger small">Máximo por cliente: @limite.Value</div>
+						}
 					</div>
 				</div>
 				<div class="col-md-3 text-center">
@@ -42,7 +52,7 @@
 						<form asp-action="Update" asp-controller="CarritoLinea" method="post" class="d-inline">
 							<input type="hidden" name="idProducto" value="@item.CarritoLinea.idProducto" />
 							<input type="hidden" name="cantidad" value="@(item.CarritoLinea.cantidad + 1)" />
-							<button class="qty-btn" type="submit">+</button>
+							<button class="qty-btn" type="submit" @(limite.HasValue && item.CarritoLinea.cantidad >= limite.Value ? "disabled" : "")>+</button>
 						</form>
 						<form asp-action="Delete" asp-controller="CarritoLinea" method="post" class="d-inline ms-3">
 							<input type="hidden" name="idProducto" value="@item.CarritoLinea.idProducto" />
@@ -68,13 +78,35 @@
 
 	<!-- Botones -->
 	<div class="container my-4">
-		<div class="row justify-content-between">
+		<div class="row justify-content-end">
 			<div class="col">
-				<button class="btn btn-dark w-100">Solicitar factura</button>
-			</div>
-			<div class="col">
-				<button class="btn btn-dark w-100">Confirmar pedido</button>
+				<button class="btn btn-dark w-100" type="button" data-bs-toggle="modal" data-bs-target="#facturaModal" @(Model == null || !Model.Any() ? "disabled" : "")>Confirmar pedido</button>
 			</div>
 		</div>
+	</div>
+
+	<!-- Modal para solicitar factura -->
+	<div class="modal fade" id="facturaModal" tabindex="-1" aria-labelledby="facturaModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="facturaModalLabel">¿Deseas solicitar factura?</h5>
+	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+	      </div>
+	      <div class="modal-body">
+	        Selecciona una opción para continuar con tu pedido.
+	      </div>
+	      <div class="modal-footer">
+	        <form asp-action="ConfirmarPedido" asp-controller="CarritoCabecera" method="post" class="d-inline">
+	          <input type="hidden" name="solicitarFactura" value="true" />
+	          <button type="submit" class="btn btn-primary">Solicitar factura</button>
+	        </form>
+	        <form asp-action="ConfirmarPedido" asp-controller="CarritoCabecera" method="post" class="d-inline">
+	          <input type="hidden" name="solicitarFactura" value="false" />
+	          <button type="submit" class="btn btn-secondary">No solicitar factura</button>
+	        </form>
+	      </div>
+	    </div>
+	  </div>
 	</div>
 </div>

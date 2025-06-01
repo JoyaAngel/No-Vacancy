@@ -3,11 +3,19 @@
   "WorkspaceRootPath": "C:\\Users\\PC WHITE WOLF\\Documents\\Escuela\\Sexto semestre\\Desarrollo de aplicaciones web\\No-Vacancy\\NoVacancy\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{15EC80C5-3A53-470C-B25C-E972A06479D1}|NoVacancy.csproj|c:\\users\\pc white wolf\\documents\\escuela\\sexto semestre\\desarrollo de aplicaciones web\\no-vacancy\\novacancy\\views\\producto\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{15EC80C5-3A53-470C-B25C-E972A06479D1}|NoVacancy.csproj|solutionrelative:views\\producto\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\PC WHITE WOLF\\AppData\\Local\\Temp\\eedibs1j..sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\PC WHITE WOLF\\AppData\\Local\\Temp\\eedibs1j..sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|"
+      "AbsoluteMoniker": "D:0:0:{15EC80C5-3A53-470C-B25C-E972A06479D1}|NoVacancy.csproj|c:\\users\\pc white wolf\\documents\\escuela\\sexto semestre\\desarrollo de aplicaciones web\\no-vacancy\\novacancy\\views\\pedido\\historial.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{15EC80C5-3A53-470C-B25C-E972A06479D1}|NoVacancy.csproj|solutionrelative:views\\pedido\\historial.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{15EC80C5-3A53-470C-B25C-E972A06479D1}|NoVacancy.csproj|c:\\users\\pc white wolf\\documents\\escuela\\sexto semestre\\desarrollo de aplicaciones web\\no-vacancy\\novacancy\\controllers\\usuariocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{15EC80C5-3A53-470C-B25C-E972A06479D1}|NoVacancy.csproj|solutionrelative:controllers\\usuariocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{15EC80C5-3A53-470C-B25C-E972A06479D1}|NoVacancy.csproj|c:\\users\\pc white wolf\\documents\\escuela\\sexto semestre\\desarrollo de aplicaciones web\\no-vacancy\\novacancy\\views\\producto\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{15EC80C5-3A53-470C-B25C-E972A06479D1}|NoVacancy.csproj|solutionrelative:views\\producto\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\PC WHITE WOLF\\AppData\\Local\\Temp\\eedibs1j..sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|CodeFrame"
@@ -23,7 +31,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Bookmark",
@@ -35,20 +43,46 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
+              "Title": "Historial.cshtml",
+              "DocumentMoniker": "C:\\Users\\PC WHITE WOLF\\Documents\\Escuela\\Sexto semestre\\Desarrollo de aplicaciones web\\No-Vacancy\\NoVacancy\\Views\\Pedido\\Historial.cshtml",
+              "RelativeDocumentMoniker": "Views\\Pedido\\Historial.cshtml",
+              "ToolTip": "C:\\Users\\PC WHITE WOLF\\Documents\\Escuela\\Sexto semestre\\Desarrollo de aplicaciones web\\No-Vacancy\\NoVacancy\\Views\\Pedido\\Historial.cshtml",
+              "RelativeToolTip": "Views\\Pedido\\Historial.cshtml",
+              "ViewState": "AgIAAAsAAAAAAAAAAAD4vxsAAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-06-01T01:54:39.064Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "UsuarioController.cs",
+              "DocumentMoniker": "C:\\Users\\PC WHITE WOLF\\Documents\\Escuela\\Sexto semestre\\Desarrollo de aplicaciones web\\No-Vacancy\\NoVacancy\\Controllers\\UsuarioController.cs",
+              "RelativeDocumentMoniker": "Controllers\\UsuarioController.cs",
+              "ToolTip": "C:\\Users\\PC WHITE WOLF\\Documents\\Escuela\\Sexto semestre\\Desarrollo de aplicaciones web\\No-Vacancy\\NoVacancy\\Controllers\\UsuarioController.cs",
+              "RelativeToolTip": "Controllers\\UsuarioController.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAnwBoAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-31T22:04:44.126Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "Create.cshtml",
               "DocumentMoniker": "C:\\Users\\PC WHITE WOLF\\Documents\\Escuela\\Sexto semestre\\Desarrollo de aplicaciones web\\No-Vacancy\\NoVacancy\\Views\\Producto\\Create.cshtml",
               "RelativeDocumentMoniker": "Views\\Producto\\Create.cshtml",
               "ToolTip": "C:\\Users\\PC WHITE WOLF\\Documents\\Escuela\\Sexto semestre\\Desarrollo de aplicaciones web\\No-Vacancy\\NoVacancy\\Views\\Producto\\Create.cshtml",
               "RelativeToolTip": "Views\\Producto\\Create.cshtml",
-              "ViewState": "AgIAAGUBAAAAAAAAAAAewIEBAAAWAAAAAAAAAA==",
+              "ViewState": "AgIAAGcAAAAAAAAAAAAnwHQAAAA4AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2025-05-31T21:06:49.806Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "SQLQuery1.sql ",
               "DocumentMoniker": "C:\\Users\\PC WHITE WOLF\\AppData\\Local\\Temp\\eedibs1j..sql",
               "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\AppData\\Local\\Temp\\eedibs1j..sql",

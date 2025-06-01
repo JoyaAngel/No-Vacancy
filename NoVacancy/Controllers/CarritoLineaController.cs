@@ -33,7 +33,10 @@ namespace NoVacancy.Controllers
             if (usuarioId == null)
                 return RedirectToAction("Login", "Usuario");
 
-            var carrito = await _context.CarritosCabecera.FirstOrDefaultAsync(c => c.Id == usuarioId);
+            var carrito = await _context.CarritosCabecera
+                .Where(c => c.Id == usuarioId && !_context.Pedidos.Any(p => p.idCarrito == c.idCarrito))
+                .OrderByDescending(c => c.idCarrito)
+                .FirstOrDefaultAsync();
             if (carrito == null)
                 return View(new List<CarritoLineaViewModel>());
 
@@ -86,7 +89,10 @@ namespace NoVacancy.Controllers
             if (usuarioId == null)
                 return RedirectToAction("Login", "Usuario");
 
-            var carrito = await _context.CarritosCabecera.FirstOrDefaultAsync(c => c.Id == usuarioId);
+            var carrito = await _context.CarritosCabecera
+                .Where(c => c.Id == usuarioId && !_context.Pedidos.Any(p => p.idCarrito == c.idCarrito))
+                .OrderByDescending(c => c.idCarrito)
+                .FirstOrDefaultAsync();
             if (carrito == null)
             {
                 carrito = new CarritoCabecera { Id = usuarioId };
@@ -98,19 +104,25 @@ namespace NoVacancy.Controllers
             var producto = await _context.Productos.FirstOrDefaultAsync(p => p.idProducto == idProducto);
             if (producto == null)
             {
-                // Log y mensaje de error
                 System.Diagnostics.Debug.WriteLine($"[CarritoLineaController] Producto con id {idProducto} no existe.");
                 TempData["Error"] = "El producto seleccionado no existe.";
                 return RedirectToAction("Shopping_cart");
             }
 
-            // Log de depuración
-            System.Diagnostics.Debug.WriteLine($"[CarritoLineaController] idCarrito: {carrito.idCarrito}, idProducto: {idProducto}, cantidad: {cantidad}");
-
             var linea = await _context.CarritosLineas.FirstOrDefaultAsync(l => l.idCarrito == carrito.idCarrito && l.idProducto == idProducto);
+            int nuevaCantidad = cantidad;
+            if (linea != null)
+                nuevaCantidad = linea.cantidad + cantidad;
+
+            if (producto.limite.HasValue && nuevaCantidad > producto.limite.Value)
+            {
+                TempData["Error"] = $"No puedes agregar más de {producto.limite.Value} unidades de este producto.";
+                return RedirectToAction("Shopping_cart");
+            }
+
             if (linea != null)
             {
-                linea.cantidad += cantidad;
+                linea.cantidad = nuevaCantidad;
                 _context.CarritosLineas.Update(linea);
             }
             else
@@ -131,9 +143,25 @@ namespace NoVacancy.Controllers
             if (usuarioId == null)
                 return RedirectToAction("Login", "Usuario");
 
-            var carrito = await _context.CarritosCabecera.FirstOrDefaultAsync(c => c.Id == usuarioId);
+            var carrito = await _context.CarritosCabecera
+                .Where(c => c.Id == usuarioId && !_context.Pedidos.Any(p => p.idCarrito == c.idCarrito))
+                .OrderByDescending(c => c.idCarrito)
+                .FirstOrDefaultAsync();
             if (carrito == null)
                 return RedirectToAction("Shopping_cart");
+
+            var producto = await _context.Productos.FirstOrDefaultAsync(p => p.idProducto == idProducto);
+            if (producto == null)
+            {
+                TempData["Error"] = "El producto seleccionado no existe.";
+                return RedirectToAction("Shopping_cart");
+            }
+
+            if (producto.limite.HasValue && cantidad > producto.limite.Value)
+            {
+                TempData["Error"] = $"No puedes seleccionar más de {producto.limite.Value} unidades de este producto.";
+                return RedirectToAction("Shopping_cart");
+            }
 
             var linea = await _context.CarritosLineas.FirstOrDefaultAsync(l => l.idCarrito == carrito.idCarrito && l.idProducto == idProducto);
             if (linea != null)
@@ -154,7 +182,10 @@ namespace NoVacancy.Controllers
             if (usuarioId == null)
                 return RedirectToAction("Login", "Usuario");
 
-            var carrito = await _context.CarritosCabecera.FirstOrDefaultAsync(c => c.Id == usuarioId);
+            var carrito = await _context.CarritosCabecera
+                .Where(c => c.Id == usuarioId && !_context.Pedidos.Any(p => p.idCarrito == c.idCarrito))
+                .OrderByDescending(c => c.idCarrito)
+                .FirstOrDefaultAsync();
             if (carrito == null)
                 return RedirectToAction("Shopping_cart");
 
@@ -176,7 +207,10 @@ namespace NoVacancy.Controllers
             if (usuarioId == null)
                 return RedirectToAction("Login", "Usuario");
 
-            var carrito = await _context.CarritosCabecera.FirstOrDefaultAsync(c => c.Id == usuarioId);
+            var carrito = await _context.CarritosCabecera
+                .Where(c => c.Id == usuarioId && !_context.Pedidos.Any(p => p.idCarrito == c.idCarrito))
+                .OrderByDescending(c => c.idCarrito)
+                .FirstOrDefaultAsync();
             if (carrito != null)
             {
                 var lineas = _context.CarritosLineas.Where(l => l.idCarrito == carrito.idCarrito);
@@ -185,6 +219,12 @@ namespace NoVacancy.Controllers
             }
 
             return RedirectToAction("Shopping_cart");
+        }
+
+        // GET: CarritoLinea/Invoice
+        public IActionResult Invoice()
+        {
+            return View();
         }
     }
 }

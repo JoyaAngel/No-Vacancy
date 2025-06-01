@@ -55,122 +55,168 @@ namespace NoVacancy.Controllers
         // POST: ProductoController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(
-            string Titulo,
-            string Descripcion,
-            int CategoriaId,
-            List<string> idColor, // Cambiado de List<int> a List<string>
-            List<string> nuevoColor,
-            List<string> nuevoCodigo,
-            List<decimal> Precio,
-            List<int> cantidad,
-            List<int?> limite
-        )
+        public async Task<IActionResult> Create([FromForm] NoVacancy.ViewModels.ProductoCreateViewModel model)
         {
-            // Validación de datos recibidos
-            if (idColor == null || Precio == null || cantidad == null || limite == null)
+            try
             {
-                return BadRequest("Faltan datos requeridos para crear productos.");
-            }
-            System.Diagnostics.Debug.WriteLine($"idColor: {idColor?.Count ?? 0}, Precio: {Precio?.Count ?? 0}, cantidad: {cantidad?.Count ?? 0}, limite: {limite?.Count ?? 0}");
-            if (idColor != null && idColor.Count > 0) System.Diagnostics.Debug.WriteLine($"idColor[0]: {idColor[0]}");
-            if (Precio != null && Precio.Count > 0) System.Diagnostics.Debug.WriteLine($"Precio[0]: {Precio[0]}");
-            if (cantidad != null && cantidad.Count > 0) System.Diagnostics.Debug.WriteLine($"cantidad[0]: {cantidad[0]}");
-            if (limite != null && limite.Count > 0) System.Diagnostics.Debug.WriteLine($"limite[0]: {limite[0]}");
-            var files = Request.Form.Files;
-            var productosInsertados = new List<Producto>();
-            // Recopila todas las imágenes subidas
-            var imagenesGlobales = new List<IFormFile>();
-            foreach (var file in files)
-            {
-                if (file.Name.StartsWith("Imagenes["))
+                // DEBUG: Loguear el modelo recibido
+                System.Diagnostics.Debug.WriteLine($"Titulo: {model.Titulo}");
+                System.Diagnostics.Debug.WriteLine($"Descripcion: {model.Descripcion}");
+                System.Diagnostics.Debug.WriteLine($"CategoriaId: {model.CategoriaId}");
+                System.Diagnostics.Debug.WriteLine($"Variantes count: {model.Variantes?.Count ?? 0}");
+                if (model.Variantes != null)
                 {
-                    imagenesGlobales.Add(file);
-                }
-            }
-            // Usar la cantidad de colores como referencia para variantes
-            int variantes = idColor?.Count ?? 0;
-            for (int i = 0; i < variantes; i++)
-            {
-                if ((idColor == null || i >= idColor.Count) ||
-                    (Precio == null || i >= Precio.Count) ||
-                    (cantidad == null || i >= cantidad.Count) ||
-                    (limite == null || i >= limite.Count))
-                {
-                    continue;
-                }
-                int colorId = 0;
-                if (idColor[i] == "nuevo" && nuevoColor != null && nuevoCodigo != null &&
-                    nuevoColor.Count > i && nuevoCodigo.Count > i &&
-                    !string.IsNullOrEmpty(nuevoColor[i]) && !string.IsNullOrEmpty(nuevoCodigo[i]))
-                {
-                    var color = new Color { nombre = nuevoColor[i], codigo = nuevoCodigo[i] };
-                    _context.Colores.Add(color);
-                    await _context.SaveChangesAsync();
-                    colorId = color.idColor;
-                }
-                else if (int.TryParse(idColor[i], out int parsedColorId))
-                {
-                    colorId = parsedColorId;
-                }
-                else
-                {
-                    continue; // Si no es válido, saltar
-                }
-                // Obtener todas las tallas seleccionadas para esta variante
-                var tallasSeleccionadas = Request.Form[$"idTalla[{i}]"];
-                if (string.IsNullOrEmpty(tallasSeleccionadas.ToString()) || tallasSeleccionadas.Count == 0)
-                {
-                    continue; // No hay tallas seleccionadas para esta variante
-                }
-                foreach (var tallaStr in tallasSeleccionadas)
-                {
-                    if (!int.TryParse(tallaStr, out int tallaId)) continue;
-                    var producto = new Producto
+                    for (int i = 0; i < model.Variantes.Count; i++)
                     {
-                        nombre = Titulo,
-                        descripcion = Descripcion,
-                        idCategoria = CategoriaId,
-                        idColor = colorId,
-                        idTalla = tallaId,
-                        precio = (double)Precio[i],
-                        cantidad = cantidad[i],
-                        limite = limite[i]
-                    };
-                    _context.Productos.Add(producto);
-                    await _context.SaveChangesAsync();
-                    productosInsertados.Add(producto);
-                    // Asocia todas las imágenes a cada producto
-                    foreach (var img in imagenesGlobales)
-                    {
-                        if (img != null && img.Length > 0)
+                        var v = model.Variantes[i];
+                        System.Diagnostics.Debug.WriteLine($"Variante[{i}]: IdColor={v.IdColor}, NuevoColor={v.NuevoColor}, NuevoCodigo={v.NuevoCodigo}, Precio={v.Precio}, Tallas={v.Tallas?.Count ?? 0}, Imagenes={v.Imagenes?.Count ?? 0}");
+                        if (v.Tallas != null)
                         {
-                            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/productos");
-                            if (!Directory.Exists(uploadsFolder))
-                                Directory.CreateDirectory(uploadsFolder);
-                            var uniqueFileName = $"producto_{producto.idProducto}_{Guid.NewGuid()}_{Path.GetFileName(img.FileName)}";
-                            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                            using (var stream = new FileStream(filePath, FileMode.Create))
+                            for (int j = 0; j < v.Tallas.Count; j++)
                             {
-                                await img.CopyToAsync(stream);
+                                var t = v.Tallas[j];
+                                System.Diagnostics.Debug.WriteLine($"  Talla[{j}]: IdTalla={t.IdTalla}, Cantidad={t.Cantidad}, Limite={t.Limite}");
                             }
-                            var imagen = new Imagen
-                            {
-                                nombre = uniqueFileName,
-                                idProducto = producto.idProducto
-                            };
-                            _context.Imagenes.Add(imagen);
                         }
                     }
                 }
+
+                System.Diagnostics.Debug.WriteLine("[DEBUG] Antes de validar ModelState.IsValid");
+                if (!ModelState.IsValid)
+                {
+                    foreach (var key in ModelState.Keys)
+                    {
+                        var errors = ModelState[key].Errors;
+                        foreach (var error in errors)
+                        {
+                            System.Diagnostics.Debug.WriteLine($"[ModelState] {key}: {error.ErrorMessage}");
+                        }
+                    }
+                    System.Diagnostics.Debug.WriteLine("[DEBUG] ModelState inválido, retornando View(model)");
+                    ViewBag.Categorias = _context.Categorias.ToList();
+                    ViewBag.Tallas = _context.Tallas.ToList();
+                    ViewBag.Colores = _context.Colores.ToList();
+                    return View(model);
+                }
+                System.Diagnostics.Debug.WriteLine("[DEBUG] ModelState válido, entrando a ciclo de variantes");
+                var productosInsertados = new List<Producto>();
+
+                if (model.Variantes == null || model.Variantes.Count == 0)
+                {
+                    ModelState.AddModelError("Variantes", "Debes agregar al menos una variante.");
+                    ViewBag.Categorias = _context.Categorias.ToList();
+                    ViewBag.Tallas = _context.Tallas.ToList();
+                    ViewBag.Colores = _context.Colores.ToList();
+                    return View(model);
+                }
+
+                for (int i = 0; i < model.Variantes.Count; i++)
+                {
+                    var variante = model.Variantes[i];
+                    int colorId = 0;
+                    // Si es un color nuevo
+                    if ((variante.IdColor == null || variante.IdColor == 0) && !string.IsNullOrWhiteSpace(variante.NuevoColor) && !string.IsNullOrWhiteSpace(variante.NuevoCodigo))
+                    {
+                        var color = new Color { nombre = variante.NuevoColor, codigo = variante.NuevoCodigo };
+                        _context.Colores.Add(color);
+                        await _context.SaveChangesAsync();
+                        colorId = color.idColor;
+                    }
+                    else if (variante.IdColor != null && variante.IdColor > 0)
+                    {
+                        colorId = variante.IdColor.Value;
+                    }
+                    else
+                    {
+                        System.Diagnostics.Debug.WriteLine($"[DEBUG] Variante {i} con color inválido: IdColor={variante.IdColor}, NuevoColor='{variante.NuevoColor}', NuevoCodigo='{variante.NuevoCodigo}'");
+                        continue; // Color inválido
+                    }
+
+                    System.Diagnostics.Debug.WriteLine($"[DEBUG] Entrando a ciclo de tallas para variante {i}, total tallas: {variante.Tallas?.Count ?? 0}");
+                    if (variante.Tallas == null || variante.Tallas.Count == 0)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"[DEBUG] Variante {i} sin tallas, se omite");
+                        continue;
+                    }
+                    bool tallaAgregada = false;
+                    foreach (var talla in variante.Tallas)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"[DEBUG] Analizando talla: IdTalla={talla.IdTalla}, Cantidad={talla.Cantidad}, Limite={talla.Limite}");
+                        if (talla.IdTalla == 0 || talla.Cantidad < 0)
+                        {
+                            System.Diagnostics.Debug.WriteLine($"[DEBUG] Talla omitida por condición: IdTalla={talla.IdTalla}, Cantidad={talla.Cantidad}");
+                            continue;
+                        }
+                        tallaAgregada = true;
+                        var producto = new Producto
+                        {
+                            nombre = model.Titulo,
+                            descripcion = model.Descripcion,
+                            idCategoria = model.CategoriaId,
+                            idColor = colorId,
+                            idTalla = talla.IdTalla,
+                            precio = (double)variante.Precio,
+                            cantidad = talla.Cantidad,
+                            limite = talla.Limite
+                        };
+                        System.Diagnostics.Debug.WriteLine($"[DEBUG] Agregando producto: nombre={producto.nombre}, idColor={producto.idColor}, idTalla={producto.idTalla}, precio={producto.precio}, cantidad={producto.cantidad}, limite={producto.limite}");
+                        _context.Productos.Add(producto);
+                        var affected = await _context.SaveChangesAsync();
+                        System.Diagnostics.Debug.WriteLine($"[DEBUG] SaveChangesAsync() productos afectadas: {affected}");
+                        productosInsertados.Add(producto);
+
+                        // Guardar imágenes asociadas a la variante
+                        if (variante.Imagenes != null)
+                        {
+                            foreach (var img in variante.Imagenes)
+                            {
+                                if (img != null && img.Length > 0)
+                                {
+                                    var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/productos");
+                                    if (!Directory.Exists(uploadsFolder))
+                                        Directory.CreateDirectory(uploadsFolder);
+                                    var uniqueFileName = $"producto_{producto.idProducto}_{Guid.NewGuid()}_{Path.GetFileName(img.FileName)}";
+                                    var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                                    using (var stream = new FileStream(filePath, FileMode.Create))
+                                    {
+                                        await img.CopyToAsync(stream);
+                                    }
+                                    var imagen = new Imagen
+                                    {
+                                        nombre = uniqueFileName,
+                                        idProducto = producto.idProducto
+                                    };
+                                    System.Diagnostics.Debug.WriteLine($"[DEBUG] Agregando imagen: nombre={imagen.nombre}, idProducto={imagen.idProducto}");
+                                    _context.Imagenes.Add(imagen);
+                                }
+                            }
+                        }
+                    }
+                    if (!tallaAgregada)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"[DEBUG] No se agregó ninguna talla para variante {i}");
+                    }
+                }
+                await _context.SaveChangesAsync();
+                System.Diagnostics.Debug.WriteLine("[DEBUG] SaveChangesAsync() final ejecutado");
+                if (productosInsertados.Count == 0)
+                {
+                    ModelState.AddModelError("", "No se insertó ningún producto. Verifica los datos enviados.");
+                    ViewBag.Categorias = _context.Categorias.ToList();
+                    ViewBag.Tallas = _context.Tallas.ToList();
+                    ViewBag.Colores = _context.Colores.ToList();
+                    return View(model);
+                }
+                return RedirectToAction(nameof(Index));
             }
-            await _context.SaveChangesAsync();
-            if (productosInsertados.Count == 0)
+            catch (Exception ex)
             {
-                return BadRequest("No se insertó ningún producto. Verifica los datos enviados.");
+                ModelState.AddModelError("", $"Error al guardar el producto: {ex.Message}");
+                ViewBag.Categorias = _context.Categorias.ToList();
+                ViewBag.Tallas = _context.Tallas.ToList();
+                ViewBag.Colores = _context.Colores.ToList();
+                return View(model);
             }
-            // Devuelve los productos insertados como JSON para verificar la inserción
-            return Json(productosInsertados);
         }
 
         // GET: ProductoController/Edit/5

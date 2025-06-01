@@ -5,9 +5,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace NoVacancy.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class PedidoController : ControllerBase
+    
+    public class PedidoController : Controller
     {
         private readonly NoVacancyDbContext _context;
         public PedidoController(NoVacancyDbContext context)
@@ -94,6 +93,54 @@ namespace NoVacancy.Controllers
             _context.Pedidos.Remove(pedido);
             await _context.SaveChangesAsync();
             return NoContent();
+        }
+
+        // Acción MVC para mostrar la confirmación de pedido
+        [HttpGet]
+        public IActionResult PedidoConfirmado()
+        {
+            return View();
+        }
+
+        // Acción MVC para mostrar el historial de pedidos
+        [HttpGet]
+        public IActionResult Historial()
+        {
+            var pedidos = _context.Pedidos
+                .Include(p => p.Carrito)
+                .ToList();
+
+            // Cargar usuarios de los carritos manualmente para evitar problemas de referencia nula
+            var carritos = pedidos.Select(p => p.Carrito).Where(c => c != null && c.Id != null).ToList();
+            var usuarioIds = carritos.Select(c => c.Id!).Distinct().ToList();
+            var usuarios = _context.Set<Usuario>().Where(u => usuarioIds.Contains(u.Id)).ToList();
+            foreach (var carrito in carritos)
+            {
+                carrito.Usuario = usuarios.FirstOrDefault(u => u.Id == carrito.Id);
+            }
+
+            // Obtener todas las líneas de los carritos involucrados
+            var carritoIds = pedidos.Select(p => p.idCarrito).ToList();
+            var lineas = _context.CarritosLineas
+                .Where(l => carritoIds.Contains(l.idCarrito))
+                .Include(l => l.Producto)
+                .ThenInclude(p => p.Color)
+                .Include(l => l.Producto)
+                .ThenInclude(p => p.Talla)
+                .ToList();
+            var lineasPorCarrito = lineas.GroupBy(l => l.idCarrito)
+                .ToDictionary(g => g.Key, g => g.ToList());
+
+            // Obtener detalles de los pedidos
+            var pedidoIds = pedidos.Select(p => p.idPedido).ToList();
+            var detalles = _context.Set<Detalle>()
+                .Where(d => pedidoIds.Contains(d.idPedido))
+                .ToList();
+            var detallesPorPedido = detalles.ToDictionary(d => d.idPedido, d => d);
+
+            ViewBag.LineasPorCarrito = lineasPorCarrito;
+            ViewBag.DetallesPorPedido = detallesPorPedido;
+            return View("Historial", pedidos);
         }
     }
 }

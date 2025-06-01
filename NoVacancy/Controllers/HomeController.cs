@@ -4,6 +4,7 @@ using NoVacancy.Models;
 using NoVacancy.Data;
 using NoVacancy.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using System.Text.RegularExpressions;
 
 namespace NoVacancy.Controllers
 {
@@ -56,7 +57,15 @@ namespace NoVacancy.Controllers
                     var imagenes = await _context.Imagenes
                         .Where(i => grupo.ProductoIds.Contains(i.idProducto))
                         .ToListAsync();
-                    imagenesPorColor[grupo.Color.idColor] = imagenes;
+                    // Agrupa por nombre base (sin el prefijo producto_{idProducto}_{Guid}_)
+                    var regex = new Regex(@"producto_\d+_[a-fA-F0-9\-]+_(.+)");
+                    imagenesPorColor[grupo.Color.idColor] = imagenes
+                        .GroupBy(img => {
+                            var match = regex.Match(img.nombre ?? "");
+                            return match.Success ? match.Groups[1].Value : (img.nombre ?? "");
+                        })
+                        .Select(g => g.First())
+                        .ToList();
                 }
             }
             ViewBag.Colores = colores;

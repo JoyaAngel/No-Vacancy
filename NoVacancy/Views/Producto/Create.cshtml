@@ -3,11 +3,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<!-- Barra de navegación y estilos se asumen en _Layout.cshtml -->
-
 <div class="form-section container">
     <h4 class="mb-4">Agregar producto</h4>
     <form asp-action="Create" asp-controller="Producto" enctype="multipart/form-data" method="post">
+        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
         <div class="mb-3">
             <label class="form-label fw-bold">Título</label>
             <input name="Titulo" class="form-control" />
@@ -36,9 +35,9 @@
                     <section itemid="Variante">
                         <div class="col-12">
                             <label class="form-label fw-bold">Color</label>
-                            <select name="idColor[0]" class="form-select mb-2" aria-label="Color" id="colorSelect-0"
+                            <select name="Variantes[0].IdColor" class="form-select mb-2" aria-label="Color" id="colorSelect-0"
                                 onchange="mostrarNuevoColor(this, 0)">
-                                <option selected disabled>Elige un color</option>
+                                <option value="" selected disabled>Elige un color</option>
                                 @if (ViewBag.Colores != null)
                                 {
                                     foreach (var color in ViewBag.Colores)
@@ -46,13 +45,13 @@
                                         <option value="@color.idColor" data-codigo="@color.codigo">@color.nombre</option>
                                     }
                                 }
-                                <option value="nuevo">Agregar nuevo color</option>
+                                <option value="0">Agregar nuevo color</option>
                             </select>
                             <div id="colorExtraContainer-0" style="display:none;">
                                 <div class="d-flex align-items-center gap-2">
-                                    <input name="nuevoColor[0]" id="nuevoColorInput-0" class="form-control"
+                                    <input name="Variantes[0].NuevoColor" id="nuevoColorInput-0" class="form-control"
                                         placeholder="Nombre del nuevo color" style="display:none; flex: 1 1 auto;" />
-                                    <input name="nuevoCodigo[0]" id="nuevoCodigoInput-0" class="form-control form-control-color"
+                                    <input name="Variantes[0].NuevoCodigo" id="nuevoCodigoInput-0" class="form-control form-control-color"
                                         type="color" title="Elige el color"
                                         style="display:none; width: 40px; min-width: 40px; max-width: 40px; height: 40px; padding: 0; flex: 0 0 40px; border-radius: 8px; margin-left: 8px;" />
                                     <span id="colorPreviewName-0" class="form-control-plaintext fw-bold"
@@ -70,7 +69,7 @@
                                         <div class="row g-3 align-items-center">
                                             <div class="col-md-4 col-12">
                                                 <label class="form-label mb-1">Talla</label>
-                                                <select class="form-select talla-select" name="idTalla[0][]" onchange="actualizarOpcionesTallas(0)">
+                                                <select class="form-select talla-select" name="Variantes[0].Tallas[0].IdTalla" onchange="actualizarOpcionesTallas(0)">
                                                     <option selected disabled>Elige una talla</option>
                                                     @if (ViewBag.Tallas != null)
                                                     {
@@ -83,13 +82,13 @@
                                             </div>
                                             <div class="col-md-4 col-12">
                                                 <label class="form-label mb-1">Stock</label>
-                                                <input name="cantidad[0][]" class="form-control form-control-sm" placeholder="Stock" type="number" min="0" />
+                                                <input name="Variantes[0].Tallas[0].Cantidad" class="form-control form-control-sm" placeholder="Stock" type="number" min="0" />
                                             </div>
                                             <div class="col-md-4 col-12">
                                                 <label class="form-label mb-1">Límite</label>
                                                 <div class="d-flex align-items-center">
                                                     <input type="checkbox" class="form-check-input me-1" onchange="toggleLimiteTalla(this)" title="¿Limitar compra?" />
-                                                    <input name="limite[0][]" class="form-control form-control-sm input-limite" placeholder="Límite" type="number" min="1" style="width: 80px; display: none; margin-left: 4px;" />
+                                                    <input name="Variantes[0].Tallas[0].Limite" class="form-control form-control-sm input-limite" placeholder="Límite" type="number" min="1" style="width: 80px; display: none; margin-left: 4px;" />
                                                 </div>
                                             </div>
                                             <div class="col-12 d-flex justify-content-end align-items-center">
@@ -109,16 +108,14 @@
                         </div>
                         <div class="col-12">
                             <label class="form-label fw-bold">Precio</label>
-                            <input name="Precio[0]" class="form-control" placeholder="Precio" />
+                            <input name="Variantes[0].Precio" class="form-control" placeholder="Precio" />
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-bold">Multimedia</label><br>
                             <label for="fileUpload-0" class="btn btn-upload">Subir nuevas</label>
-                            <input name="Imagenes[0]" type="file" id="fileUpload-0" class="d-none" accept="image/*" multiple
+                            <input name="Variantes[0].Imagenes" type="file" id="fileUpload-0" class="d-none" accept="image/*" multiple
                                 onchange="previewImages(event, 0)">
-                            <div class="mt-2" id="previewContainer-0">
-                                <!-- Previews will be inserted here -->
-                            </div>
+                            <div class="mt-2" id="previewContainer-0"></div>
                         </div>
                     </section>
                     <hr class="variante-divider" />
@@ -159,7 +156,7 @@
             var colorPreviewName = document.getElementById('colorPreviewName-' + idx);
             var nuevoColorInput = document.getElementById('nuevoColorInput-' + idx);
             var nuevoCodigoInput = document.getElementById('nuevoCodigoInput-' + idx);
-            if (select.value === 'nuevo') {
+            if (select.value === '0') {
                 colorExtra.style.display = 'block';
                 colorPreview.style.display = 'none';
                 colorPreviewName.style.display = 'none';
@@ -167,7 +164,9 @@
                 nuevoCodigoInput.style.display = 'block';
                 nuevoColorInput.value = '';
                 nuevoCodigoInput.value = '#000000';
-            } else if (select.value && select.value !== 'Elige un color') {
+                nuevoColorInput.setAttribute('required', 'required');
+                nuevoCodigoInput.setAttribute('required', 'required');
+            } else if (select.value && select.value !== '' && select.value !== '0') {
                 var selected = select.options[select.selectedIndex];
                 var hex = selected.getAttribute('data-codigo');
                 colorExtra.style.display = 'block';
@@ -177,57 +176,43 @@
                 nuevoCodigoInput.style.display = 'none';
                 colorPreview.style.backgroundColor = hex;
                 colorPreviewName.textContent = selected.text;
-                // Ajustar distribución horizontal
                 colorPreviewName.style.display = 'block';
                 colorPreviewName.style.flex = '1 1 auto';
                 colorPreviewName.style.fontSize = '1.1rem';
                 colorPreview.style.display = 'block';
                 colorPreview.style.marginLeft = '8px';
+                nuevoColorInput.removeAttribute('required');
+                nuevoCodigoInput.removeAttribute('required');
             } else {
                 colorExtra.style.display = 'none';
+                nuevoColorInput.removeAttribute('required');
+                nuevoCodigoInput.removeAttribute('required');
             }
-        }
-        function toggleLimiteInput(index) {
-            var check = document.getElementById('toggleLimite-' + index);
-            var container = document.getElementById('limiteContainer-' + index);
-            container.style.display = check.checked ? 'block' : 'none';
         }
         function agregarVariante() {
             const container = document.getElementById('variantesContainer');
             const variantes = container.getElementsByClassName('variante-section');
             const lastVariante = variantes[variantes.length - 1];
             const clone = lastVariante.cloneNode(true);
-            // Nuevo índice para la variante
             const newIdx = variantes.length;
             clone.setAttribute('data-idx', newIdx);
-            // Cambiar los nombres e ids de los inputs de la variante clonada
+            // Actualiza los names e ids de los campos de la variante clonada
             Array.from(clone.querySelectorAll('input, select, textarea, label, div, span')).forEach(el => {
-                // Actualiza name con índice para todos los campos de variantes
+                // Cambia los names de la variante
                 if (el.name) {
-                    if (el.name.match(/^idColor(\[\d+\])?$/)) el.name = `idColor[${newIdx}]`;
-                    if (el.name.match(/^idTalla(\[\d+\])?$/)) el.name = `idTalla[${newIdx}]`;
-                    if (el.name.match(/^Precio(\[\d+\])?$/)) el.name = `Precio[${newIdx}]`;
-                    if (el.name.match(/^cantidad(\[\d+\])?$/)) el.name = `cantidad[${newIdx}]`;
-                    if (el.name.match(/^limite(\[\d+\])?$/)) el.name = `limite[${newIdx}]`;
-                    if (el.name.match(/^nuevoColor(\[\d+\])?$/)) el.name = `nuevoColor[${newIdx}]`;
-                    if (el.name.match(/^nuevoCodigo(\[\d+\])?$/)) el.name = `nuevoCodigo[${newIdx}]`;
-                    if (el.name.match(/^Imagenes\[\d+\]$/)) el.name = `Imagenes[${newIdx}]`;
+                    el.name = el.name.replace(/Variantes\[\d+\]/g, `Variantes[${newIdx}]`);
+                    // Para tallas dentro de la variante
+                    el.name = el.name.replace(/Tallas\[\d+\]/g, 'Tallas[0]');
                 }
-                // Actualiza id y for para inputs/labels relacionados
-                if (el.id && el.id.match(/^colorSelect(-\d+)?$/)) el.id = `colorSelect-${newIdx}`;
-                if (el.id && el.id.match(/^nuevoColorInput(-\d+)?$/)) el.id = `nuevoColorInput-${newIdx}`;
-                if (el.id && el.id.match(/^nuevoCodigoInput(-\d+)?$/)) el.id = `nuevoCodigoInput-${newIdx}`;
-                if (el.id && el.id.match(/^toggleLimite-\d+$/)) el.id = `toggleLimite-${newIdx}`;
-                if (el.htmlFor && el.htmlFor.match(/^toggleLimite-\d+$/)) el.htmlFor = `toggleLimite-${newIdx}`;
-                if (el.id && el.id.match(/^limiteContainer-\d+$/)) el.id = `limiteContainer-${newIdx}`;
-                if (el.id && el.id.match(/^fileUpload-\d+$/)) el.id = `fileUpload-${newIdx}`;
-                if (el.htmlFor && el.htmlFor.match(/^fileUpload-\d+$/)) el.htmlFor = `fileUpload-${newIdx}`;
-                if (el.id && el.id.match(/^colorExtraContainer(-\d+)?$/)) el.id = `colorExtraContainer-${newIdx}`;
-                if (el.id && el.id.match(/^colorPreviewName(-\d+)?$/)) el.id = `colorPreviewName-${newIdx}`;
-                if (el.id && el.id.match(/^colorPreview(-\d+)?$/)) el.id = `colorPreview-${newIdx}`;
-                if (el.id && el.id.match(/^previewContainer(-\d+)?$/)) el.id = `previewContainer-${newIdx}`;
+                // Cambia los ids
+                if (el.id) {
+                    el.id = el.id.replace(/(-|_)(\d+)$/, `$1${newIdx}`);
+                }
+                if (el.htmlFor) {
+                    el.htmlFor = el.htmlFor.replace(/(-|_)(\d+)$/, `$1${newIdx}`);
+                }
             });
-            // Limpiar valores y previews como antes
+            // Limpia los valores de los inputs
             Array.from(clone.querySelectorAll('input, select, textarea')).forEach(el => {
                 if (el.type === 'checkbox' || el.type === 'radio') {
                     el.checked = false;
@@ -240,33 +225,37 @@
                     el.style.display = 'none';
                 }
             });
+            // Limpia los contenedores y previews
             const colorExtra = clone.querySelector(`#colorExtraContainer-${newIdx}`);
             if (colorExtra) colorExtra.style.display = 'none';
             const colorPreview = clone.querySelector(`#colorPreview-${newIdx}`);
             if (colorPreview) colorPreview.style.display = 'none';
             const colorPreviewName = clone.querySelector(`#colorPreviewName-${newIdx}`);
             if (colorPreviewName) colorPreviewName.style.display = 'none';
-            const limiteContainer = clone.querySelector(`#limiteContainer-${newIdx}`);
-            if (limiteContainer) limiteContainer.style.display = 'none';
             const previewContainer = clone.querySelector(`#previewContainer-${newIdx}`);
             if (previewContainer) previewContainer.innerHTML = '';
-            // Actualizar eventos para inputs clonados
+            // Actualiza eventos
             const colorSelect = clone.querySelector(`#colorSelect-${newIdx}`);
             if (colorSelect) colorSelect.setAttribute('onchange', `mostrarNuevoColor(this, ${newIdx})`);
             const fileUpload = clone.querySelector(`#fileUpload-${newIdx}`);
             if (fileUpload) fileUpload.setAttribute('onchange', `previewImages(event, ${newIdx})`);
-            const toggleLimite = clone.querySelector(`#toggleLimite-${newIdx}`);
-            if (toggleLimite) toggleLimite.setAttribute('onchange', `toggleLimiteInput(${newIdx})`);
             container.appendChild(clone);
+            // Actualiza los names de las tallas de la nueva variante
+            actualizarNamesTallas(newIdx);
         }
 
-        function agregarTalla(idx) {
-            const container = document.getElementById(`tallaCardsContainer-${idx}`);
-            // Clonar la primera tarjeta como plantilla
+        function agregarTalla(idxVariante) {
+            const container = document.getElementById(`tallaCardsContainer-${idxVariante}`);
             const plantilla = container.querySelector('.talla-card');
             const nueva = plantilla.cloneNode(true);
-            // Limpiar valores
-            nueva.querySelectorAll('input, select').forEach(el => {
+            // Encuentra el nuevo índice de talla
+            const tallasActuales = container.querySelectorAll('.talla-card');
+            const newTallaIdx = tallasActuales.length;
+            // Actualiza los names de la nueva talla
+            Array.from(nueva.querySelectorAll('input, select')).forEach(el => {
+                if (el.name) {
+                    el.name = el.name.replace(/Variantes\[\d+\]\.Tallas\[\d+\]/g, `Variantes[${idxVariante}].Tallas[${newTallaIdx}]`);
+                }
                 if (el.type === 'checkbox' || el.type === 'radio') {
                     el.checked = false;
                 } else if (el.type === 'file') {
@@ -274,20 +263,30 @@
                 } else {
                     el.value = '';
                 }
-                if (el.name && el.name.includes('[]')) {
-                    // No hacer nada, los names ya están bien
-                }
                 if (el.classList.contains('input-limite')) {
                     el.style.display = 'none';
                 }
             });
-            // Mostrar botón eliminar en la nueva tarjeta
             const btnRemove = nueva.querySelector('.btn-talla-remove');
             btnRemove.style.display = 'flex';
             btnRemove.onclick = function() { eliminarTalla(btnRemove); };
             container.appendChild(nueva);
-            actualizarOpcionesTallas(idx);
-            actualizarBotonesTalla(idx);
+            actualizarNamesTallas(idxVariante);
+            actualizarOpcionesTallas(idxVariante);
+            actualizarBotonesTalla(idxVariante);
+        }
+
+        function actualizarNamesTallas(idxVariante) {
+            // Reasigna los names de todas las tallas de la variante para mantener el orden correcto
+            const container = document.getElementById(`tallaCardsContainer-${idxVariante}`);
+            const cards = container.querySelectorAll('.talla-card');
+            cards.forEach((card, tallaIdx) => {
+                Array.from(card.querySelectorAll('input, select')).forEach(el => {
+                    if (el.name) {
+                        el.name = el.name.replace(/Variantes\[\d+\]\.Tallas\[\d+\]/g, `Variantes[${idxVariante}].Tallas[${tallaIdx}]`);
+                    }
+                });
+            });
         }
         function eliminarTalla(btn) {
             const card = btn.closest('.talla-card');
@@ -304,7 +303,6 @@
                 }
             });
         }
-        // Llama a actualizarBotonesTalla al cargar la página
         document.addEventListener('DOMContentLoaded', function() {
             actualizarBotonesTalla(0);
         });
@@ -315,7 +313,6 @@
                 if (!checkbox.checked) inputLimite.value = '';
             }
         }
-        // ...existing code...
     </script>
 }
 
@@ -378,20 +375,17 @@
         width: 24px;
         line-height: 1;
     }
-    /* Responsive: apilar campos de talla en móvil */
     @@media screen and (max-width: 768px) {
         .talla-card .row > div {
             margin-bottom: 1rem;
         }
     }
-
     .talla-card .btn-talla-remove {
         display: none !important;
     }
     .talla-card:not(:first-child) .btn-talla-remove {
         display: flex !important;
     }
-
     .btn-add-talla-icon {
         width: 44px;
         height: 44px;
