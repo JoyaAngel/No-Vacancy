@@ -26,6 +26,14 @@ builder.Services.AddControllersWithViews(options =>
 
 builder.Services.AddSession();
 
+//Redirigir al login si no hay sesión activa.
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Usuario/Login";
+    //TBD si esta línea se queda (crear la vista AccessDenied) o se va.
+    //options.AccessDeniedPath = "/Usuario/AccessDenied";
+});
+
 var app = builder.Build();
 
 //Usar seeder.
