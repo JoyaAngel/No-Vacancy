@@ -686,7 +686,6 @@ C:\Users\PC WHITE WOLF\Documents\Escuela\Sexto semestre\Desarrollo de aplicacion
 C:\Users\PC WHITE WOLF\Documents\Escuela\Sexto semestre\Desarrollo de aplicaciones web\No-Vacancy\NoVacancy\obj\Debug\net9.0\staticwebassets\msbuild.buildMultiTargeting.NoVacancy.props
 C:\Users\PC WHITE WOLF\Documents\Escuela\Sexto semestre\Desarrollo de aplicaciones web\No-Vacancy\NoVacancy\obj\Debug\net9.0\staticwebassets\msbuild.buildTransitive.NoVacancy.props
 C:\Users\PC WHITE WOLF\Documents\Escuela\Sexto semestre\Desarrollo de aplicaciones web\No-Vacancy\NoVacancy\obj\Debug\net9.0\staticwebassets.pack.json
-C:\Users\PC WHITE WOLF\Documents\Escuela\Sexto semestre\Desarrollo de aplicaciones web\No-Vacancy\NoVacancy\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
 C:\Users\PC WHITE WOLF\Documents\Escuela\Sexto semestre\Desarrollo de aplicaciones web\No-Vacancy\NoVacancy\obj\Debug\net9.0\NoVacancy.csproj.Up2Date
 C:\Users\PC WHITE WOLF\Documents\Escuela\Sexto semestre\Desarrollo de aplicaciones web\No-Vacancy\NoVacancy\obj\Debug\net9.0\NoVacancy.dll
 C:\Users\PC WHITE WOLF\Documents\Escuela\Sexto semestre\Desarrollo de aplicaciones web\No-Vacancy\NoVacancy\obj\Debug\net9.0\refint\NoVacancy.dll
@@ -5060,3 +5059,4 @@ C:\Users\PC WHITE WOLF\Documents\Escuela\Sexto semestre\Desarrollo de aplicacion
 C:\Users\PC WHITE WOLF\Documents\Escuela\Sexto semestre\Desarrollo de aplicaciones web\No-Vacancy\NoVacancy\obj\Debug\net9.0\compressed\p58gv3s19f-p3rrnmpi8b.gz
 C:\Users\PC WHITE WOLF\Documents\Escuela\Sexto semestre\Desarrollo de aplicaciones web\No-Vacancy\NoVacancy\obj\Debug\net9.0\compressed\3hvf03hmzg-fm15rnjfw7.gz
 C:\Users\PC WHITE WOLF\Documents\Escuela\Sexto semestre\Desarrollo de aplicaciones web\No-Vacancy\NoVacancy\obj\Debug\net9.0\compressed\4d51jd0bzv-d3505e3jkm.gz
+C:\Users\PC WHITE WOLF\Documents\Escuela\Sexto semestre\Desarrollo de aplicaciones web\No-Vacancy\NoVacancy\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt

@@ -39,6 +39,7 @@ namespace NoVacancy.Data
                     await userManager.AddToRoleAsync(user, "Administrador");
             }
 
+
             //Crear otro admin (prueba del seeder).
             string adminEmail2 = "chucho@novacancy.com";
             string password2 = "AlephNull0.";

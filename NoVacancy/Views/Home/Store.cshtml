@@ -1,133 +1,32 @@
+@model NoVacancy.ViewModels.TiendaViewModel
 <!-- Productos -->
 <section class="container my-5">
 	<h2 class="mb-4">Tienda</h2>
 	<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
-
-		<!-- Producto (Repetir este bloque 12 veces) -->
-		<div class="col">
-			<div class="card h-100 text-center">
-				<img src="img/playera_blanca.webp" class="card-img-top p-3" alt="T-Shirt Red">
-				<div class="card-body">
-					<p class="card-text mb-1">T-Shirt Red</p>
-					<h6 class="fw-bold">$200.00 MXN</h6>
+		@foreach (var item in Model.Productos)
+		{
+			<div class="col">
+				<div class="card h-100 text-center">
+					@if (item.Imagenes != null && item.Imagenes.Count > 0)
+					{
+						<img src="~/images/productos/@item.Imagenes.First().nombre" class="card-img-top p-3" alt="@item.Producto.nombre">
+					}
+					else
+					{
+						<img src="~/images/default-150x150.png" class="card-img-top p-3" alt="Sin imagen">
+					}
+					<div class="card-body">
+						<p class="card-text mb-1">@item.Producto.nombre</p>
+						<h6 class="fw-bold">$@item.Producto.precio.ToString("N2") MXN</h6>
+						<p class="mb-0 text-muted">@item.Producto.Categoria?.nombre</p>
+						<p class="mb-0 text-muted">Color: @item.Producto.Color?.nombre</p>
+						<p class="mb-0 text-muted">Talla: @item.Producto.Talla?.nombre</p>
+						<a href="@Url.Action("Product_detail", "Home", new { nombre = item.Producto.nombre })" class="btn btn-outline-dark mt-2 w-100">Ver detalles</a>
+					</div>
 				</div>
 			</div>
-		</div>
-		<!-- Fin producto -->
-		<div class="col">
-			<div class="card h-100 text-center">
-				<img src="img/playera_blanca.webp" class="card-img-top p-3" alt="T-Shirt Red">
-				<div class="card-body">
-					<p class="card-text mb-1">T-Shirt Red</p>
-					<h6 class="fw-bold">$200.00 MXN</h6>
-				</div>
-			</div>
-		</div>
-
-		<div class="col">
-			<div class="card h-100 text-center">
-				<img src="img/playera_blanca.webp" class="card-img-top p-3" alt="T-Shirt Red">
-				<div class="card-body">
-					<p class="card-text mb-1">T-Shirt Red</p>
-					<h6 class="fw-bold">$200.00 MXN</h6>
-				</div>
-			</div>
-		</div>
-
-		<div class="col">
-			<div class="card h-100 text-center">
-				<img src="img/playera_blanca.webp" class="card-img-top p-3" alt="T-Shirt Red">
-				<div class="card-body">
-					<p class="card-text mb-1">T-Shirt Red</p>
-					<h6 class="fw-bold">$200.00 MXN</h6>
-				</div>
-			</div>
-		</div>
-
-		<div class="col">
-			<div class="card h-100 text-center">
-				<img src="img/playera_blanca.webp" class="card-img-top p-3" alt="T-Shirt Red">
-				<div class="card-body">
-					<p class="card-text mb-1">T-Shirt Red</p>
-					<h6 class="fw-bold">$200.00 MXN</h6>
-				</div>
-			</div>
-		</div>
-
-		<div class="col">
-			<div class="card h-100 text-center">
-				<img src="img/playera_blanca.webp" class="card-img-top p-3" alt="T-Shirt Red">
-				<div class="card-body">
-					<p class="card-text mb-1">T-Shirt Red</p>
-					<h6 class="fw-bold">$200.00 MXN</h6>
-				</div>
-			</div>
-		</div>
-
-		<div class="col">
-			<div class="card h-100 text-center">
-				<img src="img/playera_blanca.webp" class="card-img-top p-3" alt="T-Shirt Red">
-				<div class="card-body">
-					<p class="card-text mb-1">T-Shirt Red</p>
-					<h6 class="fw-bold">$200.00 MXN</h6>
-				</div>
-			</div>
-		</div>
-
-		<div class="col">
-			<div class="card h-100 text-center">
-				<img src="img/playera_blanca.webp" class="card-img-top p-3" alt="T-Shirt Red">
-				<div class="card-body">
-					<p class="card-text mb-1">T-Shirt Red</p>
-					<h6 class="fw-bold">$200.00 MXN</h6>
-				</div>
-			</div>
-		</div>
-
-		<div class="col">
-			<div class="card h-100 text-center">
-				<img src="img/playera_blanca.webp" class="card-img-top p-3" alt="T-Shirt Red">
-				<div class="card-body">
-					<p class="card-text mb-1">T-Shirt Red</p>
-					<h6 class="fw-bold">$200.00 MXN</h6>
-				</div>
-			</div>
-		</div>
-
-		<div class="col">
-			<div class="card h-100 text-center">
-				<img src="img/playera_blanca.webp" class="card-img-top p-3" alt="T-Shirt Red">
-				<div class="card-body">
-					<p class="card-text mb-1">T-Shirt Red</p>
-					<h6 class="fw-bold">$200.00 MXN</h6>
-				</div>
-			</div>
-		</div>
-
-		<div class="col">
-			<div class="card h-100 text-center">
-				<img src="img/playera_blanca.webp" class="card-img-top p-3" alt="T-Shirt Red">
-				<div class="card-body">
-					<p class="card-text mb-1">T-Shirt Red</p>
-					<h6 class="fw-bold">$200.00 MXN</h6>
-				</div>
-			</div>
-		</div>
-
-		<div class="col">
-			<div class="card h-100 text-center">
-				<img src="img/playera_blanca.webp" class="card-img-top p-3" alt="T-Shirt Red">
-				<div class="card-body">
-					<p class="card-text mb-1">T-Shirt Red</p>
-					<h6 class="fw-bold">$200.00 MXN</h6>
-				</div>
-			</div>
-		</div>
-
-		<!-- Puedes copiar y pegar el bloque anterior para simular los 12 productos -->
-
+		}
 	</div>
-
 	<!-- Paginación -->
 	<nav aria-label="Paginación de productos" class="mt-4 d-flex justify-content-center">
 		<ul class="pagination">

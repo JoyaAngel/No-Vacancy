@@ -32,16 +32,16 @@ build_property.EnableCodeStyleSeverity =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/PC WHITE WOLF/Documents/Escuela/Sexto semestre/Desarrollo de aplicaciones web/No-Vacancy/NoVacancy/Views/CarritoLinea/Invoice.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2Fycml0b0xpbmVhXEludm9pY2UuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/PC WHITE WOLF/Documents/Escuela/Sexto semestre/Desarrollo de aplicaciones web/No-Vacancy/NoVacancy/Views/CarritoLinea/Shopping_cart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2Fycml0b0xpbmVhXFNob3BwaW5nX2NhcnQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/PC WHITE WOLF/Documents/Escuela/Sexto semestre/Desarrollo de aplicaciones web/No-Vacancy/NoVacancy/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/PC WHITE WOLF/Documents/Escuela/Sexto semestre/Desarrollo de aplicaciones web/No-Vacancy/NoVacancy/Views/Home/Invoice.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbnZvaWNlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/PC WHITE WOLF/Documents/Escuela/Sexto semestre/Desarrollo de aplicaciones web/No-Vacancy/NoVacancy/Views/Home/Privacy.cshtml]
@@ -54,6 +54,18 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/PC WHITE WOLF/Documents/Escuela/Sexto semestre/Desarrollo de aplicaciones web/No-Vacancy/NoVacancy/Views/Home/Store.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxTdG9yZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/PC WHITE WOLF/Documents/Escuela/Sexto semestre/Desarrollo de aplicaciones web/No-Vacancy/NoVacancy/Views/Pedido/Historial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGVkaWRvXEhpc3RvcmlhbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/PC WHITE WOLF/Documents/Escuela/Sexto semestre/Desarrollo de aplicaciones web/No-Vacancy/NoVacancy/Views/Pedido/PedidoConfirmado.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGVkaWRvXFBlZGlkb0NvbmZpcm1hZG8uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/PC WHITE WOLF/Documents/Escuela/Sexto semestre/Desarrollo de aplicaciones web/No-Vacancy/NoVacancy/Views/Producto/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvZHVjdG9cQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/PC WHITE WOLF/Documents/Escuela/Sexto semestre/Desarrollo de aplicaciones web/No-Vacancy/NoVacancy/Views/Shared/Error.cshtml]

@@ -1,0 +1,408 @@
+@{
+    ViewData["Title"] = "Agregar producto";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="form-section container">
+    <h4 class="mb-4">Agregar producto</h4>
+    <form asp-action="Create" asp-controller="Producto" enctype="multipart/form-data" method="post">
+        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+        <div class="mb-3">
+            <label class="form-label fw-bold">Título</label>
+            <input name="Titulo" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label fw-bold">Descripción</label>
+            <textarea name="Descripcion" class="form-control" rows="4"></textarea>
+        </div>
+        <div class="mb-3">
+            <label class="form-label fw-bold">Categoría</label>
+            <select name="CategoriaId" class="form-select" aria-label="Categoría">
+                <option selected disabled>Elige una categoría de producto</option>
+                @if (ViewBag.Categorias != null)
+                {
+                    foreach (var categoria in ViewBag.Categorias)
+                    {
+                        <option value="@categoria.idCategoria">@categoria.nombre</option>
+                    }
+                }
+            </select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label fw-bold">Variables</label>
+            <div id="variantesContainer">
+                <div class="row g-2 variante-section" data-idx="0">
+                    <section itemid="Variante">
+                        <div class="col-12">
+                            <label class="form-label fw-bold">Color</label>
+                            <select name="Variantes[0].IdColor" class="form-select mb-2" aria-label="Color" id="colorSelect-0"
+                                onchange="mostrarNuevoColor(this, 0)">
+                                <option value="" selected disabled>Elige un color</option>
+                                @if (ViewBag.Colores != null)
+                                {
+                                    foreach (var color in ViewBag.Colores)
+                                    {
+                                        <option value="@color.idColor" data-codigo="@color.codigo">@color.nombre</option>
+                                    }
+                                }
+                                <option value="0">Agregar nuevo color</option>
+                            </select>
+                            <div id="colorExtraContainer-0" style="display:none;">
+                                <div class="d-flex align-items-center gap-2">
+                                    <input name="Variantes[0].NuevoColor" id="nuevoColorInput-0" class="form-control"
+                                        placeholder="Nombre del nuevo color" style="display:none; flex: 1 1 auto;" />
+                                    <input name="Variantes[0].NuevoCodigo" id="nuevoCodigoInput-0" class="form-control form-control-color"
+                                        type="color" title="Elige el color"
+                                        style="display:none; width: 40px; min-width: 40px; max-width: 40px; height: 40px; padding: 0; flex: 0 0 40px; border-radius: 8px; margin-left: 8px;" />
+                                    <span id="colorPreviewName-0" class="form-control-plaintext fw-bold"
+                                        style="display:none; flex: 1 1 auto; font-size: 1.1rem;"></span>
+                                    <span id="colorPreview-0"
+                                        style="display:none; width: 40px; min-width: 40px; max-width: 40px; height: 40px; border-radius: 8px; border: 1px solid #ccc; margin-left: 8px;"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-bold">Tallas</label>
+                            <div class="tallas-dinamicas" id="tallas-dinamicas-0" style="margin-bottom:2.5rem;">
+                                <div id="tallaCardsContainer-0">
+                                    <div class="talla-card p-3 mb-3">
+                                        <div class="row g-3 align-items-center">
+                                            <div class="col-md-4 col-12">
+                                                <label class="form-label mb-1">Talla</label>
+                                                <select class="form-select talla-select" name="Variantes[0].Tallas[0].IdTalla" onchange="actualizarOpcionesTallas(0)">
+                                                    <option selected disabled>Elige una talla</option>
+                                                    @if (ViewBag.Tallas != null)
+                                                    {
+                                                        foreach (var talla in ViewBag.Tallas)
+                                                        {
+                                                            <option value="@talla.idTalla">@talla.nombre</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div class="col-md-4 col-12">
+                                                <label class="form-label mb-1">Stock</label>
+                                                <input name="Variantes[0].Tallas[0].Cantidad" class="form-control form-control-sm" placeholder="Stock" type="number" min="0" />
+                                            </div>
+                                            <div class="col-md-4 col-12">
+                                                <label class="form-label mb-1">Límite</label>
+                                                <div class="d-flex align-items-center">
+                                                    <input type="checkbox" class="form-check-input me-1" onchange="toggleLimiteTalla(this)" title="¿Limitar compra?" />
+                                                    <input name="Variantes[0].Tallas[0].Limite" class="form-control form-control-sm input-limite" placeholder="Límite" type="number" min="1" style="width: 80px; display: none; margin-left: 4px;" />
+                                                </div>
+                                            </div>
+                                            <div class="col-12 d-flex justify-content-end align-items-center">
+                                                <button type="button" class="btn btn-outline-danger btn-xs d-flex align-items-center justify-content-center btn-talla-remove ms-2" style="width:24px;height:24px;" onclick="eliminarTalla(this)" title="Eliminar talla">
+                                                    <span class="bi bi-dash"></span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-end mt-2">
+                                    <button type="button" class="btn btn-add-talla-icon d-flex align-items-center justify-content-center" onclick="agregarTalla(0)" title="Agregar talla">
+                                        <span class="bi bi-plus"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-bold">Precio</label>
+                            <input name="Variantes[0].Precio" class="form-control" placeholder="Precio" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Multimedia</label><br>
+                            <label for="fileUpload-0" class="btn btn-upload">Subir nuevas</label>
+                            <input name="Variantes[0].Imagenes" type="file" id="fileUpload-0" class="d-none" accept="image/*" multiple
+                                onchange="previewImages(event, 0)">
+                            <div class="mt-2" id="previewContainer-0"></div>
+                        </div>
+                    </section>
+                    <hr class="variante-divider" />
+                </div>
+            </div>
+            <button type="button" class="btn btn-secondary mt-2" onclick="agregarVariante()">Agregar variante</button>
+        </div>
+        <button type="submit" class="btn btn-dark w-100">Agregar producto</button>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        function previewImages(event, idx) {
+            const input = event.target;
+            const container = document.getElementById(`previewContainer-${idx}`);
+            container.innerHTML = "";
+            if (input.files) {
+                Array.from(input.files).forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const img = document.createElement("img");
+                        img.src = e.target.result;
+                        img.style.maxWidth = "100px";
+                        img.style.maxHeight = "100px";
+                        img.style.marginRight = "8px";
+                        img.style.marginBottom = "8px";
+                        img.style.borderRadius = "8px";
+                        container.appendChild(img);
+                    };
+                    reader.readAsDataURL(file);
+                });
+            }
+        }
+        function mostrarNuevoColor(select, idx) {
+            var colorExtra = document.getElementById('colorExtraContainer-' + idx);
+            var colorPreview = document.getElementById('colorPreview-' + idx);
+            var colorPreviewName = document.getElementById('colorPreviewName-' + idx);
+            var nuevoColorInput = document.getElementById('nuevoColorInput-' + idx);
+            var nuevoCodigoInput = document.getElementById('nuevoCodigoInput-' + idx);
+            if (select.value === '0') {
+                colorExtra.style.display = 'block';
+                colorPreview.style.display = 'none';
+                colorPreviewName.style.display = 'none';
+                nuevoColorInput.style.display = 'block';
+                nuevoCodigoInput.style.display = 'block';
+                nuevoColorInput.value = '';
+                nuevoCodigoInput.value = '#000000';
+                nuevoColorInput.setAttribute('required', 'required');
+                nuevoCodigoInput.setAttribute('required', 'required');
+            } else if (select.value && select.value !== '' && select.value !== '0') {
+                var selected = select.options[select.selectedIndex];
+                var hex = selected.getAttribute('data-codigo');
+                colorExtra.style.display = 'block';
+                colorPreview.style.display = 'inline-block';
+                colorPreviewName.style.display = 'inline-block';
+                nuevoColorInput.style.display = 'none';
+                nuevoCodigoInput.style.display = 'none';
+                colorPreview.style.backgroundColor = hex;
+                colorPreviewName.textContent = selected.text;
+                colorPreviewName.style.display = 'block';
+                colorPreviewName.style.flex = '1 1 auto';
+                colorPreviewName.style.fontSize = '1.1rem';
+                colorPreview.style.display = 'block';
+                colorPreview.style.marginLeft = '8px';
+                nuevoColorInput.removeAttribute('required');
+                nuevoCodigoInput.removeAttribute('required');
+            } else {
+                colorExtra.style.display = 'none';
+                nuevoColorInput.removeAttribute('required');
+                nuevoCodigoInput.removeAttribute('required');
+            }
+        }
+        function agregarVariante() {
+            const container = document.getElementById('variantesContainer');
+            const variantes = container.getElementsByClassName('variante-section');
+            const lastVariante = variantes[variantes.length - 1];
+            const clone = lastVariante.cloneNode(true);
+            const newIdx = variantes.length;
+            clone.setAttribute('data-idx', newIdx);
+            // Actualiza los names e ids de los campos de la variante clonada
+            Array.from(clone.querySelectorAll('input, select, textarea, label, div, span')).forEach(el => {
+                // Cambia los names de la variante
+                if (el.name) {
+                    el.name = el.name.replace(/Variantes\[\d+\]/g, `Variantes[${newIdx}]`);
+                    // Para tallas dentro de la variante
+                    el.name = el.name.replace(/Tallas\[\d+\]/g, 'Tallas[0]');
+                }
+                // Cambia los ids
+                if (el.id) {
+                    el.id = el.id.replace(/(-|_)(\d+)$/, `$1${newIdx}`);
+                }
+                if (el.htmlFor) {
+                    el.htmlFor = el.htmlFor.replace(/(-|_)(\d+)$/, `$1${newIdx}`);
+                }
+            });
+            // Limpia los valores de los inputs
+            Array.from(clone.querySelectorAll('input, select, textarea')).forEach(el => {
+                if (el.type === 'checkbox' || el.type === 'radio') {
+                    el.checked = false;
+                } else if (el.type === 'file') {
+                    el.value = '';
+                } else {
+                    el.value = '';
+                }
+                if (el.id && (el.id.startsWith('nuevoColorInput') || el.id.startsWith('nuevoCodigoInput'))) {
+                    el.style.display = 'none';
+                }
+            });
+            // Limpia los contenedores y previews
+            const colorExtra = clone.querySelector(`#colorExtraContainer-${newIdx}`);
+            if (colorExtra) colorExtra.style.display = 'none';
+            const colorPreview = clone.querySelector(`#colorPreview-${newIdx}`);
+            if (colorPreview) colorPreview.style.display = 'none';
+            const colorPreviewName = clone.querySelector(`#colorPreviewName-${newIdx}`);
+            if (colorPreviewName) colorPreviewName.style.display = 'none';
+            const previewContainer = clone.querySelector(`#previewContainer-${newIdx}`);
+            if (previewContainer) previewContainer.innerHTML = '';
+            // Actualiza eventos
+            const colorSelect = clone.querySelector(`#colorSelect-${newIdx}`);
+            if (colorSelect) colorSelect.setAttribute('onchange', `mostrarNuevoColor(this, ${newIdx})`);
+            const fileUpload = clone.querySelector(`#fileUpload-${newIdx}`);
+            if (fileUpload) fileUpload.setAttribute('onchange', `previewImages(event, ${newIdx})`);
+            container.appendChild(clone);
+            // Actualiza los names de las tallas de la nueva variante
+            actualizarNamesTallas(newIdx);
+        }
+
+        function agregarTalla(idxVariante) {
+            const container = document.getElementById(`tallaCardsContainer-${idxVariante}`);
+            const plantilla = container.querySelector('.talla-card');
+            const nueva = plantilla.cloneNode(true);
+            // Encuentra el nuevo índice de talla
+            const tallasActuales = container.querySelectorAll('.talla-card');
+            const newTallaIdx = tallasActuales.length;
+            // Actualiza los names de la nueva talla
+            Array.from(nueva.querySelectorAll('input, select')).forEach(el => {
+                if (el.name) {
+                    el.name = el.name.replace(/Variantes\[\d+\]\.Tallas\[\d+\]/g, `Variantes[${idxVariante}].Tallas[${newTallaIdx}]`);
+                }
+                if (el.type === 'checkbox' || el.type === 'radio') {
+                    el.checked = false;
+                } else if (el.type === 'file') {
+                    el.value = '';
+                } else {
+                    el.value = '';
+                }
+                if (el.classList.contains('input-limite')) {
+                    el.style.display = 'none';
+                }
+            });
+            const btnRemove = nueva.querySelector('.btn-talla-remove');
+            btnRemove.style.display = 'flex';
+            btnRemove.onclick = function() { eliminarTalla(btnRemove); };
+            container.appendChild(nueva);
+            actualizarNamesTallas(idxVariante);
+            actualizarOpcionesTallas(idxVariante);
+            actualizarBotonesTalla(idxVariante);
+        }
+
+        function actualizarNamesTallas(idxVariante) {
+            // Reasigna los names de todas las tallas de la variante para mantener el orden correcto
+            const container = document.getElementById(`tallaCardsContainer-${idxVariante}`);
+            const cards = container.querySelectorAll('.talla-card');
+            cards.forEach((card, tallaIdx) => {
+                Array.from(card.querySelectorAll('input, select')).forEach(el => {
+                    if (el.name) {
+                        el.name = el.name.replace(/Variantes\[\d+\]\.Tallas\[\d+\]/g, `Variantes[${idxVariante}].Tallas[${tallaIdx}]`);
+                    }
+                });
+            });
+        }
+        function eliminarTalla(btn) {
+            const card = btn.closest('.talla-card');
+            if (card) card.remove();
+            actualizarBotonesTalla(0);
+        }
+        function actualizarBotonesTalla(idx) {
+            const container = document.getElementById(`tallaCardsContainer-${idx}`);
+            const cards = container.querySelectorAll('.talla-card');
+            cards.forEach((card, i) => {
+                const btnRemove = card.querySelector('.btn-talla-remove');
+                if (btnRemove) {
+                    btnRemove.style.display = (i === 0) ? 'none' : 'flex';
+                }
+            });
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            actualizarBotonesTalla(0);
+        });
+        function toggleLimiteTalla(checkbox) {
+            const inputLimite = checkbox.parentElement.querySelector('input[type="number"].input-limite');
+            if (inputLimite) {
+                inputLimite.style.display = checkbox.checked ? 'inline-block' : 'none';
+                if (!checkbox.checked) inputLimite.value = '';
+            }
+        }
+    </script>
+}
+
+<style>
+    .form-section {
+        max-width: 600px;
+        margin: 2.5rem auto 2rem auto;
+        padding: 2.5rem 2rem 2rem 2rem;
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+    .form-section > .mb-3, .form-section > div, .form-section > button, .form-section > hr {
+        margin-bottom: 1.5rem !important;
+    }
+    .tallas-dinamicas {
+        margin-bottom: 2.5rem !important;
+    }
+    .talla-card {
+        background: #f9fbfd;
+        border-radius: 8px;
+        border: 1px solid #e3e7ed;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+        transition: box-shadow 0.2s, border-color 0.2s;
+        margin-bottom: 1.5rem !important;
+        padding: 1.2rem 1rem !important;
+    }
+    .talla-card:focus-within {
+        box-shadow: 0 0 0 2px #a5d8ff;
+        border-color: #74c0fc;
+    }
+    .talla-header {
+        background: none;
+        border: none;
+        margin-bottom: 1rem !important;
+        font-size: 1.1rem;
+        font-weight: 700;
+    }
+    .form-label {
+        margin-bottom: 0.3rem !important;
+    }
+    .form-control, .form-select {
+        min-height: 44px;
+        font-size: 1rem;
+    }
+    .btn {
+        min-height: 44px;
+        font-size: 1rem;
+    }
+    hr {
+        margin-top: 2.5rem;
+        margin-bottom: 2rem;
+    }
+    .btn-xs {
+        padding: 0;
+        font-size: 1.1rem;
+        min-height: 0;
+        min-width: 0;
+        height: 24px;
+        width: 24px;
+        line-height: 1;
+    }
+    @@media screen and (max-width: 768px) {
+        .talla-card .row > div {
+            margin-bottom: 1rem;
+        }
+    }
+    .talla-card .btn-talla-remove {
+        display: none !important;
+    }
+    .talla-card:not(:first-child) .btn-talla-remove {
+        display: flex !important;
+    }
+    .btn-add-talla-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: rgba(180, 180, 180, 0.12);
+        color: #888;
+        border: none;
+        box-shadow: none;
+        transition: background 0.2s, color 0.2s;
+        font-size: 1.5rem;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .btn-add-talla-icon:hover, .btn-add-talla-icon:focus {
+        background: rgba(180, 180, 180, 0.22);
+        color: #444;
+    }
+</style>

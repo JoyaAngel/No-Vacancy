@@ -1,0 +1,67 @@
+@model IEnumerable<NoVacancy.Models.Pedido>
+@{
+    ViewData["Title"] = "Historial de Pedidos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="mb-4">Historial de Pedidos</h2>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">No hay pedidos registrados.</div>
+}
+else
+{
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>ID Pedido</th>
+                <th>Cliente</th>
+                <th>Monto Total</th>
+                <th>Productos</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var pedido in Model)
+        {
+            var carrito = pedido.Carrito;
+            List<NoVacancy.Models.CarritoLinea>? lineas = null;
+            if (carrito != null && ViewBag.LineasPorCarrito is IDictionary<int, List<NoVacancy.Models.CarritoLinea>> lineasDict && lineasDict.TryGetValue(carrito.idCarrito, out var l))
+            {
+                lineas = l;
+            }
+            var cliente = carrito?.Usuario?.UserName ?? "-";
+            NoVacancy.Models.Detalle? detalle = null;
+            if (ViewBag.DetallesPorPedido is IDictionary<int, NoVacancy.Models.Detalle> detallesDict && detallesDict.TryGetValue(pedido.idPedido, out var d))
+            {
+                detalle = d;
+            }
+            <tr>
+                <td>@pedido.idPedido</td>
+                <td>@cliente</td>
+                <td>$@detalle?.monto.ToString("0.00")</td>
+                <td>
+                    @if (lineas != null && lineas.Any())
+                    {
+                        <ul>
+                        @foreach (var linea in lineas)
+                        {
+                            <li>
+                                @linea.Producto?.nombre x @linea.cantidad
+                                <span class="text-muted small">
+                                    (Color: @linea.Producto?.Color?.nombre, Talla: @linea.Producto?.Talla?.nombre)
+                                </span>
+                            </li>
+                        }
+                        </ul>
+                    }
+                    else
+                    {
+                        <span>-</span>
+                    }
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}

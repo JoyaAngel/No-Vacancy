@@ -19,7 +19,7 @@
                     <i class="bi bi-search fs-4"></i>
                 </a>
 
-                <span class="navbar-brand mx-auto fw-bold">No Vacancy</span>
+                <a class="navbar-brand mx-auto fw-bold" href="@Url.Action("Index", "Home")" style="text-decoration:none;color:inherit;cursor:pointer;">No Vacancy</a>
 
                 <div class="d-flex align-items-center">
                     <div class="dropdown">
@@ -46,6 +46,18 @@
                        href="@Url.Action("Shopping_cart", "CarritoLinea")"
                        title="Carrito de compras">
                         <i class="bi bi-cart fs-4"></i>
+                    </a>
+                    <!-- INICIO OPCIÓN TEMPORAL AGREGAR PRODUCTO -->
+                    @* Solo visible para usuarios autenticados *@
+                    @if (User.Identity != null && User.Identity.IsAuthenticated)
+                    {
+                        <a class="nav-link ms-3 btn btn-outline-dark px-3 py-1" href="@Url.Action("Create", "Producto")">
+                            <i class="bi bi-plus-circle"></i> Agregar producto
+                        </a>
+                    }
+                    <!-- FIN OPCIÓN TEMPORAL AGREGAR PRODUCTO -->
+                    <a class="nav-link me-3" href="@Url.Action("Historial", "Pedido")" title="Historial de pedidos">
+                        <i class="bi bi-clock-history fs-4"></i> Historial
                     </a>
                 </div>
             </div>

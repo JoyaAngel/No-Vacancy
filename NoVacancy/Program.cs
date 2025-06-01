@@ -26,7 +26,6 @@ builder.Services.AddControllersWithViews(options =>
 
 builder.Services.AddSession();
 
-
 var app = builder.Build();
 
 //Usar seeder.
