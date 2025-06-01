@@ -1,13 +1,57 @@
 ﻿@{
-	ViewData["Title"] = "Dashboard";
-	Layout = "_LayoutAdminLTE";
+    ViewData["Title"] = "Dashboard";
+    Layout = "_Layout";
 }
 
-<div class="content-wrapper">
-	<section class="content-header">
-		<h1>Panel de Administración</h1>
-	</section>
-	<section class="content">
-		<p>Bienvenido, administrador.</p>
-	</section>
+<div class="content-section container">
+    <h2 class="mb-4">Listado de Productos</h2>
+    <a href="#" class="btn btn-dark mb-3">Registrar Producto</a>
+
+    <table class="table table-bordered table-hover text-center">
+        <thead class="table-dark">
+            <tr>
+                <th>Título</th>
+                <th>Descripción</th>
+                <th>Categoría</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Ejemplo con datos estáticos (en producción usa un foreach) -->
+            <tr>
+                <td>Camiseta Oversize</td>
+                <td>Camiseta de algodón 100% color negro con corte amplio.</td>
+                <td>Camisetas</td>
+                <td>
+                    <!-- Botón Editar con ruta al controlador -->
+                    <a asp-controller="Admin" asp-action="Edit" asp-route-id="1" class="btn btn-sm btn-warning">
+                        <i class="bi bi-pencil"></i> Editar
+                    </a>
+                    <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                        <i class="bi bi-trash"></i> Eliminar
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </div>
+
+<!-- Modal de eliminación -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">¿Deseas eliminar este producto?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body text-center">
+                <p>Selecciona una opción:</p>
+                <div class="d-flex justify-content-around">
+                    <button class="btn btn-outline-dark" data-bs-dismiss="modal">Sí</button>
+                    <button class="btn btn-dark" data-bs-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
