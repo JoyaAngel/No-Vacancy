@@ -63,8 +63,14 @@ namespace NoVacancy.Controllers
                 if (producto != null)
                 {
                     total += (producto.precio * linea.cantidad);
+                    // Restar stock
+                    producto.cantidad -= linea.cantidad;
+                    if (producto.cantidad < 0)
+                        producto.cantidad = 0;
+                    _context.Productos.Update(producto);
                 }
             }
+            _context.SaveChanges();
 
             var pedido = new Pedido
             {

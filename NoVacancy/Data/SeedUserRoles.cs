@@ -30,15 +30,19 @@ namespace NoVacancy.Data
                     UserName = adminEmail,
                     Email = adminEmail,
                     Nombre = "Admin",
-                    Rol = "Administrador"
-
+                    Rol = "Administrador",
+                    Calle = "Av. Universidad",
+                    Numero = "789",
+                    Colonia = "Copilco",
+                    Ciudad = "CDMX",
+                    Estado = "CDMX",
+                    CodigoPostal = "04360"
                 };
 
                 var result = await userManager.CreateAsync(user, password);
                 if (result.Succeeded)
                     await userManager.AddToRoleAsync(user, "Administrador");
             }
-
 
             //Crear otro admin (prueba del seeder).
             string adminEmail2 = "chucho@novacancy.com";
@@ -50,12 +54,41 @@ namespace NoVacancy.Data
                     UserName = adminEmail2,
                     Email = adminEmail2,
                     Nombre = "Chucho",
-                    Rol = "Administrador"
+                    Rol = "Administrador",
+                    Calle = "Av. Siempre Viva",
+                    Numero = "742",
+                    Colonia = "Springfield",
+                    Ciudad = "CDMX",
+                    Estado = "CDMX",
+                    CodigoPostal = "12345"
                 };
 
                 var result2 = await userManager.CreateAsync(user2, password2);
                 if (result2.Succeeded)
                     await userManager.AddToRoleAsync(user2, "Administrador");
+            }
+
+            // Crear usuario cliente "Chi"
+            string chiEmail = "joya.mag02@gmail.com";
+            string chiPassword = "ChiCliente123!";
+            if(await userManager.FindByEmailAsync(chiEmail) == null)
+            {
+                var chiUser = new Usuario
+                {
+                    UserName = chiEmail,
+                    Email = chiEmail,
+                    Nombre = "Chi",
+                    Rol = "Cliente",
+                    Calle = "Calle Chi",
+                    Numero = "1",
+                    Colonia = "Colonia Chi",
+                    Ciudad = "CDMX",
+                    Estado = "CDMX",
+                    CodigoPostal = "01000"
+                };
+                var chiResult = await userManager.CreateAsync(chiUser, chiPassword);
+                if (chiResult.Succeeded)
+                    await userManager.AddToRoleAsync(chiUser, "Cliente");
             }
 
         }
