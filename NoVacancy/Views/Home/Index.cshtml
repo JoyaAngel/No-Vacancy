@@ -2,28 +2,35 @@
 	ViewData["Title"] = "Home Page";
 	var productosMasComprados = ViewBag.ProductosMasComprados as IEnumerable<dynamic>;
 	var productosMejorCalificados = ViewBag.ProductosMejorCalificados as IEnumerable<dynamic>;
+	var productosRecientes = ViewBag.ProductosRecientes as IEnumerable<dynamic>;
+	string defaultImg = Url.Content("~/images/default-150x150.png");
 }
 
 <section>
 	<div class="container mt-5">
-		<h1 id="cabecera">Más comprados</h1>
-		<br>
+		<h1 id="cabecera" class="fw-bold mb-3">Más comprados</h1>
 		<div class="row">
-			@if (productosMasComprados != null)
+			@if (productosMasComprados != null && productosMasComprados.Any())
 			{
 				foreach (var item in productosMasComprados)
 				{
-					<div class="col-md-4 mb-4">
-						<div class="card">
-							<img src="~/images/productos/@item.Imagen" class="card-img-top" alt="@item.Producto.nombre">
+					<div class="col-12 col-md-4 mb-4">
+						<div class="card shadow-sm rounded-4 h-100 border-0 card-hover">
+							<img src="@(string.IsNullOrEmpty(item.Imagen) ? defaultImg : Url.Content($"~/images/productos/{item.Imagen}"))" class="card-img-top p-3" alt="@item.Producto.nombre" style="object-fit:contain; height:220px;">
 							<div class="card-body">
-								<h5 class="card-title">@item.Producto.nombre</h5>
-								<p class="card-text">$@item.Producto.precio.ToString("0.00")</p>
-								<a href="@Url.Action("Product_detail", "Home", new { nombre = item.Producto.nombre })" class="px-3 text-muted text-decoration-none">Ver más -></a>
+								<h5 class="card-title fw-semibold">@item.Producto.nombre</h5>
+								<p class="card-text text-success fw-bold">$@item.Producto.precio.ToString("0.00")</p>
+								<a href="@Url.Action("Product_detail", "Home", new { nombre = item.Producto.nombre })" class="btn btn-outline-dark w-100 mt-2">Ver más</a>
 							</div>
 						</div>
 					</div>
 				}
+			}
+			else
+			{
+				<div class="col-12">
+					<div class="alert alert-info text-center">No hay productos más comprados aún.</div>
+				</div>
 			}
 		</div>
 	</div>
@@ -31,91 +38,120 @@
 
 <section>
 	<div class="container mt-5">
-		<h1 id="cabecera">Mejor calificados</h1>
-		<br>
+		<h1 id="cabecera" class="fw-bold mb-3">Mejor calificados</h1>
 		<div class="row">
-			@if (productosMejorCalificados != null)
+			@if (productosMejorCalificados != null && productosMejorCalificados.Any())
 			{
 				foreach (var item in productosMejorCalificados)
 				{
-					<div class="col-md-4 mb-4">
-						<div class="card">
-							<img src="~/images/productos/@item.Imagen" class="card-img-top" alt="@item.Producto.nombre">
+					<div class="col-12 col-md-4 mb-4">
+						<div class="card shadow-sm rounded-4 h-100 border-0 card-hover">
+							<img src="@(string.IsNullOrEmpty(item.Imagen) ? defaultImg : Url.Content($"~/images/productos/{item.Imagen}"))" class="card-img-top p-3" alt="@item.Producto.nombre" style="object-fit:contain; height:220px;">
 							<div class="card-body">
-								<h5 class="card-title">@item.Producto.nombre</h5>
-								<p class="card-text">$@item.Producto.precio.ToString("0.00")</p>
-								<a href="@Url.Action("Product_detail", "Home", new { nombre = item.Producto.nombre })" class="px-3 text-muted text-decoration-none">Ver más -></a>
+								<h5 class="card-title fw-semibold">@item.Producto.nombre</h5>
+								<p class="card-text text-success fw-bold">$@item.Producto.precio.ToString("0.00")</p>
+								<a href="@Url.Action("Product_detail", "Home", new { nombre = item.Producto.nombre })" class="btn btn-outline-dark w-100 mt-2">Ver más</a>
 							</div>
 						</div>
 					</div>
 				}
+			}
+			else
+			{
+				<div class="col-12">
+					<div class="alert alert-info text-center">No hay productos calificados aún.</div>
+				</div>
 			}
 		</div>
 	</div>
 </section>
 
 <div class="d-flex align-items-center my-4">
-	<div class="flex-grow-1" style="border-top: 2px solid black"></div>
-	<a href="@Url.Action("Store", "Home")" class="px-3 text-muted text-decoration-none">Ver todo</a>
-	<div class="flex-grow-1" style="border-top: 2px solid black"></div>
+	<div class="flex-grow-1" style="border-top: 2px solid #e0e0e0"></div>
+	<a href="@Url.Action("Store", "Home")" class="px-3 btn btn-dark rounded-pill">Ver todo</a>
+	<div class="flex-grow-1" style="border-top: 2px solid #e0e0e0"></div>
 </div>
 
-<section class="carrusel mb-5">
-	<div id="carouselExampleControls"
-		 class="carousel slide"
-		 data-bs-ride="carousel">
-		<div class="carousel-inner">
-			<!-- Imagen 1 -->
-			<div class="carousel-item active">
-				<div class="position-relative d-flex justify-content-center align-items-center"
-					 style="height: 400px">
-					<img src="~/images/1.webp" class="d-block w-50" alt="Imagen 1" />
-					<div class="position-absolute bottom-0 end-0 text-end text-white bg-dark bg-opacity-50 p-2 rounded">
-						<h5>Texto 1</h5>
-					</div>
-				</div>
-			</div>
-
-			<!-- Imagen 2 -->
-			<div class="carousel-item">
-				<div class="position-relative d-flex justify-content-center align-items-center"
-					 style="height: 400px">
-					<img src="~/images/2.jpg" class="d-block w-50" alt="Imagen 2" />
-					<div class="position-absolute bottom-0 end-0 text-end text-white bg-dark bg-opacity-50 p-2 rounded">
-						<h5>Texto 2</h5>
-					</div>
-				</div>
-			</div>
-
-			<!-- Imagen 3 -->
-			<div class="carousel-item">
-				<div class="position-relative d-flex justify-content-center align-items-center"
-					 style="height: 400px">
-					<img src="~/images/3.png" class="d-block w-50" alt="Imagen 3" />
-					<div class="position-absolute bottom-0 end-0 text-end text-white bg-dark bg-opacity-50 p-2 rounded">
-						<h5>Texto 3</h5>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<!-- Controles -->
-		<button class="carousel-control-prev"
-				type="button"
-				data-bs-target="#carouselExampleControls"
-				data-bs-slide="prev"
-				style="top: 50%; transform: translateY(-50%); height: 400px">
-			<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-			<span class="visually-hidden">Anterior</span>
-		</button>
-
-		<button class="carousel-control-next"
-				type="button"
-				data-bs-target="#carouselExampleControls"
-				data-bs-slide="next"
-				style="top: 50%; transform: translateY(-50%); height: 400px">
-			<span class="carousel-control-next-icon" aria-hidden="true"></span>
-			<span class="visually-hidden">Siguiente</span>
-		</button>
-	</div>
+<section>
+    <div id="luxuryCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="3500">
+        <div class="carousel-inner">
+            @if (productosRecientes != null && productosRecientes.Any())
+            {
+                var idx = 0;
+                foreach (var item in productosRecientes)
+                {
+                    var isActive = idx == 0 ? "active" : "";
+                    <div class="carousel-item @isActive">
+                        <div class="d-flex flex-column justify-content-center align-items-center bg-white p-5 rounded-4 border border-1 shadow-sm" style="min-height: 420px;">
+                            <img src="@(string.IsNullOrEmpty(item.Imagen) ? defaultImg : Url.Content($"~/images/productos/{item.Imagen}"))"
+                                 class="d-block mx-auto mb-4 rounded-3"
+                                 alt="@item.Producto.nombre"
+                                 style="max-width: 340px; max-height: 340px; object-fit: contain; background: #fff; border: 1px solid #e0e0e0;" />
+                            <h3 class="mb-1 text-dark fw-bold">@item.Producto.nombre</h3>
+                            <p class="h4 mb-2 text-dark">$@item.Producto.precio.ToString("0.00")</p>
+                            <a href="@Url.Action("Product_detail", "Home", new { nombre = item.Producto.nombre })"
+                               class="btn btn-outline-dark rounded-pill px-4 mt-2">
+                                Ver producto <i class="ms-2 bi bi-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                    idx++;
+                }
+            }
+            else
+            {
+                <div class="carousel-item active">
+                    <div class="d-flex flex-column justify-content-center align-items-center bg-white p-5 rounded-4 border border-1 shadow-sm" style="min-height: 420px;">
+                        <img src="~/images/1.webp" class="d-block mx-auto mb-4 rounded-3" alt="Imagen destacada" style="max-width: 340px; max-height: 340px; object-fit: contain; background: #fff; border: 1px solid #e0e0e0;" />
+                        <h2 class="text-dark fw-bold">¡Explora nuestros productos exclusivos!</h2>
+                        <a href="@Url.Action("Store", "Home")" class="btn btn-outline-dark rounded-pill px-4 mt-3">
+                            Descubrir colección
+                        </a>
+                    </div>
+                </div>
+            }
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#luxuryCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Anterior</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#luxuryCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Siguiente</span>
+        </button>
+    </div>
 </section>
+
+<style>
+.carousel-inner {
+    background: transparent;
+    border-radius: 1.5rem;
+    box-shadow: none;
+}
+.carousel-item {
+    transition: opacity 0.5s;
+}
+.carousel-control-prev, .carousel-control-next {
+    width: 44px;
+    height: 44px;
+    background: #fff;
+    border-radius: 50%;
+    border: 1px solid #222;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.85;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+}
+.carousel-control-prev:hover, .carousel-control-next:hover {
+    background: #222;
+    border-color: #222;
+    opacity: 1;
+}
+.carousel-control-prev-icon, .carousel-control-next-icon {
+    filter: invert(1) grayscale(1);
+}
+.carousel-control-prev:hover .carousel-control-prev-icon,
+.carousel-control-next:hover .carousel-control-next-icon {
+    filter: none;
+}
+</style>

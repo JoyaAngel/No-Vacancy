@@ -66,6 +66,18 @@ namespace NoVacancy.Controllers
                 .Where(i => productosCalificadosIds.Contains(i.idProducto))
                 .ToListAsync();
 
+            // Productos más recientes (últimos 3 agregados)
+            var productosRecientes = await _context.Productos
+                .OrderByDescending(p => p.idProducto)
+                .Include(p => p.Color)
+                .Include(p => p.Talla)
+                .Include(p => p.Categoria)
+                .Take(3)
+                .ToListAsync();
+            var imagenesRecientes = await _context.Imagenes
+                .Where(i => productosRecientes.Select(p => p.idProducto).Contains(i.idProducto))
+                .ToListAsync();
+
             ViewBag.ProductosMasComprados = productosComprados.Select(p => new {
                 Producto = p,
                 Imagen = imagenesComprados.FirstOrDefault(i => i.idProducto == p.idProducto)?.nombre
@@ -73,6 +85,10 @@ namespace NoVacancy.Controllers
             ViewBag.ProductosMejorCalificados = productosCalificados.Select(p => new {
                 Producto = p,
                 Imagen = imagenesCalificados.FirstOrDefault(i => i.idProducto == p.idProducto)?.nombre
+            }).ToList();
+            ViewBag.ProductosRecientes = productosRecientes.Select(p => new {
+                Producto = p,
+                Imagen = imagenesRecientes.FirstOrDefault(i => i.idProducto == p.idProducto)?.nombre
             }).ToList();
 
             return View();
@@ -138,28 +154,51 @@ namespace NoVacancy.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Store()
+        public async Task<IActionResult> Store(string? search, string? categoria, string? color, string? talla, int pagina = 1)
         {
-            var productos = await _context.Productos
+            int pageSize = 9; // Productos por página
+            var productosQuery = _context.Productos
                 .Include(p => p.Categoria)
                 .Include(p => p.Color)
                 .Include(p => p.Talla)
-                .ToListAsync();
+                .AsQueryable();
+
+            // Filtros
+            if (!string.IsNullOrWhiteSpace(search))
+                productosQuery = productosQuery.Where(p => p.nombre != null && p.nombre.Contains(search));
+            if (!string.IsNullOrWhiteSpace(categoria))
+                productosQuery = productosQuery.Where(p => p.Categoria != null && p.Categoria.nombre == categoria);
+            if (!string.IsNullOrWhiteSpace(color))
+                productosQuery = productosQuery.Where(p => p.Color != null && p.Color.nombre == color);
+            if (!string.IsNullOrWhiteSpace(talla))
+                productosQuery = productosQuery.Where(p => p.Talla != null && p.Talla.nombre == talla);
+
             // Agrupar por nombre y tomar solo el primero de cada grupo
-            var productosUnicos = productos
+            var productosUnicos = await productosQuery
+                .ToListAsync();
+            productosUnicos = productosUnicos
                 .GroupBy(p => p.nombre)
                 .Select(g => g.First())
                 .ToList();
+
+            // Paginación
+            int totalProductos = productosUnicos.Count;
+            int totalPaginas = (int)Math.Ceiling(totalProductos / (double)pageSize);
+            pagina = Math.Max(1, Math.Min(pagina, totalPaginas == 0 ? 1 : totalPaginas));
+            var productosPagina = productosUnicos
+                .Skip((pagina - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
             var productosVM = new List<ProductoTiendaViewModel>();
-            foreach (var producto in productosUnicos)
+            foreach (var producto in productosPagina)
             {
                 // Buscar imágenes para el idProducto
                 var imagenes = await _context.Imagenes.Where(i => i.idProducto == producto.idProducto).ToListAsync();
                 // Si no hay imágenes, buscar imágenes de cualquier producto con el mismo nombre
                 if (imagenes == null || imagenes.Count == 0)
                 {
-                    // Buscar ids de productos con el mismo nombre
-                    var idsMismoNombre = productos.Where(p => p.nombre == producto.nombre).Select(p => p.idProducto).ToList();
+                    var idsMismoNombre = productosUnicos.Where(p => p.nombre == producto.nombre).Select(p => p.idProducto).ToList();
                     imagenes = await _context.Imagenes.Where(i => idsMismoNombre.Contains(i.idProducto)).ToListAsync();
                 }
                 productosVM.Add(new ProductoTiendaViewModel
@@ -168,7 +207,21 @@ namespace NoVacancy.Controllers
                     Imagenes = imagenes
                 });
             }
-            var viewModel = new TiendaViewModel { Productos = productosVM };
+
+            // Llenar filtros
+            var categorias = await _context.Categorias.ToListAsync();
+            var colores = await _context.Colores.ToListAsync();
+            var tallas = await _context.Tallas.ToListAsync();
+
+            var viewModel = new TiendaViewModel
+            {
+                Productos = productosVM,
+                Categorias = categorias,
+                Colores = colores,
+                Tallas = tallas,
+                TotalPaginas = totalPaginas,
+                PaginaActual = pagina
+            };
             return View(viewModel);
         }
 
@@ -176,17 +229,6 @@ namespace NoVacancy.Controllers
         {
             return View();
         }
-
-        // Eliminar o comentar los métodos Login y Register, ya que ahora se usan desde UsuarioController.
-        // public IActionResult Register()
-        // {
-        //     return View();
-        // }
-
-        // public IActionResult Login()
-        // {
-        //     return View();
-        // }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

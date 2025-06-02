@@ -1,38 +1,113 @@
 @model NoVacancy.ViewModels.TiendaViewModel
+@{
+    var query = Context.Request.Query;
+    string searchValue = query["search"].ToString();
+    string categoriaValue = query["categoria"].ToString();
+    string colorValue = query["color"].ToString();
+    string tallaValue = query["talla"].ToString();
+}
+<!-- Barra de búsqueda y filtros -->
+<form method="get" asp-action="Store" class="mb-4">
+    <div class="row g-2 align-items-end">
+        <div class="col-md-4">
+            <label for="search" class="form-label">Buscar producto</label>
+            <input type="text" class="form-control" id="search" name="search" value="@searchValue" placeholder="Nombre del producto">
+        </div>
+        <div class="col-md-2">
+            <label for="categoria" class="form-label">Categoría</label>
+            <select class="form-select" id="categoria" name="categoria">
+                <option value="">Todas</option>
+                @if (Model.Categorias != null)
+                {
+                    foreach (var cat in Model.Categorias)
+                    {
+                        var selected = categoriaValue == cat.nombre ? " selected=\"selected\"" : "";
+                        @Html.Raw($"<option value=\"{cat.nombre}\"{selected}>{cat.nombre}</option>")
+                    }
+                }
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label for="color" class="form-label">Color</label>
+            <select class="form-select" id="color" name="color">
+                <option value="">Todos</option>
+                @if (Model.Colores != null)
+                {
+                    foreach (var color in Model.Colores)
+                    {
+                        var selected = colorValue == color.nombre ? " selected=\"selected\"" : "";
+                        @Html.Raw($"<option value=\"{color.nombre}\"{selected}>{color.nombre}</option>")
+                    }
+                }
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label for="talla" class="form-label">Talla</label>
+            <select class="form-select" id="talla" name="talla">
+                <option value="">Todas</option>
+                @if (Model.Tallas != null)
+                {
+                    foreach (var talla in Model.Tallas)
+                    {
+                        var selected = tallaValue == talla.nombre ? " selected=\"selected\"" : "";
+                        @Html.Raw($"<option value=\"{talla.nombre}\"{selected}>{talla.nombre}</option>")
+                    }
+                }
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-dark w-100">Filtrar</button>
+        </div>
+    </div>
+</form>
 <!-- Productos -->
 <section class="container my-5">
-	<h2 class="mb-4">Tienda</h2>
-	<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
-		@foreach (var item in Model.Productos)
-		{
-			<div class="col">
-				<div class="card h-100 text-center">
-					@if (item.Imagenes != null && item.Imagenes.Count > 0)
-					{
-						<img src="~/images/productos/@item.Imagenes.First().nombre" class="card-img-top p-3" alt="@item.Producto.nombre">
-					}
-					else
-					{
-						<img src="~/images/default-150x150.png" class="card-img-top p-3" alt="Sin imagen">
-					}
-					<div class="card-body">
-						<p class="card-text mb-1">@item.Producto.nombre</p>
-						<h6 class="fw-bold">$@item.Producto.precio.ToString("N2") MXN</h6>
-						<p class="mb-0 text-muted">@item.Producto.Categoria?.nombre</p>
-						<p class="mb-0 text-muted">Color: @item.Producto.Color?.nombre</p>
-						<p class="mb-0 text-muted">Talla: @item.Producto.Talla?.nombre</p>
-						<a href="@Url.Action("Product_detail", "Home", new { nombre = item.Producto.nombre })" class="btn btn-outline-dark mt-2 w-100">Ver detalles</a>
-					</div>
-				</div>
-			</div>
-		}
-	</div>
-	<!-- Paginación -->
-	<nav aria-label="Paginación de productos" class="mt-4 d-flex justify-content-center">
-		<ul class="pagination">
-			<li class="page-item active"><a class="page-link" href="#">1</a></li>
-			<li class="page-item"><a class="page-link" href="#">2</a></li>
-			<li class="page-item"><a class="page-link" href="#">3</a></li>
-		</ul>
-	</nav>
+    <h2 class="mb-4">Tienda</h2>
+    @if (Model.Productos == null || !Model.Productos.Any())
+    {
+        <div class="alert alert-warning text-center">No hay productos disponibles con los filtros seleccionados.</div>
+    }
+    else
+    {
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+            @foreach (var item in Model.Productos)
+            {
+                <div class="col">
+                    <div class="card h-100 text-center shadow-sm border-0">
+                        @if (item.Imagenes != null && item.Imagenes.Any() && item.Imagenes.FirstOrDefault() != null)
+                        {
+                            <img src="~/images/productos/@item.Imagenes.First().nombre" class="card-img-top p-3" alt="@(item.Producto?.nombre ?? "Producto")" style="object-fit:contain; height:220px;">
+                        }
+                        else
+                        {
+                            <img src="~/images/default-150x150.png" class="card-img-top p-3" alt="Sin imagen" style="object-fit:contain; height:220px;">
+                        }
+                        <div class="card-body">
+                            <p class="card-text mb-1 fw-semibold">@(item.Producto?.nombre ?? "")</p>
+                            <h6 class="fw-bold text-success">$@(item.Producto?.precio.ToString("N2") ?? "0.00") MXN</h6>
+                            <p class="mb-0 text-muted small">@(item.Producto?.Categoria?.nombre ?? "")</p>
+                            <p class="mb-0 text-muted small">Color: @(item.Producto?.Color?.nombre ?? "")</p>
+                            <p class="mb-0 text-muted small">Talla: @(item.Producto?.Talla?.nombre ?? "")</p>
+                            <a href="@Url.Action("Product_detail", "Home", new { nombre = item.Producto?.nombre })" class="btn btn-outline-dark mt-2 w-100">Ver detalles</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    <!-- Paginación dinámica (simulada) -->
+    @if (Model.TotalPaginas > 1)
+    {
+        <nav aria-label="Paginación de productos" class="mt-4 d-flex justify-content-center">
+            <ul class="pagination">
+                @for (int i = 1; i <= Model.TotalPaginas; i++)
+                {
+                    var active = i == Model.PaginaActual ? "active" : "";
+                    <li class="page-item @active">
+                        <a class="page-link" href="@Url.Action("Store", new { search = searchValue, categoria = categoriaValue, color = colorValue, talla = tallaValue, pagina = i })">@i</a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    }
 </section>
