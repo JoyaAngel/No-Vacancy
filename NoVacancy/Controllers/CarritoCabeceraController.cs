@@ -32,11 +32,28 @@ namespace NoVacancy.Controllers
         }
 
         [HttpPost]
-        public IActionResult ConfirmarPedido([FromForm] bool solicitarFactura)
+        public IActionResult ConfirmarPedido(
+            [FromForm] bool solicitarFactura,
+            [FromForm] string? rfc,
+            [FromForm] string? regimenFiscal,
+            [FromForm] string? codigoPostal,
+            [FromForm] string Calle,
+            [FromForm] string Numero,
+            [FromForm] string Colonia,
+            [FromForm] string Ciudad,
+            [FromForm] string Estado,
+            [FromForm] string CodigoPostalEnvio)
         {
             string? usuarioId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(usuarioId))
                 return RedirectToAction("Login", "Usuario");
+
+            // Validación de campos de factura
+            if (solicitarFactura && (string.IsNullOrWhiteSpace(rfc) || string.IsNullOrWhiteSpace(regimenFiscal) || string.IsNullOrWhiteSpace(codigoPostal)))
+            {
+                TempData["Error"] = "Para solicitar factura debes llenar RFC, Régimen fiscal y Código postal.";
+                return RedirectToAction("Shopping_cart", "CarritoLinea");
+            }
 
             // Buscar el carrito activo del usuario (el más reciente sin pedido asociado)
             var carrito = _context.CarritosCabecera
@@ -74,20 +91,21 @@ namespace NoVacancy.Controllers
 
             var pedido = new Pedido
             {
-                idCarrito = carrito.idCarrito
+                idCarrito = carrito.idCarrito,
+                Calle = Calle,
+                Numero = Numero,
+                Colonia = Colonia,
+                Ciudad = Ciudad,
+                Estado = Estado,
+                CodigoPostalEnvio = CodigoPostalEnvio,
+                FechaHoraPedido = DateTime.Now,
+                rfc = solicitarFactura ? rfc : null,
+                regimen = solicitarFactura ? regimenFiscal : null,
+                codigoPostal = solicitarFactura ? codigoPostal : null
             };
             _context.Pedidos.Add(pedido);
             _context.SaveChanges();
 
-            var detalle = new Detalle
-            {
-                idPedido = pedido.idPedido,
-                monto = total
-            };
-            _context.Set<Detalle>().Add(detalle);
-            _context.SaveChanges();
-
-            // Crear un nuevo carrito vacío para el usuario
             var nuevoCarrito = new CarritoCabecera
             {
                 Id = usuarioId
@@ -96,10 +114,7 @@ namespace NoVacancy.Controllers
             _context.SaveChanges();
 
             TempData["PedidoId"] = pedido.idPedido;
-            if (solicitarFactura)
-                return RedirectToAction("Invoice", "CarritoLinea");
-            else
-                return RedirectToAction("PedidoConfirmado", "Pedido");
+            return RedirectToAction("PedidoConfirmado", "Pedido");
         }
     }
 }

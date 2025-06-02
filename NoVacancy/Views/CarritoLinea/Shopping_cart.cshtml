@@ -80,33 +80,78 @@
 	<div class="container my-4">
 		<div class="row justify-content-end">
 			<div class="col">
-				<button class="btn btn-dark w-100" type="button" data-bs-toggle="modal" data-bs-target="#facturaModal" @(Model == null || !Model.Any() ? "disabled" : "")>Confirmar pedido</button>
+				<button class="btn btn-dark w-100" type="button" data-bs-toggle="modal" data-bs-target="#confirmarPedidoModal" @(Model == null || !Model.Any() ? "disabled" : "")>Confirmar pedido</button>
 			</div>
 		</div>
 	</div>
 
-	<!-- Modal para solicitar factura -->
-	<div class="modal fade" id="facturaModal" tabindex="-1" aria-labelledby="facturaModalLabel" aria-hidden="true">
+	<!-- Modal para confirmar pedido y solicitar dirección/factura -->
+	<div class="modal fade" id="confirmarPedidoModal" tabindex="-1" aria-labelledby="confirmarPedidoModalLabel" aria-hidden="true">
 	  <div class="modal-dialog">
 	    <div class="modal-content">
 	      <div class="modal-header">
-	        <h5 class="modal-title" id="facturaModalLabel">¿Deseas solicitar factura?</h5>
+	        <h5 class="modal-title" id="confirmarPedidoModalLabel">Confirmar pedido</h5>
 	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
 	      </div>
-	      <div class="modal-body">
-	        Selecciona una opción para continuar con tu pedido.
-	      </div>
-	      <div class="modal-footer">
-	        <form asp-action="ConfirmarPedido" asp-controller="CarritoCabecera" method="post" class="d-inline">
-	          <input type="hidden" name="solicitarFactura" value="true" />
-	          <button type="submit" class="btn btn-primary">Solicitar factura</button>
-	        </form>
-	        <form asp-action="ConfirmarPedido" asp-controller="CarritoCabecera" method="post" class="d-inline">
-	          <input type="hidden" name="solicitarFactura" value="false" />
-	          <button type="submit" class="btn btn-secondary">No solicitar factura</button>
-	        </form>
-	      </div>
+	      <form asp-action="ConfirmarPedido" asp-controller="CarritoCabecera" method="post">
+	        <div class="modal-body">
+	          <div class="mb-3">
+	            <label class="form-label">Calle</label>
+	            <input type="text" class="form-control" name="Calle" required />
+	          </div>
+	          <div class="mb-3">
+	            <label class="form-label">Número</label>
+	            <input type="text" class="form-control" name="Numero" required />
+	          </div>
+	          <div class="mb-3">
+	            <label class="form-label">Colonia</label>
+	            <input type="text" class="form-control" name="Colonia" required />
+	          </div>
+	          <div class="mb-3">
+	            <label class="form-label">Ciudad</label>
+	            <input type="text" class="form-control" name="Ciudad" required />
+	          </div>
+	          <div class="mb-3">
+	            <label class="form-label">Estado</label>
+	            <input type="text" class="form-control" name="Estado" required />
+	          </div>
+	          <div class="mb-3">
+	            <label class="form-label">Código Postal de Envío</label>
+	            <input type="text" class="form-control" name="CodigoPostalEnvio" required />
+	          </div>
+	          <div class="form-check mb-3">
+	            <input type="checkbox" class="form-check-input" value="true" id="solicitarFacturaCheck" name="solicitarFactura" onclick="toggleFacturaFields()">
+	            <label class="form-check-label" for="solicitarFacturaCheck">
+	              Solicitar factura
+	            </label>
+	          </div>
+	          <div id="facturaFields" style="display:none;">
+	            <div class="mb-3">
+	              <label class="form-label">RFC</label>
+	              <input type="text" class="form-control" name="rfc">
+	            </div>
+	            <div class="mb-3">
+	              <label class="form-label">Régimen fiscal</label>
+	              <input type="text" class="form-control" name="regimenFiscal">
+	            </div>
+	            <div class="mb-3">
+	              <label class="form-label">Código postal</label>
+	              <input type="text" class="form-control" name="codigoPostal">
+	            </div>
+	          </div>
+	        </div>
+	        <div class="modal-footer">
+	          <button type="submit" class="btn btn-dark">Confirmar pedido</button>
+	        </div>
+	      </form>
 	    </div>
 	  </div>
 	</div>
+	<script>
+	function toggleFacturaFields() {
+	  var check = document.getElementById('solicitarFacturaCheck');
+	  var fields = document.getElementById('facturaFields');
+	  fields.style.display = check.checked ? 'block' : 'none';
+	}
+	</script>
 </div>
