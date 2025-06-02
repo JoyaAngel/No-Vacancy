@@ -26,7 +26,8 @@ namespace NoVacancy.Controllers
                 .Include(p => p.Talla)
                 .ToListAsync();
             // Retorna los productos como JSON para pruebas
-            return Json(productos);
+            //return Json(productos);
+            return View(productos);
         }
 
         // GET: ProductoController/Details/5
@@ -224,33 +225,67 @@ namespace NoVacancy.Controllers
             var producto = await _context.Productos.FindAsync(id);
             if (producto == null)
                 return NotFound();
+
+            // Cargar las listas necesarias para los dropdowns
+            ViewBag.Categorias = await _context.Categorias.ToListAsync();
+            ViewBag.Tallas = await _context.Tallas.ToListAsync();
+            ViewBag.Colores = await _context.Colores.ToListAsync();
+
             return View(producto);
         }
 
         // POST: ProductoController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("idProducto,nombre,cantidad,limite,descripcion,precio,idTalla,idCategoria,idColor")] Producto producto)
+        public async Task<IActionResult> Edit(int id, Producto producto)
         {
             if (id != producto.idProducto)
                 return NotFound();
+
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(producto);
+                    // Verificar si el producto existe
+                    var productoExistente = await _context.Productos.FindAsync(id);
+                    if (productoExistente == null)
+                        return NotFound();
+
+                    // Actualizar propiedades
+                    productoExistente.nombre = producto.nombre;
+                    productoExistente.descripcion = producto.descripcion;
+                    productoExistente.precio = producto.precio;
+                    productoExistente.cantidad = producto.cantidad;
+                    productoExistente.limite = producto.limite;
+                    productoExistente.idCategoria = producto.idCategoria;
+                    productoExistente.idColor = producto.idColor;
+                    productoExistente.idTalla = producto.idTalla;
+
+                    _context.Update(productoExistente);
                     await _context.SaveChangesAsync();
+
                     return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!_context.Productos.Any(e => e.idProducto == id))
+                    if (!ProductoExists(id))
                         return NotFound();
                     else
                         throw;
                 }
             }
+
+            // Si hay errores de validación, recargar los ViewBag
+            ViewBag.Categorias = await _context.Categorias.ToListAsync();
+            ViewBag.Tallas = await _context.Tallas.ToListAsync();
+            ViewBag.Colores = await _context.Colores.ToListAsync();
+
             return View(producto);
+        }
+
+        private bool ProductoExists(int id)
+        {
+            return _context.Productos.Any(e => e.idProducto == id);
         }
 
         // GET: ProductoController/Delete/5

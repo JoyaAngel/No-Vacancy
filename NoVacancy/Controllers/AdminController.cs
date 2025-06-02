@@ -1,14 +1,30 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NoVacancy.Data;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace NoVacancy.Controllers
 {
     [Authorize(Roles = "Administrador")]
     public class AdminController : Controller
     {
-        public IActionResult Index()
+
+        private readonly NoVacancyDbContext _context;
+
+        public AdminController(NoVacancyDbContext context)
         {
-            return View();
+            _context = context;
+        }
+        public async Task<IActionResult> Index()
+        {
+            var productos = await _context.Productos
+                .Include(p => p.Categoria)
+                .Include(p => p.Color)
+                .Include(p => p.Talla)
+                .ToListAsync();
+
+            return View(productos);
         }
 
         [HttpGet] // Muestra el formulario

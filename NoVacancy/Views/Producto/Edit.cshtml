@@ -1,0 +1,99 @@
+﻿@model NoVacancy.Models.Producto
+@{
+    ViewData["Title"] = "Editar Producto";
+    Layout = "_Layout";
+}
+
+<div class="form-section container">
+    <h4 class="mb-4">Editar producto: @Model.nombre</h4>
+
+    <form asp-action="Edit" asp-controller="Producto" method="post">
+        <input type="hidden" asp-for="idProducto" />
+
+        <div class="mb-3">
+            <label class="form-label fw-bold">Título</label>
+            <input asp-for="nombre" class="form-control" />
+            <span asp-validation-for="nombre" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label fw-bold">Descripción</label>
+            <textarea asp-for="descripcion" class="form-control" rows="4"></textarea>
+            <span asp-validation-for="descripcion" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label fw-bold">Categoría</label>
+            <select asp-for="idCategoria" class="form-select" aria-label="Categoría">
+                <option value="">Seleccione una categoría</option>
+                @if (ViewBag.Categorias != null)
+                {
+                    foreach (var categoria in ViewBag.Categorias)
+                    {
+                        <option value="@categoria.idCategoria" selected="@(categoria.idCategoria == Model.idCategoria)">@categoria.nombre</option>
+                    }
+                }
+            </select>
+            <span asp-validation-for="idCategoria" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label fw-bold">Color</label>
+            <select asp-for="idColor" class="form-select" aria-label="Color">
+                <option value="">Seleccione un color</option>
+                @if (ViewBag.Colores != null)
+                {
+                    foreach (var color in ViewBag.Colores)
+                    {
+                        <option value="@color.idColor" selected="@(color.idColor == Model.idColor)">@color.nombre</option>
+                    }
+                }
+            </select>
+            <span asp-validation-for="idColor" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label fw-bold">Talla</label>
+            <select asp-for="idTalla" class="form-select" aria-label="Talla">
+                <option value="">Seleccione una talla</option>
+                @if (ViewBag.Tallas != null)
+                {
+                    foreach (var talla in ViewBag.Tallas)
+                    {
+                        <option value="@talla.idTalla" selected="@(talla.idTalla == Model.idTalla)">@talla.nombre</option>
+                    }
+                }
+            </select>
+            <span asp-validation-for="idTalla" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label fw-bold">Precio</label>
+            <input asp-for="precio" class="form-control" />
+            <span asp-validation-for="precio" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label fw-bold">Cantidad en Stock</label>
+            <input asp-for="cantidad" class="form-control" min="0" />
+            <span asp-validation-for="cantidad" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label fw-bold">Límite por compra (opcional)</label>
+            <input asp-for="limite" class="form-control" min="1" />
+            <span asp-validation-for="limite" class="text-danger"></span>
+        </div>
+
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-dark flex-grow-1">Guardar cambios</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
