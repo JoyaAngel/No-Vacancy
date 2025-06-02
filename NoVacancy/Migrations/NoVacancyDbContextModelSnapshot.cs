@@ -206,48 +206,6 @@ namespace NoVacancy.Migrations
                     b.HasKey("idCategoria");
 
                     b.ToTable("Categorias");
-
-                    b.HasData(
-                        new
-                        {
-                            idCategoria = 1,
-                            nombre = "Camisetas"
-                        },
-                        new
-                        {
-                            idCategoria = 2,
-                            nombre = "Pantalones"
-                        },
-                        new
-                        {
-                            idCategoria = 3,
-                            nombre = "Vestidos"
-                        },
-                        new
-                        {
-                            idCategoria = 4,
-                            nombre = "Faldas"
-                        },
-                        new
-                        {
-                            idCategoria = 5,
-                            nombre = "Chaquetas"
-                        },
-                        new
-                        {
-                            idCategoria = 6,
-                            nombre = "Ropa interior"
-                        },
-                        new
-                        {
-                            idCategoria = 7,
-                            nombre = "Zapatos"
-                        },
-                        new
-                        {
-                            idCategoria = 8,
-                            nombre = "Accesorios"
-                        });
                 });
 
             modelBuilder.Entity("NoVacancy.Models.Color", b =>
@@ -318,6 +276,27 @@ namespace NoVacancy.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("idPedido"));
+
+                    b.Property<string>("Calle")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Ciudad")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CodigoPostalEnvio")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Colonia")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Estado")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("FechaHoraPedido")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Numero")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("codigoPostal")
                         .HasColumnType("nvarchar(max)");
@@ -424,38 +403,6 @@ namespace NoVacancy.Migrations
                     b.HasKey("idTalla");
 
                     b.ToTable("Tallas");
-
-                    b.HasData(
-                        new
-                        {
-                            idTalla = 1,
-                            nombre = "XS"
-                        },
-                        new
-                        {
-                            idTalla = 2,
-                            nombre = "S"
-                        },
-                        new
-                        {
-                            idTalla = 3,
-                            nombre = "M"
-                        },
-                        new
-                        {
-                            idTalla = 4,
-                            nombre = "L"
-                        },
-                        new
-                        {
-                            idTalla = 5,
-                            nombre = "XL"
-                        },
-                        new
-                        {
-                            idTalla = 6,
-                            nombre = "XXL"
-                        });
                 });
 
             modelBuilder.Entity("NoVacancy.Models.Usuario", b =>
@@ -465,6 +412,18 @@ namespace NoVacancy.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
+
+                    b.Property<string>("Calle")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Ciudad")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CodigoPostal")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Colonia")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -476,6 +435,9 @@ namespace NoVacancy.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<string>("Estado")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -494,6 +456,9 @@ namespace NoVacancy.Migrations
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("Numero")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");

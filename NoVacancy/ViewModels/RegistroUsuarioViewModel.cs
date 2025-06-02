@@ -5,17 +5,25 @@ namespace NoVacancy.ViewModels
     public class RegistroUsuarioViewModel
     {
         [Required(ErrorMessage = "El nombre es obligatorio.")]
-        public string Nombre { get; set; }
+        public string Nombre { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "El correo es obligatorio.")]
-        [EmailAddress(ErrorMessage = "El correo no es v·lido.")]
-        public string Email { get; set; }
+        [EmailAddress(ErrorMessage = "El correo no es v√°lido.")]
+        public string Email { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "La contraseÒa es obligatoria.")]
+        [Required(ErrorMessage = "La contrase√±a es obligatoria.")]
         [DataType(DataType.Password)]
-        public string Password { get; set; }
+        public string Password { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "El rol es obligatorio.")]
-        public string Rol { get; set; }
+        public string Rol { get; set; } = string.Empty;
+
+        // Direcci√≥n
+        public string? Calle { get; set; }
+        public string? Numero { get; set; }
+        public string? Colonia { get; set; }
+        public string? Ciudad { get; set; }
+        public string? Estado { get; set; }
+        public string? CodigoPostal { get; set; }
     }
 }

@@ -33,12 +33,12 @@ namespace NoVacancy.Data
         {
             var tallasSeed = new[]
             {
-                new Talla { idTalla = 1, nombre = "XS" },
-                new Talla { idTalla = 2, nombre = "S" },
-                new Talla { idTalla = 3, nombre = "M" },
-                new Talla { idTalla = 4, nombre = "L" },
-                new Talla { idTalla = 5, nombre = "XL" },
-                new Talla { idTalla = 6, nombre = "XXL" }
+                new Talla { nombre = "XS" },
+                new Talla { nombre = "S" },
+                new Talla { nombre = "M" },
+                new Talla { nombre = "L" },
+                new Talla { nombre = "XL" },
+                new Talla { nombre = "XXL" }
             };
             foreach (var talla in tallasSeed)
             {
@@ -52,14 +52,14 @@ namespace NoVacancy.Data
         {
             var categoriasSeed = new[]
             {
-                new Categoria { idCategoria = 1, nombre = "Camisetas" },
-                new Categoria { idCategoria = 2, nombre = "Pantalones" },
-                new Categoria { idCategoria = 3, nombre = "Vestidos" },
-                new Categoria { idCategoria = 4, nombre = "Faldas" },
-                new Categoria { idCategoria = 5, nombre = "Chaquetas" },
-                new Categoria { idCategoria = 6, nombre = "Ropa interior" },
-                new Categoria { idCategoria = 7, nombre = "Zapatos" },
-                new Categoria { idCategoria = 8, nombre = "Accesorios" }
+                new Categoria { nombre = "Camisetas" },
+                new Categoria { nombre = "Pantalones" },
+                new Categoria { nombre = "Vestidos" },
+                new Categoria { nombre = "Faldas" },
+                new Categoria { nombre = "Chaquetas" },
+                new Categoria { nombre = "Ropa interior" },
+                new Categoria { nombre = "Zapatos" },
+                new Categoria { nombre = "Accesorios" }
             };
             foreach (var categoria in categoriasSeed)
             {
@@ -87,6 +87,26 @@ namespace NoVacancy.Data
 
         private static void SeedProductosBase(NoVacancyDbContext context)
         {
+            // Obtener IDs reales de talla, categoría y color
+            var tallaL = context.Tallas.FirstOrDefault(t => t.nombre == "L");
+            var tallaM = context.Tallas.FirstOrDefault(t => t.nombre == "M");
+            var tallaS = context.Tallas.FirstOrDefault(t => t.nombre == "S");
+            var catCamisetas = context.Categorias.FirstOrDefault(c => c.nombre == "Camisetas");
+            var catPantalones = context.Categorias.FirstOrDefault(c => c.nombre == "Pantalones");
+            var catVestidos = context.Categorias.FirstOrDefault(c => c.nombre == "Vestidos");
+            var colorNegro = context.Colores.FirstOrDefault(c => c.nombre == "Negro");
+            var colorAzul = context.Colores.FirstOrDefault(c => c.nombre == "Azul");
+            var colorRojo = context.Colores.FirstOrDefault(c => c.nombre == "Rojo");
+
+            // Solo continuar si todas las referencias existen
+            if (tallaL == null || tallaM == null || tallaS == null ||
+                catCamisetas == null || catPantalones == null || catVestidos == null ||
+                colorNegro == null || colorAzul == null || colorRojo == null)
+            {
+                // Puedes agregar un log aquí si lo deseas
+                return;
+            }
+
             var productosSeed = new[]
             {
                 new Producto
@@ -96,9 +116,9 @@ namespace NoVacancy.Data
                     precio = 200.00,
                     cantidad = 50,
                     limite = 2,
-                    idTalla = 4,
-                    idCategoria = 1,
-                    idColor = 1
+                    idTalla = tallaL.idTalla,
+                    idCategoria = catCamisetas.idCategoria,
+                    idColor = colorNegro.idColor
                 },
                 new Producto
                 {
@@ -107,9 +127,9 @@ namespace NoVacancy.Data
                     precio = 450.00,
                     cantidad = 30,
                     limite = 1,
-                    idTalla = 3,
-                    idCategoria = 2,
-                    idColor = 2
+                    idTalla = tallaM.idTalla,
+                    idCategoria = catPantalones.idCategoria,
+                    idColor = colorAzul.idColor
                 },
                 new Producto
                 {
@@ -118,9 +138,9 @@ namespace NoVacancy.Data
                     precio = 600.00,
                     cantidad = 20,
                     limite = 3,
-                    idTalla = 2,
-                    idCategoria = 3,
-                    idColor = 3
+                    idTalla = tallaS.idTalla,
+                    idCategoria = catVestidos.idCategoria,
+                    idColor = colorRojo.idColor
                 }
             };
             foreach (var producto in productosSeed)
@@ -135,9 +155,54 @@ namespace NoVacancy.Data
         {
             var usuariosSeed = new[]
             {
-                new Usuario { UserName = "juan@example.com", Email = "juan@example.com", Nombre = "Juan Pérez", Rol = "Cliente" },
-                new Usuario { UserName = "ana@example.com", Email = "ana@example.com", Nombre = "Ana López", Rol = "Cliente" },
-                new Usuario { UserName = "admin@example.com", Email = "admin@example.com", Nombre = "Admin", Rol = "Administrador" }
+                new Usuario {
+                    UserName = "juan@example.com",
+                    Email = "juan@example.com",
+                    Nombre = "Juan Pérez",
+                    Rol = "Cliente",
+                    Calle = "Av. Reforma",
+                    Numero = "123",
+                    Colonia = "Centro",
+                    Ciudad = "CDMX",
+                    Estado = "CDMX",
+                    CodigoPostal = "06000"
+                },
+                new Usuario {
+                    UserName = "ana@example.com",
+                    Email = "ana@example.com",
+                    Nombre = "Ana López",
+                    Rol = "Cliente",
+                    Calle = "Insurgentes Sur",
+                    Numero = "456",
+                    Colonia = "Del Valle",
+                    Ciudad = "CDMX",
+                    Estado = "CDMX",
+                    CodigoPostal = "03100"
+                },
+                new Usuario {
+                    UserName = "admin@example.com",
+                    Email = "admin@example.com",
+                    Nombre = "Admin",
+                    Rol = "Administrador",
+                    Calle = "Av. Universidad",
+                    Numero = "789",
+                    Colonia = "Copilco",
+                    Ciudad = "CDMX",
+                    Estado = "CDMX",
+                    CodigoPostal = "04360"
+                },
+                new Usuario {
+                    UserName = "joya.mag02@gmail.com",
+                    Email = "joya.mag02@gmail.com",
+                    Nombre = "Chi",
+                    Rol = "Cliente",
+                    Calle = "Calle Chi",
+                    Numero = "1",
+                    Colonia = "Colonia Chi",
+                    Ciudad = "CDMX",
+                    Estado = "CDMX",
+                    CodigoPostal = "01000"
+                }
             };
             foreach (var usuario in usuariosSeed)
             {
@@ -255,18 +320,52 @@ namespace NoVacancy.Data
 
         private static void SeedProductosExtra(NoVacancyDbContext context)
         {
+            // Obtener IDs reales de talla, categoría y color
+            var tallas = context.Tallas.ToList();
+            var categorias = context.Categorias.ToList();
+            var colores = context.Colores.ToList();
+
+            // Mapear por nombre para mayor claridad
+            int? idTalla1 = tallas.FirstOrDefault(t => t.nombre == "M")?.idTalla;
+            int? idTalla2 = tallas.FirstOrDefault(t => t.nombre == "S")?.idTalla;
+            int? idTalla3 = tallas.FirstOrDefault(t => t.nombre == "L")?.idTalla;
+            int? idTalla4 = tallas.FirstOrDefault(t => t.nombre == "XL")?.idTalla;
+            int? idTalla5 = tallas.FirstOrDefault(t => t.nombre == "XXL")?.idTalla;
+            int? idTalla6 = tallas.FirstOrDefault(t => t.nombre == "XS")?.idTalla;
+
+            int? idCategoria1 = categorias.FirstOrDefault(c => c.nombre == "Camisetas")?.idCategoria;
+            int? idCategoria2 = categorias.FirstOrDefault(c => c.nombre == "Pantalones")?.idCategoria;
+            int? idCategoria3 = categorias.FirstOrDefault(c => c.nombre == "Vestidos")?.idCategoria;
+            int? idCategoria4 = categorias.FirstOrDefault(c => c.nombre == "Faldas")?.idCategoria;
+            int? idCategoria5 = categorias.FirstOrDefault(c => c.nombre == "Chaquetas")?.idCategoria;
+            int? idCategoria6 = categorias.FirstOrDefault(c => c.nombre == "Ropa interior")?.idCategoria;
+            int? idCategoria7 = categorias.FirstOrDefault(c => c.nombre == "Zapatos")?.idCategoria;
+            int? idCategoria8 = categorias.FirstOrDefault(c => c.nombre == "Accesorios")?.idCategoria;
+
+            int? idColor1 = colores.FirstOrDefault(c => c.nombre == "Negro")?.idColor;
+            int? idColor2 = colores.FirstOrDefault(c => c.nombre == "Azul")?.idColor;
+            int? idColor3 = colores.FirstOrDefault(c => c.nombre == "Rojo")?.idColor;
+
+            // Solo continuar si existen todos los ids requeridos
+            if (idTalla1 == null || idTalla2 == null || idTalla3 == null || idTalla4 == null || idTalla5 == null || idTalla6 == null ||
+                idCategoria1 == null || idCategoria2 == null || idCategoria3 == null || idCategoria4 == null || idCategoria5 == null || idCategoria6 == null || idCategoria7 == null || idCategoria8 == null ||
+                idColor1 == null || idColor2 == null || idColor3 == null)
+            {
+                return;
+            }
+
             var productosExtra = new[]
             {
-                new Producto { nombre = "Camisa blanca formal", descripcion = "Camisa de vestir blanca, manga larga.", precio = 350.00, cantidad = 40, limite = 2, idTalla = 3, idCategoria = 1, idColor = 1 },
-                new Producto { nombre = "Falda azul plisada", descripcion = "Falda azul, ideal para primavera.", precio = 320.00, cantidad = 25, limite = 2, idTalla = 2, idCategoria = 4, idColor = 2 },
-                new Producto { nombre = "Chaqueta de mezclilla", descripcion = "Chaqueta clásica de mezclilla.", precio = 700.00, cantidad = 15, limite = 1, idTalla = 4, idCategoria = 5, idColor = 2 },
-                new Producto { nombre = "Zapatos deportivos rojos", descripcion = "Zapatos cómodos para correr.", precio = 500.00, cantidad = 35, limite = 2, idTalla = 5, idCategoria = 7, idColor = 3 },
-                new Producto { nombre = "Blusa negra elegante", descripcion = "Blusa de seda negra para ocasiones especiales.", precio = 400.00, cantidad = 18, limite = 1, idTalla = 2, idCategoria = 1, idColor = 1 },
-                new Producto { nombre = "Pantalón corto azul", descripcion = "Short de mezclilla azul.", precio = 250.00, cantidad = 22, limite = 2, idTalla = 3, idCategoria = 2, idColor = 2 },
-                new Producto { nombre = "Vestido largo rojo", descripcion = "Vestido largo elegante color rojo.", precio = 900.00, cantidad = 10, limite = 1, idTalla = 4, idCategoria = 3, idColor = 3 },
-                new Producto { nombre = "Cinturón negro", descripcion = "Cinturón de piel color negro.", precio = 150.00, cantidad = 50, limite = 3, idTalla = 1, idCategoria = 8, idColor = 1 },
-                new Producto { nombre = "Calcetas deportivas", descripcion = "Pack de 3 pares de calcetas.", precio = 120.00, cantidad = 60, limite = 5, idTalla = 3, idCategoria = 6, idColor = 1 },
-                new Producto { nombre = "Gorra azul", descripcion = "Gorra casual azul.", precio = 180.00, cantidad = 30, limite = 2, idTalla = 1, idCategoria = 8, idColor = 2 }
+                new Producto { nombre = "Camisa blanca formal", descripcion = "Camisa de vestir blanca, manga larga.", precio = 350.00, cantidad = 40, limite = 2, idTalla = idTalla3.Value, idCategoria = idCategoria1.Value, idColor = idColor1.Value },
+                new Producto { nombre = "Falda azul plisada", descripcion = "Falda azul, ideal para primavera.", precio = 320.00, cantidad = 25, limite = 2, idTalla = idTalla2.Value, idCategoria = idCategoria4.Value, idColor = idColor2.Value },
+                new Producto { nombre = "Chaqueta de mezclilla", descripcion = "Chaqueta clásica de mezclilla.", precio = 700.00, cantidad = 15, limite = 1, idTalla = idTalla4.Value, idCategoria = idCategoria5.Value, idColor = idColor2.Value },
+                new Producto { nombre = "Zapatos deportivos rojos", descripcion = "Zapatos cómodos para correr.", precio = 500.00, cantidad = 35, limite = 2, idTalla = idTalla5.Value, idCategoria = idCategoria7.Value, idColor = idColor3.Value },
+                new Producto { nombre = "Blusa negra elegante", descripcion = "Blusa de seda negra para ocasiones especiales.", precio = 400.00, cantidad = 18, limite = 1, idTalla = idTalla2.Value, idCategoria = idCategoria1.Value, idColor = idColor1.Value },
+                new Producto { nombre = "Pantalón corto azul", descripcion = "Short de mezclilla azul.", precio = 250.00, cantidad = 22, limite = 2, idTalla = idTalla3.Value, idCategoria = idCategoria2.Value, idColor = idColor2.Value },
+                new Producto { nombre = "Vestido largo rojo", descripcion = "Vestido largo elegante color rojo.", precio = 900.00, cantidad = 10, limite = 1, idTalla = idTalla4.Value, idCategoria = idCategoria3.Value, idColor = idColor3.Value },
+                new Producto { nombre = "Cinturón negro", descripcion = "Cinturón de piel color negro.", precio = 150.00, cantidad = 50, limite = 3, idTalla = idTalla6.Value, idCategoria = idCategoria8.Value, idColor = idColor1.Value },
+                new Producto { nombre = "Calcetas deportivas", descripcion = "Pack de 3 pares de calcetas.", precio = 120.00, cantidad = 60, limite = 5, idTalla = idTalla3.Value, idCategoria = idCategoria6.Value, idColor = idColor1.Value },
+                new Producto { nombre = "Gorra azul", descripcion = "Gorra casual azul.", precio = 180.00, cantidad = 30, limite = 2, idTalla = idTalla6.Value, idCategoria = idCategoria8.Value, idColor = idColor2.Value }
             };
             foreach (var producto in productosExtra)
             {
