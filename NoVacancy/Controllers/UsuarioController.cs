@@ -29,7 +29,7 @@ namespace NoVacancy.Controllers
 
         // GET: UsuarioController
         [AllowAnonymous]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             var usuarios = _userManager.Users.ToList(); 
             return View(usuarios);
@@ -361,6 +361,17 @@ namespace NoVacancy.Controllers
             ViewBag.Lineas = lineas;
             var detalle = await _context.Set<Detalle>().FirstOrDefaultAsync(d => d.idPedido == pedido.idPedido);
             ViewBag.Detalle = detalle;
+
+            // Obtener reseñas del usuario para los productos de este pedido
+            var productoIds = lineas.Select(l => l.idProducto).ToList();
+            var resenias = await _context.Resenias
+                .Where(r => productoIds.Contains(r.idProducto))
+                .ToListAsync();
+            var reseniasPorProducto = resenias
+                .GroupBy(r => r.idProducto)
+                .ToDictionary(g => g.Key, g => g.First());
+            ViewBag.ReseniasPorProducto = reseniasPorProducto;
+
             return View(pedido);
         }
     }

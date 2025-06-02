@@ -44,74 +44,132 @@
     <h2 class="mb-4">Listado de Productos</h2>
     <a asp-controller="Producto" asp-action="Create" class="btn btn-dark mb-3">Registrar Producto</a>
 
-    <table class="table table-bordered table-hover text-center">
-        <thead class="table-dark">
-            <tr>
-                <th>Título</th>
-                <th>Descripción</th>
-                <th>Categoría</th>
-                <th>Color</th>
-                <th>Talla</th>
-                <th>Cantidad</th>
-                <th>Precio</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (Model != null && Model.Any())
-            {
-                foreach (var producto in Model)
+    <!-- Vista de tabla para escritorio -->
+    <div class="d-none d-md-block">
+        <table class="table table-bordered table-hover text-center">
+            <thead class="table-dark">
+                <tr>
+                    <th>Título</th>
+                    <th>Descripción</th>
+                    <th>Categoría</th>
+                    <th>Color</th>
+                    <th>Talla</th>
+                    <th>Cantidad</th>
+                    <th>Precio</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
                 {
-                    <tr>
-                        <td>@producto.nombre</td>
-                        <td>@producto.descripcion</td>
-                        <td>@producto.Categoria?.nombre</td>
-                        <td>@producto.Color?.nombre</td>
-                        <td>@producto.Talla?.nombre</td>
-                        <td>@producto.cantidad</td>
-                        <td>@producto.precio.ToString("C")</td>
-                        <td>
-                            <a asp-controller="Producto" asp-action="Edit" asp-route-id="@producto.idProducto" class="btn btn-sm btn-warning">
-                                <i class="bi bi-pencil"></i> Editar
-                            </a>
-
-                            <!-- Botón para abrir el modal -->
-                            <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal-@producto.idProducto">
-                                <i class="bi bi-trash"></i> Eliminar
-                            </button>
-
-                            <!-- Modal de confirmación -->
-                            <div class="modal fade" id="deleteModal-@producto.idProducto" tabindex="-1" aria-labelledby="deleteModalLabel-@producto.idProducto" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="deleteModalLabel-@producto.idProducto">Confirmar eliminación</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            ¿Estás seguro de que deseas eliminar el producto <strong>@producto.nombre</strong>?
-                                        </div>
-                                        <div class="modal-footer">
-                                            <form asp-action="DeleteConfirmed" asp-controller="Producto" method="post">
-                                                <input type="hidden" name="id" value="@producto.idProducto" />
-                                                @Html.AntiForgeryToken() <!-- Token de seguridad -->
-                                                <button type="submit" class="btn btn-danger">Sí, eliminar</button>
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                            </form>
+                    foreach (var producto in Model)
+                    {
+                        <tr>
+                            <td>@producto.nombre</td>
+                            <td>@producto.descripcion</td>
+                            <td>@producto.Categoria?.nombre</td>
+                            <td>@producto.Color?.nombre</td>
+                            <td>@producto.Talla?.nombre</td>
+                            <td>@producto.cantidad</td>
+                            <td>@producto.precio.ToString("C")</td>
+                            <td>
+                                <a asp-controller="Producto" asp-action="Edit" asp-route-id="@producto.idProducto" class="btn btn-sm btn-warning">
+                                    <i class="bi bi-pencil"></i> Editar
+                                </a>
+                                <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal-@producto.idProducto">
+                                    <i class="bi bi-trash"></i> Eliminar
+                                </button>
+                                <div class="modal fade" id="deleteModal-@producto.idProducto" tabindex="-1" aria-labelledby="deleteModalLabel-@producto.idProducto" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="deleteModalLabel-@producto.idProducto">Confirmar eliminación</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                ¿Estás seguro de que deseas eliminar el producto <strong>@producto.nombre</strong>?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <form asp-action="DeleteConfirmed" asp-controller="Producto" method="post">
+                                                    <input type="hidden" name="id" value="@producto.idProducto" />
+                                                    @Html.AntiForgeryToken()
+                                                    <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                </form>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </td>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="8">No hay productos registrados.</td>
                     </tr>
                 }
-            }
-            else
-            {
-                <tr>
-                    <td colspan="8">No hay productos registrados.</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Vista de tarjetas para móviles -->
+    <div class="d-block d-md-none">
+        @if (Model != null && Model.Any())
+        {
+            <div class="row g-3">
+                @foreach (var producto in Model)
+                {
+                    <div class="col-12">
+                        <div class="card p-2 shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title mb-2">@producto.nombre</h5>
+                                <p class="mb-1"><strong>Descripción:</strong> @producto.descripcion</p>
+                                <p class="mb-1"><strong>Categoría:</strong> @producto.Categoria?.nombre</p>
+                                <p class="mb-1"><strong>Color:</strong> @producto.Color?.nombre</p>
+                                <p class="mb-1"><strong>Talla:</strong> @producto.Talla?.nombre</p>
+                                <p class="mb-1"><strong>Cantidad:</strong> @producto.cantidad</p>
+                                <p class="mb-2"><strong>Precio:</strong> @producto.precio.ToString("C")</p>
+                                <div class="d-flex gap-2">
+                                    <a asp-controller="Producto" asp-action="Edit" asp-route-id="@producto.idProducto" class="btn btn-sm btn-warning flex-fill">
+                                        <i class="bi bi-pencil"></i> Editar
+                                    </a>
+                                    <button type="button" class="btn btn-sm btn-danger flex-fill" data-bs-toggle="modal" data-bs-target="#deleteModalMobile-@producto.idProducto">
+                                        <i class="bi bi-trash"></i> Eliminar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Modal de confirmación móvil -->
+                        <div class="modal fade" id="deleteModalMobile-@producto.idProducto" tabindex="-1" aria-labelledby="deleteModalMobileLabel-@producto.idProducto" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="deleteModalMobileLabel-@producto.idProducto">Confirmar eliminación</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        ¿Estás seguro de que deseas eliminar el producto <strong>@producto.nombre</strong>?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <form asp-action="DeleteConfirmed" asp-controller="Producto" method="post">
+                                            <input type="hidden" name="id" value="@producto.idProducto" />
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-info">No hay productos registrados.</div>
+        }
+    </div>
 </div>

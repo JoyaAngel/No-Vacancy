@@ -4,6 +4,12 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@if (!User.IsInRole("Administrador"))
+{
+    <div class="alert alert-danger">No tienes permisos para ver el historial general de pedidos.</div>
+    return;
+}
+
 <h2 class="mb-4">Historial de Pedidos</h2>
 
 @if (!Model.Any())
@@ -12,16 +18,62 @@
 }
 else
 {
-    <table class="table table-bordered table-striped">
-        <thead>
-            <tr>
-                <th>ID Pedido</th>
-                <th>Cliente</th>
-                <th>Monto Total</th>
-                <th>Productos</th>
-            </tr>
-        </thead>
-        <tbody>
+    <!-- Tabla para escritorio -->
+    <div class="d-none d-md-block">
+        <table class="table table-bordered table-striped align-middle">
+            <thead>
+                <tr>
+                    <th>ID Pedido</th>
+                    <th>Cliente</th>
+                    <th>Monto Total</th>
+                    <th>Productos</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var pedido in Model)
+            {
+                var carrito = pedido.Carrito;
+                List<NoVacancy.Models.CarritoLinea>? lineas = null;
+                if (carrito != null && ViewBag.LineasPorCarrito is IDictionary<int, List<NoVacancy.Models.CarritoLinea>> lineasDict && lineasDict.TryGetValue(carrito.idCarrito, out var l))
+                {
+                    lineas = l;
+                }
+                var cliente = carrito?.Usuario?.UserName ?? "-";
+                NoVacancy.Models.Detalle? detalle = null;
+                if (ViewBag.DetallesPorPedido is IDictionary<int, NoVacancy.Models.Detalle> detallesDict && detallesDict.TryGetValue(pedido.idPedido, out var d))
+                {
+                    detalle = d;
+                }
+                <tr>
+                    <td><span class="badge bg-dark">@pedido.idPedido</span></td>
+                    <td><i class="bi bi-person-circle me-1"></i>@cliente</td>
+                    <td><span class="fw-bold text-success">$@detalle?.monto.ToString("0.00")</span></td>
+                    <td>
+                        @if (lineas != null && lineas.Any())
+                        {
+                            <ul class="mb-0 ps-3">
+                            @foreach (var linea in lineas)
+                            {
+                                <li>
+                                    <span class="fw-semibold">@linea.Producto?.nombre</span> x @linea.cantidad
+                                    <span class="text-muted small">(Color: @linea.Producto?.Color?.nombre, Talla: @linea.Producto?.Talla?.nombre)</span>
+                                </li>
+                            }
+                            </ul>
+                        }
+                        else
+                        {
+                            <span>-</span>
+                        }
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+    <!-- Tarjetas para móviles -->
+    <div class="d-block d-md-none">
+        <div class="row g-3">
         @foreach (var pedido in Model)
         {
             var carrito = pedido.Carrito;
@@ -36,55 +88,37 @@ else
             {
                 detalle = d;
             }
-            <tr>
-                <td>@pedido.idPedido</td>
-                <td>@cliente</td>
-                <td>$@detalle?.monto.ToString("0.00")</td>
-                <td>
-                    @if (lineas != null && lineas.Any())
-                    {
-                        <ul>
-                        @foreach (var linea in lineas)
-                        {
-                            <li>
-                                @linea.Producto?.nombre x @linea.cantidad
-                                <span class="text-muted small">
-                                    (Color: @linea.Producto?.Color?.nombre, Talla: @linea.Producto?.Talla?.nombre)
-                                </span>
-                                @{
-                                    var reseniasDict = ViewBag.ReseniasPorProducto as IDictionary<int, NoVacancy.Models.Resenia>;
-                                    NoVacancy.Models.Resenia? reseniaLinea = null;
-                                    if (reseniasDict != null && linea.Producto != null)
-                                    {
-                                        reseniasDict.TryGetValue(linea.Producto.idProducto, out reseniaLinea);
-                                    }
-                                }
-                                @if (reseniaLinea != null)
+            <div class="col-12">
+                <div class="card shadow-sm p-2">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="badge bg-dark">#@pedido.idPedido</span>
+                            <span class="fw-bold text-success">$@detalle?.monto.ToString("0.00")</span>
+                        </div>
+                        <div class="mb-1"><i class="bi bi-person-circle me-1"></i><span class="fw-semibold">@cliente</span></div>
+                        <div class="mb-2">
+                            <span class="text-muted small">Productos:</span>
+                            <ul class="mb-1 ps-3">
+                                @if (lineas != null && lineas.Any())
                                 {
-                                    <span class="ms-2">
-                                        @for (int j = 1; j <= 5; j++)
-                                        {
-                                            <span style="font-size:1.1rem;color:@(j <= reseniaLinea.calificacion ? "#ffc107" : "#ccc");">&#9733;</span>
-                                        }
-                                    </span>
+                                    foreach (var linea in lineas)
+                                    {
+                                        <li>
+                                            <span class="fw-semibold">@linea.Producto?.nombre</span> x @linea.cantidad
+                                            <span class="text-muted small">(Color: @linea.Producto?.Color?.nombre, Talla: @linea.Producto?.Talla?.nombre)</span>
+                                        </li>
+                                    }
                                 }
                                 else
                                 {
-                                    <a class="btn btn-sm btn-outline-primary ms-2" href="@Url.Action("Create", "Resenia", new { idProducto = linea.Producto?.idProducto })">
-                                        Dejar reseña
-                                    </a>
+                                    <li>-</li>
                                 }
-                            </li>
-                        }
-                        </ul>
-                    }
-                    else
-                    {
-                        <span>-</span>
-                    }
-                </td>
-            </tr>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
         }
-        </tbody>
-    </table>
+        </div>
+    </div>
 }

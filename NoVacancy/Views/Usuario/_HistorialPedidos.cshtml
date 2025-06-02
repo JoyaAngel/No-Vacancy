@@ -8,27 +8,53 @@
 }
 else
 {
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Fecha</th>
-                <th>Dirección de envío</th>
-                <th>Monto</th>
-                <th>Detalles</th>
-            </tr>
-        </thead>
-        <tbody>
+    <div class="d-none d-md-block">
+        <table class="table table-bordered align-middle">
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Dirección de envío</th>
+                    <th>Monto</th>
+                    <th>Detalles</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var pedido in Model)
+            {
+                <tr>
+                    <td>@pedido.FechaHoraPedido.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>@pedido.Calle @pedido.Numero, @pedido.Colonia, @pedido.Ciudad, @pedido.Estado, @pedido.CodigoPostalEnvio</td>
+                    <td><span class="fw-bold text-success">@pedido.Detalle?.monto.ToString("C")</span></td>
+                    <td>
+                        <a href="@Url.Action("DetallesPedido", "Usuario", new { id = pedido.idPedido })" class="btn btn-info btn-sm">Ver detalles</a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+    <div class="d-block d-md-none">
+        <div class="row g-3">
         @foreach (var pedido in Model)
         {
-            <tr>
-                <td>@pedido.FechaHoraPedido.ToString("dd/MM/yyyy HH:mm")</td>
-                <td>@pedido.Calle @pedido.Numero, @pedido.Colonia, @pedido.Ciudad, @pedido.Estado, @pedido.CodigoPostalEnvio</td>
-                <td>@pedido.Detalle?.monto.ToString("C")</td>
-                <td>
-                    <a href="@Url.Action("DetallesPedido", "Usuario", new { id = pedido.idPedido })" class="btn btn-info btn-sm">Ver detalles</a>
-                </td>
-            </tr>
+            <div class="col-12">
+                <div class="card shadow-sm p-2">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="badge bg-dark">@pedido.FechaHoraPedido.ToString("dd/MM/yyyy HH:mm")</span>
+                            <span class="fw-bold text-success">@pedido.Detalle?.monto.ToString("C")</span>
+                        </div>
+                        <div class="mb-1">
+                            <span class="text-muted small">Dirección:</span><br />
+                            <span>@pedido.Calle @pedido.Numero, @pedido.Colonia, @pedido.Ciudad, @pedido.Estado, @pedido.CodigoPostalEnvio</span>
+                        </div>
+                        <div class="d-flex justify-content-end mt-2 mb-2">
+                            <a href="@Url.Action("DetallesPedido", "Usuario", new { id = pedido.idPedido })" class="btn btn-info btn-sm">Ver detalles</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         }
-        </tbody>
-    </table>
+        </div>
+    </div>
 }
