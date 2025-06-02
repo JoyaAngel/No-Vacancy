@@ -34,33 +34,19 @@ namespace NoVacancy.Controllers
             if (usuarioId == null)
                 return RedirectToAction("Login", "Usuario");
 
-            // Buscar el carrito más reciente del usuario que tenga líneas
+            // Buscar el carrito más reciente del usuario que NO esté asociado a un Pedido
             var carrito = await _context.CarritosCabecera
-                .Where(c => c.Id == usuarioId)
+                .Where(c => c.Id == usuarioId && !_context.Pedidos.Any(p => p.idCarrito == c.idCarrito))
                 .OrderByDescending(c => c.idCarrito)
                 .FirstOrDefaultAsync();
             if (carrito == null)
                 return View(new List<CarritoLineaViewModel>());
 
-            // Si el carrito más reciente no tiene líneas, buscar el anterior con líneas
+            // Obtener las líneas SOLO de ese carrito
             var lineas = await _context.CarritosLineas
                 .Where(l => l.idCarrito == carrito.idCarrito)
                 .Include(l => l.Producto)
                 .ToListAsync();
-            if (lineas.Count == 0)
-            {
-                // Buscar el carrito anterior con líneas
-                carrito = await _context.CarritosCabecera
-                    .Where(c => c.Id == usuarioId && _context.CarritosLineas.Any(l => l.idCarrito == c.idCarrito))
-                    .OrderByDescending(c => c.idCarrito)
-                    .FirstOrDefaultAsync();
-                if (carrito == null)
-                    return View(new List<CarritoLineaViewModel>());
-                lineas = await _context.CarritosLineas
-                    .Where(l => l.idCarrito == carrito.idCarrito)
-                    .Include(l => l.Producto)
-                    .ToListAsync();
-            }
 
             // Obtener ids de productos
             var productoIds = lineas.Select(l => l.idProducto).ToList();

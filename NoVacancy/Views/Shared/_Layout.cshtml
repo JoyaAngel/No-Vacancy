@@ -22,7 +22,7 @@
                 <a class="navbar-brand mx-auto fw-bold order-0 order-md-1 text-center" href="@Url.Action("Index", "Home")" style="text-decoration:none;color:inherit;cursor:pointer;">No Vacancy</a>
 
                 <div class="d-flex align-items-center order-2 order-md-2 mt-2 mt-md-0">
-                    <!-- Botón de Historial (SOLO para Admin) -->
+                    <!-- Botón de Historial (SOLO para Admin, NO para Cliente) -->
                     @if (User.Identity != null && User.Identity.IsAuthenticated && User.IsInRole("Administrador"))
                     {
                         <a class="nav-link me-2 me-md-3" href="@Url.Action("Historial", "Pedido")" title="Historial">
@@ -51,7 +51,7 @@
                                     <li><a class="dropdown-item" href="@Url.Action("Perfil", "Usuario")"><i class="bi bi-person-circle me-2"></i>Perfil</a></li>
                                 }
                                 <!-- Historial en dropdown (SOLO para no-admins) -->
-                                @if (!User.IsInRole("Administrador"))
+                                @if (!User.IsInRole("Administrador") && !User.IsInRole("Cliente"))
                                 {
                                     <li><a class="dropdown-item" href="@Url.Action("Historial", "Pedido")"><i class="bi bi-clock-history me-2"></i>Historial</a></li>
                                 }

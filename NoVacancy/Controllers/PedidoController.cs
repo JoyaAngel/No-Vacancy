@@ -40,10 +40,36 @@ namespace NoVacancy.Controllers
 
         // POST: api/PedidoApi
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] Pedido pedido)
+        public async Task<IActionResult> Create([FromBody] Pedido pedido, [FromBody] List<CarritoLinea> productosPedido)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+            // 1. Crear el carrito si no existe
+            var carrito = await _context.CarritosCabecera.FirstOrDefaultAsync(c => c.idCarrito == pedido.idCarrito);
+            if (carrito == null)
+            {
+                carrito = new CarritoCabecera { Id = pedido.Carrito?.Id };
+                _context.CarritosCabecera.Add(carrito);
+                await _context.SaveChangesAsync();
+                pedido.idCarrito = carrito.idCarrito;
+            }
+            // 2. Crear las líneas del carrito si no existen
+            var lineasExistentes = await _context.CarritosLineas.Where(l => l.idCarrito == pedido.idCarrito).ToListAsync();
+            if (lineasExistentes.Count == 0 && productosPedido != null)
+            {
+                foreach (var prod in productosPedido)
+                {
+                    var nuevaLinea = new CarritoLinea
+                    {
+                        idCarrito = pedido.idCarrito,
+                        idProducto = prod.idProducto,
+                        cantidad = prod.cantidad
+                    };
+                    _context.CarritosLineas.Add(nuevaLinea);
+                }
+                await _context.SaveChangesAsync();
+            }
+            // 3. Crear el pedido
             _context.Pedidos.Add(pedido);
             await _context.SaveChangesAsync();
 
@@ -63,7 +89,7 @@ namespace NoVacancy.Controllers
             _context.Set<Detalle>().Add(detalle);
             await _context.SaveChangesAsync();
 
-            // Restar stock de los productos comprados (asegura que el producto esté actualizado desde la base de datos)
+            // Restar stock de los productos comprados
             foreach (var linea in lineas)
             {
                 var productoDb = await _context.Productos.FirstOrDefaultAsync(p => p.idProducto == linea.idProducto);
@@ -78,12 +104,100 @@ namespace NoVacancy.Controllers
             await _context.SaveChangesAsync();
 
             // Enviar email de confirmación de pedido
-            var usuario = await _userManager.FindByIdAsync(pedido.Carrito?.Id);
-            if (usuario != null)
+            var usuarioId = pedido.Carrito?.Id ?? carrito.Id;
+            if (!string.IsNullOrEmpty(usuarioId))
             {
-                string subject = "Confirmación de tu pedido - No-Vacancy";
-                string body = $"<h2>¡Gracias por tu compra, {usuario.Nombre}!</h2><p>Tu pedido #{pedido.idPedido} ha sido registrado exitosamente.</p><p>Monto total: <strong>{detalle.monto:C}</strong></p>";
-                await _emailService.SendEmailAsync(usuario.Email, subject, body);
+                var usuario = await _userManager.FindByIdAsync(usuarioId);
+                if (usuario != null && !string.IsNullOrEmpty(usuario.Email))
+                {
+                    string subject = "Confirmación de tu pedido - No-Vacancy";
+                    string body = $"<h2>¡Gracias por tu compra, {usuario.Nombre}!</h2><p>Tu pedido #{pedido.idPedido} ha sido registrado exitosamente.</p><p>Monto total: <strong>{detalle.monto:C}</strong></p>";
+                    await _emailService.SendEmailAsync(usuario.Email, subject, body);
+                }
+            }
+
+            return Ok(pedido);
+        }
+
+        // POST: api/PedidoApi/CreateManual
+        [HttpPost("CreateManual")]
+        public async Task<IActionResult> CreateManual([FromBody] Pedido pedido, [FromBody] List<CarritoLinea> productosPedido)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            // 1. Crear el carrito si no existe
+            var carrito = await _context.CarritosCabecera.FirstOrDefaultAsync(c => c.idCarrito == pedido.idCarrito);
+            if (carrito == null)
+            {
+                var userId = pedido.Carrito?.Id ?? productosPedido.FirstOrDefault()?.Carrito?.Id;
+                if (string.IsNullOrEmpty(userId))
+                    return BadRequest("No se proporcionó usuario para el carrito");
+                carrito = new CarritoCabecera { Id = userId };
+                _context.CarritosCabecera.Add(carrito);
+                await _context.SaveChangesAsync();
+                pedido.idCarrito = carrito.idCarrito;
+            }
+            // 2. Crear las líneas del carrito si no existen
+            var lineasExistentes = await _context.CarritosLineas.Where(l => l.idCarrito == pedido.idCarrito).ToListAsync();
+            if (lineasExistentes.Count == 0 && productosPedido != null)
+            {
+                foreach (var prod in productosPedido)
+                {
+                    var nuevaLinea = new CarritoLinea
+                    {
+                        idCarrito = pedido.idCarrito,
+                        idProducto = prod.idProducto,
+                        cantidad = prod.cantidad
+                    };
+                    _context.CarritosLineas.Add(nuevaLinea);
+                }
+                await _context.SaveChangesAsync();
+            }
+            // 3. Crear el pedido
+            _context.Pedidos.Add(pedido);
+            await _context.SaveChangesAsync();
+
+            // Calcular el monto total del carrito
+            var lineas = await _context.CarritosLineas
+                .Where(l => l.idCarrito == pedido.idCarrito)
+                .Include(l => l.Producto)
+                .ToListAsync();
+            double montoTotal = lineas.Sum(l => l.cantidad * (l.Producto != null ? l.Producto.precio : 0));
+
+            // Crear el detalle
+            var detalle = new Detalle
+            {
+                monto = montoTotal,
+                idPedido = pedido.idPedido
+            };
+            _context.Set<Detalle>().Add(detalle);
+            await _context.SaveChangesAsync();
+
+            // Restar stock de los productos comprados
+            foreach (var linea in lineas)
+            {
+                var productoDb = await _context.Productos.FirstOrDefaultAsync(p => p.idProducto == linea.idProducto);
+                if (productoDb != null)
+                {
+                    productoDb.cantidad -= linea.cantidad;
+                    if (productoDb.cantidad < 0)
+                        productoDb.cantidad = 0;
+                    _context.Productos.Update(productoDb);
+                }
+            }
+            await _context.SaveChangesAsync();
+
+            // Enviar email de confirmación de pedido
+            var usuarioId = pedido.Carrito?.Id ?? carrito.Id;
+            if (!string.IsNullOrEmpty(usuarioId))
+            {
+                var usuario = await _userManager.FindByIdAsync(usuarioId);
+                if (usuario != null && !string.IsNullOrEmpty(usuario.Email))
+                {
+                    string subject = "Confirmación de tu pedido - No-Vacancy";
+                    string body = $"<h2>¡Gracias por tu compra, {usuario.Nombre}!</h2><p>Tu pedido #{pedido.idPedido} ha sido registrado exitosamente.</p><p>Monto total: <strong>{detalle.monto:C}</strong></p>";
+                    await _emailService.SendEmailAsync(usuario.Email, subject, body);
+                }
             }
 
             return Ok(pedido);

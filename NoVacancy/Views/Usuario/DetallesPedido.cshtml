@@ -3,7 +3,7 @@
     ViewBag.Title = "Detalles del Pedido";
     var lineas = ViewBag.Lineas as List<NoVacancy.Models.CarritoLinea>;
     var detalle = ViewBag.Detalle as NoVacancy.Models.Detalle;
-    var reseñasPorProducto = ViewBag.ReseniasPorProducto as List<NoVacancy.Models.Resenia>;
+    var reseniasPorProducto = ViewBag.ReseniasPorProducto as Dictionary<int, NoVacancy.Models.Resenia>;
 }
 <h2>Detalles del Pedido</h2>
 <div class="mb-3">
@@ -23,32 +23,40 @@
         </tr>
     </thead>
     <tbody>
-    @foreach (var l in lineas ?? new List<NoVacancy.Models.CarritoLinea>())
+    @if (lineas != null && lineas.Count > 0)
     {
-        var reseniasPorProducto = ViewBag.ReseniasPorProducto as Dictionary<int, NoVacancy.Models.Resenia>;
-        NoVacancy.Models.Resenia? resenia = null;
-        if (reseniasPorProducto != null && reseniasPorProducto.ContainsKey(l.idProducto))
+        foreach (var l in lineas)
         {
-            resenia = reseniasPorProducto[l.idProducto];
+            NoVacancy.Models.Resenia? resenia = null;
+            if (reseniasPorProducto != null && reseniasPorProducto.ContainsKey(l.idProducto))
+            {
+                resenia = reseniasPorProducto[l.idProducto];
+            }
+            <tr>
+                <td>@l.Producto?.nombre</td>
+                <td>@l.Producto?.Color?.nombre</td>
+                <td>@l.Producto?.Talla?.nombre</td>
+                <td>@l.cantidad</td>
+                <td>
+                    @if (resenia != null)
+                    {
+                        <span class="d-block mb-1">Calificación: @resenia.calificacion/5</span>
+                        <span class="d-block mb-1">"@resenia.resenia"</span>
+                        <a href="@Url.Action("Edit", "Resenia", new { id = resenia.idResenia })" class="btn btn-sm btn-warning me-1">Editar</a>
+                        <a href="@Url.Action("Delete", "Resenia", new { id = resenia.idResenia })" class="btn btn-sm btn-danger">Eliminar</a>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("Create", "Resenia", new { idProducto = l.idProducto })" class="btn btn-sm btn-primary">Escribir reseña</a>
+                    }
+                </td>
+            </tr>
         }
+    }
+    else
+    {
         <tr>
-            <td>@l.Producto?.nombre</td>
-            <td>@l.Producto?.Color?.nombre</td>
-            <td>@l.Producto?.Talla?.nombre</td>
-            <td>@l.cantidad</td>
-            <td>
-                @if (resenia != null)
-                {
-                    <span class="d-block mb-1">Calificación: @resenia.calificacion/5</span>
-                    <span class="d-block mb-1">"@resenia.resenia"</span>
-                    <a href="@Url.Action("Edit", "Resenia", new { id = resenia.idResenia })" class="btn btn-sm btn-warning me-1">Editar</a>
-                    <a href="@Url.Action("Delete", "Resenia", new { id = resenia.idResenia })" class="btn btn-sm btn-danger">Eliminar</a>
-                }
-                else
-                {
-                    <a href="@Url.Action("Create", "Resenia", new { idProducto = l.idProducto })" class="btn btn-sm btn-primary">Escribir reseña</a>
-                }
-            </td>
+            <td colspan="5" class="text-center text-muted">No hay productos en este pedido.</td>
         </tr>
     }
     </tbody>
