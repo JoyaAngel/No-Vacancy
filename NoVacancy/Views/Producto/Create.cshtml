@@ -117,6 +117,11 @@
                                 onchange="previewImages(event, 0)">
                             <div class="mt-2" id="previewContainer-0"></div>
                         </div>
+                        <div class="mb-3 d-flex justify-content-end">
+                            <button type="button" class="btn btn-outline-danger btn-xs d-flex align-items-center justify-content-center btn-variante-remove ms-2" style="width:24px;height:24px;display:none;" onclick="eliminarVariante(this)" title="Eliminar variante">
+                                <span class="bi bi-x"></span>
+                            </button>
+                        </div>
                     </section>
                     <hr class="variante-divider" />
                 </div>
@@ -249,8 +254,12 @@
             // ACTUALIZA el botón de agregar talla para que use el índice correcto
             const btnAddTalla = clone.querySelector('.btn-add-talla-icon');
             if (btnAddTalla) btnAddTalla.setAttribute('onclick', `agregarTalla(${newIdx})`);
+            // Mostrar/ocultar botón eliminar variante en la nueva variante
+            const btnRemove = clone.querySelector('.btn-variante-remove');
+            if (btnRemove) btnRemove.style.display = 'flex';
             container.appendChild(clone);
             actualizarNamesTallas(newIdx);
+            actualizarIndicesVariantes(); // Esto ya oculta el botón de la primera variante
         }
 
         function agregarTalla(idxVariante) {
@@ -312,8 +321,57 @@
                 }
             });
         }
+        function eliminarVariante(btn) {
+            const varianteSection = btn.closest('.variante-section');
+            if (varianteSection) {
+                varianteSection.remove();
+                actualizarIndicesVariantes();
+            }
+        }
+        function actualizarIndicesVariantes() {
+            const container = document.getElementById('variantesContainer');
+            const variantes = container.getElementsByClassName('variante-section');
+            Array.from(variantes).forEach((variante, idx) => {
+                variante.setAttribute('data-idx', idx);
+                // Actualiza los names e ids de los campos de la variante
+                Array.from(variante.querySelectorAll('input, select, textarea, label, div, span')).forEach(el => {
+                    if (el.name) {
+                        el.name = el.name.replace(/Variantes\[\d+\]/g, `Variantes[${idx}]`);
+                    }
+                    if (el.id) {
+                        el.id = el.id.replace(/(-|_)(\d+)$/, `$1${idx}`);
+                    }
+                    if (el.htmlFor) {
+                        el.htmlFor = el.htmlFor.replace(/(-|_)(\d+)$/, `$1${idx}`);
+                    }
+                });
+                // Actualiza eventos
+                const colorSelect = variante.querySelector(`#colorSelect-${idx}`);
+                if (colorSelect) colorSelect.setAttribute('onchange', `mostrarNuevoColor(this, ${idx})`);
+                const fileUpload = variante.querySelector(`#fileUpload-${idx}`);
+                if (fileUpload) fileUpload.setAttribute('onchange', `previewImages(event, ${idx})`);
+                const btnAddTalla = variante.querySelector('.btn-add-talla-icon');
+                if (btnAddTalla) btnAddTalla.setAttribute('onclick', `agregarTalla(${idx})`);
+                // Actualiza el id del contenedor de tallas
+                const tallaCardsContainer = variante.querySelector('[id^="tallaCardsContainer-"]');
+                if (tallaCardsContainer) tallaCardsContainer.id = `tallaCardsContainer-${idx}`;
+                actualizarNamesTallas(idx);
+                actualizarBotonesTalla(idx);
+                // Mostrar/ocultar botón eliminar variante
+                const btnRemove = variante.querySelector('.btn-variante-remove');
+                if (btnRemove) {
+                    // Forzar display:none con !important en la primera variante
+                    if (idx === 0) {
+                        btnRemove.style.setProperty('display', 'none', 'important');
+                    } else {
+                        btnRemove.style.setProperty('display', 'flex', 'important');
+                    }
+                }
+            });
+        }
         document.addEventListener('DOMContentLoaded', function() {
             actualizarBotonesTalla(0);
+            actualizarIndicesVariantes();
         });
         function toggleLimiteTalla(checkbox) {
             const inputLimite = checkbox.parentElement.querySelector('input[type="number"].input-limite');
