@@ -1,0 +1,71 @@
+@model NoVacancy.Models.Resenia
+@{
+    ViewData["Title"] = "Editar Reseña";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Editar Reseña</h2>
+
+@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="idResenia" />
+    <input type="hidden" asp-for="idProducto" />
+    <input type="hidden" asp-for="idPedido" />
+    <div class="form-group mb-3">
+        <label asp-for="calificacion" class="form-label">Calificación</label>
+        <div id="star-rating" class="mb-2 d-inline-block" role="radiogroup" aria-label="Calificación de estrellas">
+            @for (int i = 1; i <= 5; i++)
+            {
+                <input type="radio" id="star-@i" name="calificacion" value="@i" style="display:none;" @(Model.calificacion == i ? "checked" : "") required aria-checked="@(Model.calificacion == i ? "true" : "false")" aria-label="@i estrella@(i > 1 ? "s" : "")" />
+            }
+            @for (int i = 1; i <= 5; i++)
+            {
+                <label for="star-@i" class="star" data-star="@i" style="font-size:2rem;cursor:pointer;color:#ccc;" tabindex="0" aria-label="@i estrella@(i > 1 ? "s" : "")" role="radio">★</label>
+            }
+        </div>
+        <span asp-validation-for="calificacion" class="text-danger"></span>
+    </div>
+    <div class="form-group mb-3">
+        <label asp-for="resenia" class="form-label">Comentario</label>
+        <textarea asp-for="resenia" class="form-control" required maxlength="500" rows="4" placeholder="Escribe tu comentario...">@Model.resenia</textarea>
+        <span asp-validation-for="resenia" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary mt-2">Guardar Cambios</button>
+    <a href="@Url.Action("DetallesPedido", "Usuario", new { id = Model.idPedido })" class="btn btn-secondary mt-2">Cancelar</a>
+</form>
+
+@section Scripts {
+<script>
+    // Script para pintar las estrellas SOLO al hacer clic y con teclado
+    const stars = document.querySelectorAll('#star-rating .star');
+    const radios = document.querySelectorAll('#star-rating input[type=radio]');
+    function updateStars(selected) {
+        stars.forEach((star, idx) => {
+            star.style.color = idx < selected ? '#ffc107' : '#ccc';
+        });
+    }
+    stars.forEach(function(star, idx) {
+        star.addEventListener('click', function() {
+            radios[idx].checked = true;
+            updateStars(idx + 1);
+        });
+        star.addEventListener('keydown', function(e) {
+            if (e.key === ' ' || e.key === 'Enter') {
+                radios[idx].checked = true;
+                updateStars(idx + 1);
+                e.preventDefault();
+            } else if (e.key === 'ArrowLeft' && idx > 0) {
+                radios[idx - 1].focus();
+            } else if (e.key === 'ArrowRight' && idx < stars.length - 1) {
+                radios[idx + 1].focus();
+            }
+        });
+    });
+    // Inicializar estrellas
+    const checkedRadio = document.querySelector('#star-rating input[type=radio]:checked');
+    if (checkedRadio) {
+        updateStars(parseInt(checkedRadio.value));
+    }
+</script>
+}

@@ -10,6 +10,7 @@
 
 <form asp-action="Create" method="post" id="review-form">
     <input type="hidden" asp-for="idProducto" />
+    <input type="hidden" asp-for="idPedido" />
     <div class="form-group mb-3">
         <label asp-for="calificacion" class="form-label">Calificación</label>
         <div id="star-rating" class="mb-2 d-inline-block" role="radiogroup" aria-label="Calificación de estrellas">

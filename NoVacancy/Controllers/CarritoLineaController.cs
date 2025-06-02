@@ -34,6 +34,17 @@ namespace NoVacancy.Controllers
             if (usuarioId == null)
                 return RedirectToAction("Login", "Usuario");
 
+            // Obtener datos de dirección del usuario
+            var usuario = await _context.Set<Usuario>().FirstOrDefaultAsync(u => u.Id == usuarioId);
+            ViewBag.DireccionUsuario = usuario != null ? new {
+                usuario.Calle,
+                usuario.Numero,
+                usuario.Colonia,
+                usuario.Ciudad,
+                usuario.Estado,
+                usuario.CodigoPostal
+            } : null;
+
             // Buscar el carrito más reciente del usuario que NO esté asociado a un Pedido
             var carrito = await _context.CarritosCabecera
                 .Where(c => c.Id == usuarioId && !_context.Pedidos.Any(p => p.idCarrito == c.idCarrito))

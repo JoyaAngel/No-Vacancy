@@ -18,5 +18,10 @@ namespace NoVacancy.Models
         public int idProducto { get; set; }
         public Producto? Producto { get; set; }
 
+        [ForeignKey("Pedido")]
+        [Required]
+        public int idPedido { get; set; }
+        public Pedido? Pedido { get; set; }
+
     }
 }

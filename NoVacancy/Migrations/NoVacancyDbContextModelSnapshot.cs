@@ -374,6 +374,9 @@ namespace NoVacancy.Migrations
                     b.Property<int>("calificacion")
                         .HasColumnType("int");
 
+                    b.Property<int>("idPedido")
+                        .HasColumnType("int");
+
                     b.Property<int>("idProducto")
                         .HasColumnType("int");
 
@@ -382,6 +385,8 @@ namespace NoVacancy.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("idResenia");
+
+                    b.HasIndex("idPedido");
 
                     b.HasIndex("idProducto");
 
@@ -642,11 +647,19 @@ namespace NoVacancy.Migrations
 
             modelBuilder.Entity("NoVacancy.Models.Resenia", b =>
                 {
+                    b.HasOne("NoVacancy.Models.Pedido", "Pedido")
+                        .WithMany()
+                        .HasForeignKey("idPedido")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("NoVacancy.Models.Producto", "Producto")
                         .WithMany()
                         .HasForeignKey("idProducto")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Pedido");
 
                     b.Navigation("Producto");
                 });

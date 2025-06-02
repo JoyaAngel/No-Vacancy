@@ -1,0 +1,21 @@
+@model NoVacancy.Models.Resenia
+@{
+    ViewData["Title"] = "Eliminar Reseña";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Eliminar Reseña</h2>
+<div class="alert alert-warning">¿Estás seguro de que deseas eliminar esta reseña?</div>
+
+<div class="mb-3">
+    <strong>Calificación:</strong> @Model.calificacion/5<br />
+    <strong>Comentario:</strong> @Model.resenia
+</div>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="idResenia" />
+    <input type="hidden" asp-for="idProducto" />
+    <input type="hidden" asp-for="idPedido" />
+    <button type="submit" class="btn btn-danger">Eliminar</button>
+    <a href="@Url.Action("DetallesPedido", "Usuario", new { id = Model.idPedido })" class="btn btn-secondary">Cancelar</a>
+</form>

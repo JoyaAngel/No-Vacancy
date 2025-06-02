@@ -42,12 +42,12 @@
                     {
                         <span class="d-block mb-1">Calificación: @resenia.calificacion/5</span>
                         <span class="d-block mb-1">"@resenia.resenia"</span>
-                        <a href="@Url.Action("Edit", "Resenia", new { id = resenia.idResenia })" class="btn btn-sm btn-warning me-1">Editar</a>
-                        <a href="@Url.Action("Delete", "Resenia", new { id = resenia.idResenia })" class="btn btn-sm btn-danger">Eliminar</a>
+                        <a href="@Url.Action("Edit", "Resenia", new { idProducto = l.idProducto, idPedido = Model.idPedido })" class="btn btn-sm btn-warning me-1">Editar</a>
+                        <a href="@Url.Action("Delete", "Resenia", new { idProducto = l.idProducto, idPedido = Model.idPedido })" class="btn btn-sm btn-danger">Eliminar</a>
                     }
                     else
                     {
-                        <a href="@Url.Action("Create", "Resenia", new { idProducto = l.idProducto })" class="btn btn-sm btn-primary">Escribir reseña</a>
+                        <a href="@Url.Action("Create", "Resenia", new { idProducto = l.idProducto, idPedido = Model.idPedido })" class="btn btn-sm btn-primary">Escribir reseña</a>
                     }
                 </td>
             </tr>

@@ -288,7 +288,10 @@ namespace NoVacancy.Data
             var producto1 = context.Productos.FirstOrDefault(p => p.nombre == "Playera básica negra");
             var producto2 = context.Productos.FirstOrDefault(p => p.nombre == "Pantalón mezclilla azul");
             var producto3 = context.Productos.FirstOrDefault(p => p.nombre == "Vestido rojo verano");
-            if (producto1 != null && producto2 != null && producto3 != null)
+            // Obtener pedidos existentes para asociar reseñas
+            var pedido1 = context.Pedidos.FirstOrDefault();
+            var pedido2 = context.Pedidos.Skip(1).FirstOrDefault();
+            if (producto1 != null && producto2 != null && producto3 != null && pedido1 != null && pedido2 != null)
             {
                 var imagenesSeed = new[]
                 {
@@ -305,13 +308,13 @@ namespace NoVacancy.Data
 
                 var reseniasSeed = new[]
                 {
-                    new Resenia { resenia = "Muy buena calidad", calificacion = 5, idProducto = producto1.idProducto },
-                    new Resenia { resenia = "Cómodo y bonito", calificacion = 4, idProducto = producto2.idProducto },
-                    new Resenia { resenia = "Perfecto para el verano", calificacion = 5, idProducto = producto3.idProducto }
+                    new Resenia { resenia = "Muy buena calidad", calificacion = 5, idProducto = producto1.idProducto, idPedido = pedido1.idPedido },
+                    new Resenia { resenia = "Cómodo y bonito", calificacion = 4, idProducto = producto2.idProducto, idPedido = pedido1.idPedido },
+                    new Resenia { resenia = "Perfecto para el verano", calificacion = 5, idProducto = producto3.idProducto, idPedido = pedido2.idPedido }
                 };
                 foreach (var resenia in reseniasSeed)
                 {
-                    if (!context.Resenias.Any(r => r.resenia == resenia.resenia && r.idProducto == resenia.idProducto))
+                    if (!context.Resenias.Any(r => r.resenia == resenia.resenia && r.idProducto == resenia.idProducto && r.idPedido == resenia.idPedido))
                         context.Resenias.Add(resenia);
                 }
                 context.SaveChanges();
@@ -385,14 +388,19 @@ namespace NoVacancy.Data
             {
                 var carrito = context.CarritosCabecera.FirstOrDefault(c => c.Id == usuario.Id);
                 if (carrito == null) continue;
-                foreach (var prod in todosProductos.OrderBy(x => Guid.NewGuid()).Take(4))
+                // Solo agregar líneas si el carrito NO tiene pedidos asignados
+                bool carritoConPedido = context.Pedidos.Any(p => p.idCarrito == carrito.idCarrito);
+                if (!carritoConPedido)
                 {
-                    if (!context.CarritosLineas.Any(l => l.idCarrito == carrito.idCarrito && l.idProducto == prod.idProducto))
+                    foreach (var prod in todosProductos.OrderBy(x => Guid.NewGuid()).Take(4))
                     {
-                        context.CarritosLineas.Add(new CarritoLinea { idCarrito = carrito.idCarrito, idProducto = prod.idProducto, cantidad = new Random().Next(1, 4) });
+                        if (!context.CarritosLineas.Any(l => l.idCarrito == carrito.idCarrito && l.idProducto == prod.idProducto))
+                        {
+                            context.CarritosLineas.Add(new CarritoLinea { idCarrito = carrito.idCarrito, idProducto = prod.idProducto, cantidad = new Random().Next(1, 4) });
+                        }
                     }
+                    context.SaveChanges();
                 }
-                context.SaveChanges();
                 for (int i = 0; i < 3; i++)
                 {
                     var pedido = new Pedido { idCarrito = carrito.idCarrito, rfc = $"RFC{usuario.Id.Substring(0,4)}{pedidoIndex}", regimen = "General", codigoPostal = $"{10000 + pedidoIndex}" };
@@ -438,9 +446,11 @@ namespace NoVacancy.Data
                     {
                         context.Imagenes.Add(new Imagen { nombre = imgName, idProducto = prod.idProducto });
                     }
-                    if (!context.Resenias.Any(r => r.idProducto == prod.idProducto))
+                    // Buscar un pedido existente para asociar la reseña
+                    var pedido = context.Pedidos.FirstOrDefault();
+                    if (pedido != null && !context.Resenias.Any(r => r.idProducto == prod.idProducto && r.idPedido == pedido.idPedido))
                     {
-                        context.Resenias.Add(new Resenia { resenia = $"Reseña de ejemplo para {prod.nombre}", calificacion = new Random().Next(3, 6), idProducto = prod.idProducto });
+                        context.Resenias.Add(new Resenia { resenia = $"Reseña de ejemplo para {prod.nombre}", calificacion = new Random().Next(3, 6), idProducto = prod.idProducto, idPedido = pedido.idPedido });
                     }
                     imgIndex++;
                 }
@@ -523,6 +533,12 @@ namespace NoVacancy.Data
             {
                 var carrito = context.CarritosCabecera.FirstOrDefault(c => c.Id == usuario.Id);
                 if (carrito == null) continue;
+                // Solo agregar líneas si el carrito NO tiene pedidos asignados
+                bool carritoConPedido = context.Pedidos.Any(p => p.idCarrito == carrito.idCarrito);
+                if (!carritoConPedido)
+                {
+                    // Puedes agregar aquí líneas de carrito si lo deseas
+                }
                 int pedidosPorUsuario = random.Next(3, 7);
                 for (int j = 0; j < pedidosPorUsuario; j++)
                 {

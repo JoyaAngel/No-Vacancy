@@ -365,7 +365,7 @@ namespace NoVacancy.Controllers
             // Obtener reseñas del usuario para los productos de este pedido
             var productoIds = lineas.Select(l => l.idProducto).ToList();
             var resenias = await _context.Resenias
-                .Where(r => productoIds.Contains(r.idProducto))
+                .Where(r => productoIds.Contains(r.idProducto) && r.idPedido == pedido.idPedido)
                 .ToListAsync();
             var reseniasPorProducto = resenias
                 .GroupBy(r => r.idProducto)
