@@ -264,7 +264,8 @@ namespace NoVacancy.Controllers
                     _context.Update(productoExistente);
                     await _context.SaveChangesAsync();
 
-                    return RedirectToAction(nameof(Index));
+                    return Redirect("/Admin/Index");
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -297,8 +298,7 @@ namespace NoVacancy.Controllers
             return View(producto);
         }
 
-        // POST: ProductoController/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
@@ -308,7 +308,7 @@ namespace NoVacancy.Controllers
                 _context.Productos.Remove(producto);
                 await _context.SaveChangesAsync();
             }
-            return RedirectToAction(nameof(Index));
+            return Redirect("/Admin/Index");
         }
     }
 }

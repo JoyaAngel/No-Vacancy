@@ -57,8 +57,9 @@
                                             ¿Estás seguro de que deseas eliminar el producto <strong>@producto.nombre</strong>?
                                         </div>
                                         <div class="modal-footer">
-                                            <form asp-controller="Producto" asp-action="DeleteConfirmed" method="post">
+                                            <form asp-action="DeleteConfirmed" asp-controller="Producto" method="post">
                                                 <input type="hidden" name="id" value="@producto.idProducto" />
+                                                @Html.AntiForgeryToken() <!-- Token de seguridad -->
                                                 <button type="submit" class="btn btn-danger">Sí, eliminar</button>
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                                             </form>
