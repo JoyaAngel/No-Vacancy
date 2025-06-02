@@ -7,20 +7,26 @@
 }
 
 <section>
-	<div class="container mt-5">
-		<h1 id="cabecera" class="fw-bold mb-3">Más comprados</h1>
-		<div class="row">
+	<div class="container mt-4 px-2 px-md-0">
+		<div class="d-flex justify-content-center mb-4">
+			<a href="@Url.Action("Store", "Home")" class="btn btn-dark btn-lg px-4 shadow rounded-pill d-flex align-items-center gap-2 ver-tienda-btn">
+				<i class="bi bi-shop-window fs-5"></i>
+				<span>Ver tienda</span>
+			</a>
+		</div>
+		<h1 id="cabecera" class="fw-bold mb-3 text-center text-md-start">Más comprados</h1>
+		<div class="row g-3">
 			@if (productosMasComprados != null && productosMasComprados.Any())
 			{
 				foreach (var item in productosMasComprados)
 				{
-					<div class="col-12 col-md-4 mb-4">
+					<div class="col-12 col-sm-6 col-md-4 mb-3">
 						<div class="card shadow-sm rounded-4 h-100 border-0 card-hover">
-							<img src="@(string.IsNullOrEmpty(item.Imagen) ? defaultImg : Url.Content($"~/images/productos/{item.Imagen}"))" class="card-img-top p-3" alt="@item.Producto.nombre" style="object-fit:contain; height:220px;">
-							<div class="card-body">
+							<img src="@(string.IsNullOrEmpty(item.Imagen) ? defaultImg : Url.Content($"~/images/productos/{item.Imagen}"))" class="card-img-top p-3 mx-auto" alt="@item.Producto.nombre" style="object-fit:contain; height:180px; max-width:100%;">
+							<div class="card-body d-flex flex-column">
 								<h5 class="card-title fw-semibold">@item.Producto.nombre</h5>
 								<p class="card-text text-success fw-bold">$@item.Producto.precio.ToString("0.00")</p>
-								<a href="@Url.Action("Product_detail", "Home", new { nombre = item.Producto.nombre })" class="btn btn-outline-dark w-100 mt-2">Ver más</a>
+								<a href="@Url.Action("Product_detail", "Home", new { nombre = item.Producto.nombre })" class="btn btn-outline-dark w-100 mt-auto">Ver más</a>
 							</div>
 						</div>
 					</div>
@@ -37,20 +43,20 @@
 </section>
 
 <section>
-	<div class="container mt-5">
-		<h1 id="cabecera" class="fw-bold mb-3">Mejor calificados</h1>
-		<div class="row">
+	<div class="container mt-5 px-2 px-md-0">
+		<h1 id="cabecera" class="fw-bold mb-3 text-center text-md-start">Mejor calificados</h1>
+		<div class="row g-3">
 			@if (productosMejorCalificados != null && productosMejorCalificados.Any())
 			{
 				foreach (var item in productosMejorCalificados)
 				{
-					<div class="col-12 col-md-4 mb-4">
+					<div class="col-12 col-sm-6 col-md-4 mb-3">
 						<div class="card shadow-sm rounded-4 h-100 border-0 card-hover">
-							<img src="@(string.IsNullOrEmpty(item.Imagen) ? defaultImg : Url.Content($"~/images/productos/{item.Imagen}"))" class="card-img-top p-3" alt="@item.Producto.nombre" style="object-fit:contain; height:220px;">
-							<div class="card-body">
+							<img src="@(string.IsNullOrEmpty(item.Imagen) ? defaultImg : Url.Content($"~/images/productos/{item.Imagen}"))" class="card-img-top p-3 mx-auto" alt="@item.Producto.nombre" style="object-fit:contain; height:180px; max-width:100%;">
+							<div class="card-body d-flex flex-column">
 								<h5 class="card-title fw-semibold">@item.Producto.nombre</h5>
 								<p class="card-text text-success fw-bold">$@item.Producto.precio.ToString("0.00")</p>
-								<a href="@Url.Action("Product_detail", "Home", new { nombre = item.Producto.nombre })" class="btn btn-outline-dark w-100 mt-2">Ver más</a>
+								<a href="@Url.Action("Product_detail", "Home", new { nombre = item.Producto.nombre })" class="btn btn-outline-dark w-100 mt-auto">Ver más</a>
 							</div>
 						</div>
 					</div>
@@ -59,99 +65,39 @@
 			else
 			{
 				<div class="col-12">
-					<div class="alert alert-info text-center">No hay productos calificados aún.</div>
+					<div class="alert alert-info text-center">No hay productos mejor calificados aún.</div>
 				</div>
 			}
 		</div>
 	</div>
 </section>
 
-<div class="d-flex align-items-center my-4">
-	<div class="flex-grow-1" style="border-top: 2px solid #e0e0e0"></div>
-	<a href="@Url.Action("Store", "Home")" class="px-3 btn btn-dark rounded-pill">Ver todo</a>
-	<div class="flex-grow-1" style="border-top: 2px solid #e0e0e0"></div>
-</div>
-
 <section>
-    <div id="luxuryCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="3500">
-        <div class="carousel-inner">
-            @if (productosRecientes != null && productosRecientes.Any())
-            {
-                var idx = 0;
-                foreach (var item in productosRecientes)
-                {
-                    var isActive = idx == 0 ? "active" : "";
-                    <div class="carousel-item @isActive">
-                        <div class="d-flex flex-column justify-content-center align-items-center bg-white p-5 rounded-4 border border-1 shadow-sm" style="min-height: 420px;">
-                            <img src="@(string.IsNullOrEmpty(item.Imagen) ? defaultImg : Url.Content($"~/images/productos/{item.Imagen}"))"
-                                 class="d-block mx-auto mb-4 rounded-3"
-                                 alt="@item.Producto.nombre"
-                                 style="max-width: 340px; max-height: 340px; object-fit: contain; background: #fff; border: 1px solid #e0e0e0;" />
-                            <h3 class="mb-1 text-dark fw-bold">@item.Producto.nombre</h3>
-                            <p class="h4 mb-2 text-dark">$@item.Producto.precio.ToString("0.00")</p>
-                            <a href="@Url.Action("Product_detail", "Home", new { nombre = item.Producto.nombre })"
-                               class="btn btn-outline-dark rounded-pill px-4 mt-2">
-                                Ver producto <i class="ms-2 bi bi-arrow-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                    idx++;
-                }
-            }
-            else
-            {
-                <div class="carousel-item active">
-                    <div class="d-flex flex-column justify-content-center align-items-center bg-white p-5 rounded-4 border border-1 shadow-sm" style="min-height: 420px;">
-                        <img src="~/images/1.webp" class="d-block mx-auto mb-4 rounded-3" alt="Imagen destacada" style="max-width: 340px; max-height: 340px; object-fit: contain; background: #fff; border: 1px solid #e0e0e0;" />
-                        <h2 class="text-dark fw-bold">¡Explora nuestros productos exclusivos!</h2>
-                        <a href="@Url.Action("Store", "Home")" class="btn btn-outline-dark rounded-pill px-4 mt-3">
-                            Descubrir colección
-                        </a>
-                    </div>
-                </div>
-            }
-        </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#luxuryCarousel" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Anterior</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#luxuryCarousel" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Siguiente</span>
-        </button>
-    </div>
+	<div class="container mt-5 px-2 px-md-0">
+		<h1 id="cabecera" class="fw-bold mb-3 text-center text-md-start">Nuevos productos</h1>
+		<div class="row g-3">
+			@if (productosRecientes != null && productosRecientes.Any())
+			{
+				foreach (var item in productosRecientes)
+				{
+					<div class="col-12 col-sm-6 col-md-4 mb-3">
+						<div class="card shadow-sm rounded-4 h-100 border-0 card-hover">
+							<img src="@(string.IsNullOrEmpty(item.Imagen) ? defaultImg : Url.Content($"~/images/productos/{item.Imagen}"))" class="card-img-top p-3 mx-auto" alt="@item.Producto.nombre" style="object-fit:contain; height:180px; max-width:100%;">
+							<div class="card-body d-flex flex-column">
+								<h5 class="card-title fw-semibold">@item.Producto.nombre</h5>
+								<p class="card-text text-success fw-bold">$@item.Producto.precio.ToString("0.00")</p>
+								<a href="@Url.Action("Product_detail", "Home", new { nombre = item.Producto.nombre })" class="btn btn-outline-dark w-100 mt-auto">Ver más</a>
+							</div>
+						</div>
+					</div>
+				}
+			}
+			else
+			{
+				<div class="col-12">
+					<div class="alert alert-info text-center">No hay productos nuevos aún.</div>
+				</div>
+			}
+		</div>
+	</div>
 </section>
-
-<style>
-.carousel-inner {
-    background: transparent;
-    border-radius: 1.5rem;
-    box-shadow: none;
-}
-.carousel-item {
-    transition: opacity 0.5s;
-}
-.carousel-control-prev, .carousel-control-next {
-    width: 44px;
-    height: 44px;
-    background: #fff;
-    border-radius: 50%;
-    border: 1px solid #222;
-    top: 50%;
-    transform: translateY(-50%);
-    opacity: 0.85;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-}
-.carousel-control-prev:hover, .carousel-control-next:hover {
-    background: #222;
-    border-color: #222;
-    opacity: 1;
-}
-.carousel-control-prev-icon, .carousel-control-next-icon {
-    filter: invert(1) grayscale(1);
-}
-.carousel-control-prev:hover .carousel-control-prev-icon,
-.carousel-control-next:hover .carousel-control-next-icon {
-    filter: none;
-}
-</style>

@@ -3,6 +3,41 @@
 @{
     ViewData["Title"] = "Dashboard";
     Layout = "_Layout";
+    // Filtrar productos con bajo stock
+    var productosBajoStock = Model?.Where(p => p.cantidad <= 20).ToList();
+}
+
+<!-- Modal de alerta de bajo stock -->
+@if (productosBajoStock != null && productosBajoStock.Any())
+{
+    <div class="modal fade" id="bajoStockModal" tabindex="-1" aria-labelledby="bajoStockModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-warning">
+                    <h5 class="modal-title" id="bajoStockModalLabel">¡Alerta de bajo stock!</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Los siguientes productos tienen un stock menor o igual a 20 piezas:</p>
+                    <ul>
+                        @foreach (var producto in productosBajoStock)
+                        {
+                            <li><strong>@producto.nombre</strong> (Stock: @producto.cantidad)</li>
+                        }
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var bajoStockModal = new bootstrap.Modal(document.getElementById('bajoStockModal'));
+            bajoStockModal.show();
+        });
+    </script>
 }
 
 <div class="content-section container">

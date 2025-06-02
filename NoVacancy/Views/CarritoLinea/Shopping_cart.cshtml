@@ -16,6 +16,7 @@
 
 	@{
 		double total = 0;
+		int productosValidos = 0;
 	}
 	@if (Model != null && Model.Count > 0)
 	{
@@ -27,9 +28,13 @@
 			var talla = item.CarritoLinea.Producto?.Talla?.nombre ?? "-";
 			var imagen = item.ImagenPrincipal;
 			int? limite = item.CarritoLinea.Producto?.limite;
-			<div class="row align-items-center mb-4">
+			int stock = item.CarritoLinea.Producto?.cantidad ?? 0;
+			bool sinStock = stock <= 0 || item.CarritoLinea.cantidad > stock;
+			if (!sinStock) { productosValidos++; }
+			<string>
+			<div class="row align-items-center mb-4 @(sinStock ? "bg-light text-muted position-relative" : "")" style="@(sinStock ? "opacity:0.6; pointer-events:none;" : "")">
 				<div class="col-md-6 d-flex">
-					<img src="@imagen" style="width: 80px; height: 80px; object-fit: cover;" alt="@item.CarritoLinea.Producto?.nombre" class="me-3">
+					<img src="@imagen" style="width: 80px; height: 80px; object-fit: cover;@(sinStock ? "filter: grayscale(1);" : "")" alt="@item.CarritoLinea.Producto?.nombre" class="me-3">
 					<div>
 						<div class="fw-bold">@item.CarritoLinea.Producto?.nombre</div>
 						<div class="text-muted">$@String.Format("{0:0.00}", item.CarritoLinea.Producto?.precio ?? 0)</div>
@@ -38,6 +43,14 @@
 						@if (limite.HasValue)
 						{
 							<div class="text-danger small">Máximo por cliente: @limite.Value</div>
+						}
+						@if (stock <= 0)
+						{
+							<div class="text-danger fw-bold">Sin existencias</div>
+						}
+						@if (item.CarritoLinea.cantidad > stock && stock > 0)
+						{
+							<div class="text-danger fw-bold">Cantidad supera existencias disponibles (@stock)</div>
 						}
 					</div>
 				</div>
@@ -52,7 +65,7 @@
 						<form asp-action="Update" asp-controller="CarritoLinea" method="post" class="d-inline">
 							<input type="hidden" name="idProducto" value="@item.CarritoLinea.idProducto" />
 							<input type="hidden" name="cantidad" value="@(item.CarritoLinea.cantidad + 1)" />
-							<button class="qty-btn" type="submit" @(limite.HasValue && item.CarritoLinea.cantidad >= limite.Value ? "disabled" : "")>+</button>
+							<button class="qty-btn" type="submit" @((limite.HasValue && item.CarritoLinea.cantidad >= limite.Value) || (stock > 0 ? item.CarritoLinea.cantidad >= stock : true) ? "disabled" : "")>+</button>
 						</form>
 						<form asp-action="Delete" asp-controller="CarritoLinea" method="post" class="d-inline ms-3">
 							<input type="hidden" name="idProducto" value="@item.CarritoLinea.idProducto" />
@@ -61,7 +74,12 @@
 					</div>
 				</div>
 				<div class="col-md-3 text-end fw-bold">$@String.Format("{0:0.00}", subtotal)</div>
+				@if (sinStock)
+				{
+					<span class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center" style="background:rgba(255,255,255,0.7);font-weight:bold;font-size:1.1rem;z-index:2;">No disponible</span>
+				}
 			</div>
+			</string>
 		}
 	}
 	else
@@ -80,7 +98,7 @@
 	<div class="container my-4">
 		<div class="row justify-content-end">
 			<div class="col">
-				<button class="btn btn-dark w-100" type="button" data-bs-toggle="modal" data-bs-target="#confirmarPedidoModal" @(Model == null || !Model.Any() ? "disabled" : "")>Confirmar pedido</button>
+				<button class="btn btn-dark w-100" type="button" data-bs-toggle="modal" data-bs-target="#confirmarPedidoModal" @(Model == null || !Model.Any() || productosValidos == 0 ? "disabled" : "")>Confirmar pedido</button>
 			</div>
 		</div>
 	</div>
@@ -93,7 +111,7 @@
 	        <h5 class="modal-title" id="confirmarPedidoModalLabel">Confirmar pedido</h5>
 	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
 	      </div>
-	      <form asp-action="ConfirmarPedido" asp-controller="CarritoCabecera" method="post">
+	      <form asp-action="ConfirmarPedido" asp-controller="CarritoCabecera" method="post" id="formConfirmarPedido">
 	        <div class="modal-body">
 	          <div class="mb-3">
 	            <label class="form-label">Calle</label>
@@ -153,5 +171,19 @@
 	  var fields = document.getElementById('facturaFields');
 	  fields.style.display = check.checked ? 'block' : 'none';
 	}
+
+	// Evitar envío de productos inválidos
+	document.addEventListener('DOMContentLoaded', function() {
+		const form = document.getElementById('formConfirmarPedido');
+		if (form) {
+			form.addEventListener('submit', function(e) {
+				// Si no hay productos válidos, bloquear
+				if (@productosValidos == 0) {
+					e.preventDefault();
+					alert('No hay productos válidos para confirmar el pedido.');
+				}
+			});
+		}
+	});
 	</script>
 </div>

@@ -1,0 +1,35 @@
+@model NoVacancy.Models.Pedido
+@{
+    ViewBag.Title = "Detalles del Pedido";
+    var lineas = ViewBag.Lineas as List<NoVacancy.Models.CarritoLinea>;
+    var detalle = ViewBag.Detalle as NoVacancy.Models.Detalle;
+}
+<h2>Detalles del Pedido</h2>
+<div class="mb-3">
+    <strong>Fecha:</strong> @Model.FechaHoraPedido.ToString("dd/MM/yyyy HH:mm")<br />
+    <strong>Dirección de envío:</strong> @Model.Calle @Model.Numero, @Model.Colonia, @Model.Ciudad, @Model.Estado, @Model.CodigoPostalEnvio<br />
+    <strong>Monto total:</strong> @detalle?.monto.ToString("C")
+</div>
+<h4>Productos</h4>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Producto</th>
+            <th>Color</th>
+            <th>Talla</th>
+            <th>Cantidad</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var l in lineas)
+    {
+        <tr>
+            <td>@l.Producto?.nombre</td>
+            <td>@l.Producto?.Color?.nombre</td>
+            <td>@l.Producto?.Talla?.nombre</td>
+            <td>@l.cantidad</td>
+        </tr>
+    }
+    </tbody>
+</table>
+<a href="@Url.Action("Perfil", "Usuario")" class="btn btn-secondary">Volver al perfil</a>

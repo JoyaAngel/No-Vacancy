@@ -6,10 +6,12 @@
 
 <h2>Dejar Reseña</h2>
 
+@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
 <form asp-action="Create" method="post" id="review-form">
     <input type="hidden" asp-for="idProducto" />
     <div class="form-group mb-3">
-        <label asp-for="calificacion">Calificación</label>
+        <label asp-for="calificacion" class="form-label">Calificación</label>
         <div id="star-rating" class="mb-2 d-inline-block" role="radiogroup" aria-label="Calificación de estrellas">
             @for (int i = 1; i <= 5; i++)
             {
@@ -17,13 +19,15 @@
             }
             @for (int i = 1; i <= 5; i++)
             {
-                <label for="star-@i" class="star" data-star="@i" style="font-size:2rem;cursor:pointer;color:#ccc;" tabindex="0" aria-label="@i estrella@(i > 1 ? "s" : "")" role="radio"></label>
+                <label for="star-@i" class="star" data-star="@i" style="font-size:2rem;cursor:pointer;color:#ccc;" tabindex="0" aria-label="@i estrella@(i > 1 ? "s" : "")" role="radio">★</label>
             }
         </div>
+        <span asp-validation-for="calificacion" class="text-danger"></span>
     </div>
-    <div class="form-group">
-        <label asp-for="resenia">Comentario</label>
-        <textarea asp-for="resenia" class="form-control" required></textarea>
+    <div class="form-group mb-3">
+        <label asp-for="resenia" class="form-label">Comentario</label>
+        <textarea asp-for="resenia" class="form-control" required maxlength="500" rows="4" placeholder="Escribe tu comentario..."></textarea>
+        <span asp-validation-for="resenia" class="text-danger"></span>
     </div>
     <button type="submit" class="btn btn-primary mt-2" id="submit-btn">Enviar Reseña</button>
 </form>
@@ -33,7 +37,6 @@
     // Script para pintar las estrellas SOLO al hacer clic y con teclado
     const stars = document.querySelectorAll('#star-rating .star');
     const radios = document.querySelectorAll('#star-rating input[type=radio]');
-    let selectedIdx = -1;
     stars.forEach(function(star, idx) {
         star.addEventListener('click', function() {
             radios[idx].checked = true;
@@ -74,6 +77,7 @@
         display: inline-block;
         color: #ccc;
         outline: none;
+        transition: color 0.2s;
     }
     #star-rating .star:focus {
         outline: 2px solid #007bff;

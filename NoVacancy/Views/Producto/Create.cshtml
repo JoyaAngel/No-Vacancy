@@ -196,6 +196,16 @@
             const clone = lastVariante.cloneNode(true);
             const newIdx = variantes.length;
             clone.setAttribute('data-idx', newIdx);
+            // Elimina todas las tallas menos la primera en la variante clonada
+            const tallaCardsContainer = clone.querySelector(`#tallaCardsContainer-${newIdx - 1}`) || clone.querySelector('[id^="tallaCardsContainer-"]');
+            if (tallaCardsContainer) {
+                const tallaCards = tallaCardsContainer.querySelectorAll('.talla-card');
+                tallaCards.forEach((card, idx) => {
+                    if (idx > 0) card.remove();
+                });
+                // Cambia el id del contenedor de tallas al nuevo índice
+                tallaCardsContainer.id = `tallaCardsContainer-${newIdx}`;
+            }
             // Actualiza los names e ids de los campos de la variante clonada
             Array.from(clone.querySelectorAll('input, select, textarea, label, div, span')).forEach(el => {
                 if (el.name) {
@@ -217,8 +227,10 @@
                 } else {
                     el.value = '';
                 }
-                if (el.id && (el.id.startsWith('nuevoColorInput') || el.id.startsWith('nuevoCodigoInput'))) {
+                // Oculta y limpia el input-limite en la variante clonada
+                if (el.classList.contains('input-limite')) {
                     el.style.display = 'none';
+                    el.value = '';
                 }
             });
             const colorExtra = clone.querySelector(`#colorExtraContainer-${newIdx}`);

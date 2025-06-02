@@ -67,9 +67,49 @@ namespace NoVacancy.Controllers
             }
 
             var lineas = _context.CarritosLineas.Where(l => l.idCarrito == carrito.idCarrito).ToList();
+            // Guardar productos inválidos para reinsertar en el nuevo carrito
+            var lineasInvalidas = new List<CarritoLinea>();
+            foreach (var linea in lineas)
+            {
+                var producto = _context.Productos.FirstOrDefault(p => p.idProducto == linea.idProducto);
+                if (producto == null || producto.cantidad <= 0 || linea.cantidad > producto.cantidad)
+                {
+                    lineasInvalidas.Add(linea);
+                }
+            }
+            if (lineasInvalidas.Count > 0)
+            {
+                _context.CarritosLineas.RemoveRange(lineasInvalidas);
+                _context.SaveChanges();
+                // Actualizar la lista de líneas después de eliminar
+                lineas = _context.CarritosLineas.Where(l => l.idCarrito == carrito.idCarrito).ToList();
+            }
             if (lineas.Count == 0)
             {
-                TempData["Error"] = "El carrito está vacío.";
+                // Crear el nuevo carrito y reinsertar productos no procesados
+                var nuevoCarrito = new CarritoCabecera { Id = usuarioId };
+                _context.CarritosCabecera.Add(nuevoCarrito);
+                _context.SaveChanges();
+                foreach (var lineaInvalida in lineasInvalidas)
+                {
+                    var producto = _context.Productos.FirstOrDefault(p => p.idProducto == lineaInvalida.idProducto);
+                    if (producto != null && producto.cantidad > 0)
+                    {
+                        int cantidadAInsertar = Math.Min(producto.cantidad, lineaInvalida.cantidad);
+                        if (cantidadAInsertar > 0)
+                        {
+                            var nuevaLinea = new CarritoLinea
+                            {
+                                idCarrito = nuevoCarrito.idCarrito,
+                                idProducto = producto.idProducto,
+                                cantidad = cantidadAInsertar
+                            };
+                            _context.CarritosLineas.Add(nuevaLinea);
+                        }
+                    }
+                }
+                _context.SaveChanges();
+                TempData["Error"] = "No hay productos válidos para confirmar el pedido. Los productos sin stock han sido eliminados del carrito y los restantes se han transferido al nuevo carrito.";
                 return RedirectToAction("Shopping_cart", "CarritoLinea");
             }
 
@@ -106,11 +146,28 @@ namespace NoVacancy.Controllers
             _context.Pedidos.Add(pedido);
             _context.SaveChanges();
 
-            var nuevoCarrito = new CarritoCabecera
+            // Crear el nuevo carrito y reinsertar productos no procesados
+            var nuevoCarritoDespues = new CarritoCabecera { Id = usuarioId };
+            _context.CarritosCabecera.Add(nuevoCarritoDespues);
+            _context.SaveChanges();
+            foreach (var lineaInvalida in lineasInvalidas)
             {
-                Id = usuarioId
-            };
-            _context.CarritosCabecera.Add(nuevoCarrito);
+                var producto = _context.Productos.FirstOrDefault(p => p.idProducto == lineaInvalida.idProducto);
+                if (producto != null && producto.cantidad > 0)
+                {
+                    int cantidadAInsertar = Math.Min(producto.cantidad, lineaInvalida.cantidad);
+                    if (cantidadAInsertar > 0)
+                    {
+                        var nuevaLinea = new CarritoLinea
+                        {
+                            idCarrito = nuevoCarritoDespues.idCarrito,
+                            idProducto = producto.idProducto,
+                            cantidad = cantidadAInsertar
+                        };
+                        _context.CarritosLineas.Add(nuevaLinea);
+                    }
+                }
+            }
             _context.SaveChanges();
 
             TempData["PedidoId"] = pedido.idPedido;

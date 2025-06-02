@@ -1,0 +1,31 @@
+@model NoVacancy.Models.Usuario
+@using Microsoft.AspNetCore.Identity
+@{
+    ViewBag.Title = "Perfil de Usuario";
+    var pedidos = ViewBag.Pedidos as IEnumerable<NoVacancy.Models.Pedido>;
+}
+
+<h2>Perfil de Usuario</h2>
+
+@if (User.IsInRole("Cliente"))
+{
+    <div class="card mb-4">
+        <div class="card-body">
+            <h4>@Model.Nombre</h4>
+            <p><strong>Email:</strong> @Model.Email</p>
+            <p><strong>Dirección:</strong> @Model.Calle @Model.Numero, @Model.Colonia, @Model.Ciudad, @Model.Estado, @Model.CodigoPostal</p>
+            <a class="btn btn-primary" href="@Url.Action("EditarPerfil", "Usuario")">Editar datos personales</a>
+            <a class="btn btn-secondary" href="@Url.Action("CambiarContrasena", "Usuario")">Cambiar contraseña</a>
+        </div>
+    </div>
+    <div>
+        <h4>Historial de pedidos</h4>
+        <div id="historialPedidos">
+            @await Html.PartialAsync("_HistorialPedidos", pedidos)
+        </div>
+    </div>
+}
+else
+{
+    <div class="alert alert-warning">Esta sección es solo para usuarios de tipo Cliente.</div>
+}

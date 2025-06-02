@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using NoVacancy.Models;
 using NoVacancy.Data;
 using Microsoft.EntityFrameworkCore;
+using NoVacancy.Services;
+using Microsoft.AspNetCore.Identity;
 
 namespace NoVacancy.Controllers
 {
@@ -9,9 +11,13 @@ namespace NoVacancy.Controllers
     public class PedidoController : Controller
     {
         private readonly NoVacancyDbContext _context;
-        public PedidoController(NoVacancyDbContext context)
+        private readonly EmailService _emailService;
+        private readonly UserManager<Usuario> _userManager;
+        public PedidoController(NoVacancyDbContext context, EmailService emailService, UserManager<Usuario> userManager)
         {
             _context = context;
+            _emailService = emailService;
+            _userManager = userManager;
         }
 
         // GET: api/PedidoApi
@@ -70,6 +76,15 @@ namespace NoVacancy.Controllers
                 }
             }
             await _context.SaveChangesAsync();
+
+            // Enviar email de confirmación de pedido
+            var usuario = await _userManager.FindByIdAsync(pedido.Carrito?.Id);
+            if (usuario != null)
+            {
+                string subject = "Confirmación de tu pedido - No-Vacancy";
+                string body = $"<h2>¡Gracias por tu compra, {usuario.Nombre}!</h2><p>Tu pedido #{pedido.idPedido} ha sido registrado exitosamente.</p><p>Monto total: <strong>{detalle.monto:C}</strong></p>";
+                await _emailService.SendEmailAsync(usuario.Email, subject, body);
+            }
 
             return Ok(pedido);
         }

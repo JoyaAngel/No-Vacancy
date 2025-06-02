@@ -154,7 +154,8 @@ namespace NoVacancy.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Store(string? search, string? categoria, string? color, string? talla, int pagina = 1)
+        [HttpGet]
+        public async Task<IActionResult> Store(string? search, string? categoria, string? color, string? talla, decimal? precioMin, decimal? precioMax, int pagina = 1)
         {
             int pageSize = 9; // Productos por página
             var productosQuery = _context.Productos
@@ -172,6 +173,10 @@ namespace NoVacancy.Controllers
                 productosQuery = productosQuery.Where(p => p.Color != null && p.Color.nombre == color);
             if (!string.IsNullOrWhiteSpace(talla))
                 productosQuery = productosQuery.Where(p => p.Talla != null && p.Talla.nombre == talla);
+            if (precioMin.HasValue)
+                productosQuery = productosQuery.Where(p => p.precio >= (double)precioMin.Value);
+            if (precioMax.HasValue)
+                productosQuery = productosQuery.Where(p => p.precio <= (double)precioMax.Value);
 
             // Agrupar por nombre y tomar solo el primero de cada grupo
             var productosUnicos = await productosQuery
@@ -226,6 +231,16 @@ namespace NoVacancy.Controllers
         }
 
         public IActionResult Shopping_cart()
+        {
+            return View();
+        }
+
+        public IActionResult Contact()
+        {
+            return View();
+        }
+
+        public IActionResult Terms()
         {
             return View();
         }

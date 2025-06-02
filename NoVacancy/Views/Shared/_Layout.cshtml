@@ -13,19 +13,19 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-light bg-white border-bottom px-4">
-            <div class="container-fluid d-flex justify-content-between align-items-center">
-                <a class="nav-link" href="#" title="Buscar">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom px-2 px-md-4">
+            <div class="container-fluid d-flex justify-content-between align-items-center flex-wrap">
+                <a class="nav-link order-1 order-md-0" href="#" title="Buscar">
                     <i class="bi bi-search fs-4"></i>
                 </a>
 
-                <a class="navbar-brand mx-auto fw-bold" href="@Url.Action("Index", "Home")" style="text-decoration:none;color:inherit;cursor:pointer;">No Vacancy</a>
+                <a class="navbar-brand mx-auto fw-bold order-0 order-md-1 text-center" href="@Url.Action("Index", "Home")" style="text-decoration:none;color:inherit;cursor:pointer;">No Vacancy</a>
 
-                <div class="d-flex align-items-center">
+                <div class="d-flex align-items-center order-2 order-md-2 mt-2 mt-md-0">
                     <!-- Botón de Historial (SOLO para Admin) -->
                     @if (User.Identity != null && User.Identity.IsAuthenticated && User.IsInRole("Administrador"))
                     {
-                        <a class="nav-link me-3" href="@Url.Action("Historial", "Pedido")" title="Historial">
+                        <a class="nav-link me-2 me-md-3" href="@Url.Action("Historial", "Pedido")" title="Historial">
                             <i class="bi bi-clock-history fs-4"></i>
                         </a>
                     }
@@ -33,18 +33,23 @@
                     <!-- Botón de Dashboard (solo Admin) -->
                     @if (User.Identity != null && User.Identity.IsAuthenticated && User.IsInRole("Administrador"))
                     {
-                        <a class="nav-link me-3" href="/Admin/Index" title="Dashboard">
+                        <a class="nav-link me-2 me-md-3" href="/Admin/Index" title="Dashboard">
                             <i class="bi bi-speedometer2 fs-4"></i>
                         </a>
                     }
 
                     <div class="dropdown">
-                        <a class="nav-link me-3 dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" title="Perfil de usuario">
+                        <a class="nav-link me-2 me-md-3 dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" title="Perfil de usuario">
                             <i class="bi bi-person fs-4"></i>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                             @if (User.Identity != null && User.Identity.IsAuthenticated)
                             {
+                                <!-- Perfil en dropdown (SOLO para usuarios Cliente) -->
+                                @if (User.IsInRole("Cliente"))
+                                {
+                                    <li><a class="dropdown-item" href="@Url.Action("Perfil", "Usuario")"><i class="bi bi-person-circle me-2"></i>Perfil</a></li>
+                                }
                                 <!-- Historial en dropdown (SOLO para no-admins) -->
                                 @if (!User.IsInRole("Administrador"))
                                 {
@@ -78,16 +83,16 @@
         <div style="border-bottom: 2px solid black"></div>
     </header>
 
-    <div class="container">
+    <div class="container-fluid px-2 px-md-4">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center">
+    <footer class="border-top footer text-muted mt-4">
+        <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center py-3 gap-3">
             <!-- Redes sociales -->
-            <div class="mb-3 mb-md-0 d-flex align-items-center">
+            <div class="mb-2 mb-md-0 d-flex align-items-center">
                 <span class="me-3">Redes sociales</span>
                 <i class="bi bi-facebook me-2"></i>
                 <i class="bi bi-instagram me-2"></i>
@@ -95,13 +100,13 @@
             </div>
 
             <!-- Enlaces legales -->
-            <div class="footer-links d-flex bg-white border-top py-4">
-                <a href="@Url.Action("Privacy", "Home")" class="text-decoration-none text-dark me-3">Política de privacidad</a>
-                <a href="#" class="text-decoration-none text-dark me-3">Contáctanos</a>
-                <a href="#" class="text-decoration-none text-dark">Acerca de</a>
+            <div class="footer-links d-flex flex-column flex-md-row bg-white border-top border-0 py-2 py-md-4">
+                <a href="@Url.Action("Privacy", "Home")" class="text-decoration-none text-dark me-0 me-md-3 mb-2 mb-md-0">Política de privacidad</a>
+                <a href="@Url.Action("Contact", "Home")" class="text-decoration-none text-dark me-0 me-md-3 mb-2 mb-md-0">Contáctanos</a>
+                <a href="@Url.Action("Terms", "Home")" class="text-decoration-none text-dark">Términos de uso</a>
             </div>
         </div>
-        <div class="container">
+        <div class="container text-center">
             &copy; 2025 - NoVacancy - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>

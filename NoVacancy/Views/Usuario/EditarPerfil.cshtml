@@ -1,0 +1,38 @@
+@model NoVacancy.Models.Usuario
+@{
+    ViewBag.Title = "Editar Perfil";
+}
+<h2>Editar datos personales</h2>
+<form asp-action="EditarPerfil" method="post">
+    <div class="mb-3">
+        <label class="form-label">Nombre</label>
+        <input asp-for="Nombre" class="form-control" />
+        <span asp-validation-for="Nombre" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Calle</label>
+        <input asp-for="Calle" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Número</label>
+        <input asp-for="Numero" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Colonia</label>
+        <input asp-for="Colonia" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Ciudad</label>
+        <input asp-for="Ciudad" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Estado</label>
+        <input asp-for="Estado" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Código Postal</label>
+        <input asp-for="CodigoPostal" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+    <a href="@Url.Action("Perfil", "Usuario")" class="btn btn-secondary">Cancelar</a>
+</form>

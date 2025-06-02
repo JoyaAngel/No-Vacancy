@@ -9,10 +9,10 @@
 	string categoria = ViewBag.Categoria;
 }
 
-<div class="container my-5">
-	<div class="row align-items-center">
+<div class="container my-4 px-2 px-md-0">
+	<div class="row align-items-center gy-4">
 		<!-- Imagen -->
-		<div class="col-md-6 text-center">
+		<div class="col-12 col-md-6 text-center mb-3 mb-md-0">
 			<div id="imagen-producto">
 				<!-- Imagen principal, cambia con el color y miniaturas -->
 			</div>
@@ -20,30 +20,30 @@
 		</div>
 
 		<!-- Detalles del producto -->
-		<div class="col-md-6">
+		<div class="col-12 col-md-6">
 			<h4 class="fw-bold">@nombre</h4>
 			<p class="text-muted">@descripcion</p>
 			<p class="fw-semibold" id="precio-producto" style="display:none"></p>
 			<p class="mb-1">Categoría: <strong>@categoria</strong></p>
 			<p class="mb-1">Color:</p>
-			<div class="mb-3 d-flex gap-2" id="color-options">
+			<div class="mb-3 d-flex flex-wrap gap-2" id="color-options">
 				@foreach (var color in colores)
 				{
 					<button type="button" class="color-btn" style="width:32px;height:32px;border-radius:50%;border:2px solid #ccc;background:@color.Color.codigo" data-color-id="@color.Color.idColor" title="@color.Color.nombre"></button>
 				}
 			</div>
 			<p>Elige la talla:</p>
-			<div class="mb-3 d-flex gap-2" id="talla-options">
+			<div class="mb-3 d-flex flex-wrap gap-2" id="talla-options">
 				<!-- Aquí se llenarán las tallas según el color -->
 			</div>
 			<div id="stock-info" class="mb-2" style="display:none"></div>
 			<div class="mb-2">Total: <span id="total-producto">$0.00</span></div>
 			<!-- Cantidad y carrito -->
-			<div class="d-flex align-items-center">
+			<div class="d-flex flex-wrap align-items-center gap-2">
 				<button class="qty-btn" id="btn-restar">−</button>
 				<span class="mx-2" id="cantidad-seleccionada">1</span>
 				<button class="qty-btn" id="btn-sumar">+</button>
-				<button class="ms-3 add-to-cart" id="btn-add-cart">Añadir al carrito</button>
+				<button class="add-to-cart ms-0 ms-md-3 mt-2 mt-md-0" id="btn-add-cart" disabled style="background:#ccc; color:#888; cursor:not-allowed; border:1px solid #ccc;">Añadir al carrito</button>
 			</div>
 		</div>
 	</div>
@@ -158,20 +158,45 @@
 	function mostrarStockYPrecio() {
 		if (!colorSeleccionado || !tallaSeleccionada) return;
 		const variante = variantes.find(v => v.idColor === colorSeleccionado && v.idTalla === tallaSeleccionada);
+		const stockInfo = document.getElementById('stock-info');
+		const precioProducto = document.getElementById('precio-producto');
+		const btnAddCart = document.getElementById('btn-add-cart');
 		if (variante) {
-			document.getElementById('stock-info').style.display = '';
+			if (variante.cantidad <= 0) {
+				stockInfo.style.display = '';
+				stockInfo.innerHTML = '<span class="text-danger fw-bold">Sin existencias</span>';
+				precioProducto.style.display = 'none';
+				btnAddCart.disabled = true;
+				btnAddCart.style.background = '#ccc';
+				btnAddCart.style.color = '#888';
+				btnAddCart.style.cursor = 'not-allowed';
+				btnAddCart.style.border = '1px solid #ccc';
+				actualizarCantidad(0, 0, 0);
+				return;
+			}
+			stockInfo.style.display = '';
 			let info = `Stock: ${variante.cantidad}`;
 			if (variante.limite !== undefined && variante.limite !== null) {
 				info += ` | Límite de compra: ${variante.limite}`;
 			}
-			document.getElementById('stock-info').innerText = info;
-			document.getElementById('precio-producto').style.display = '';
-			document.getElementById('precio-producto').innerText = `$${variante.precio.toFixed(2)}`;
+			stockInfo.innerText = info;
+			precioProducto.style.display = '';
+			precioProducto.innerText = `$${variante.precio.toFixed(2)}`;
+			btnAddCart.disabled = false;
+			btnAddCart.style.background = '';
+			btnAddCart.style.color = '';
+			btnAddCart.style.cursor = '';
+			btnAddCart.style.border = '';
 			actualizarCantidad(1, variante.cantidad, variante.limite);
 		} else {
-			document.getElementById('stock-info').style.display = 'none';
-			document.getElementById('precio-producto').style.display = 'none';
-			actualizarCantidad(1, 1, 1);
+			stockInfo.style.display = 'none';
+			precioProducto.style.display = 'none';
+			btnAddCart.disabled = true;
+			btnAddCart.style.background = '#ccc';
+			btnAddCart.style.color = '#888';
+			btnAddCart.style.cursor = 'not-allowed';
+			btnAddCart.style.border = '1px solid #ccc';
+			actualizarCantidad(0, 0, 0);
 		}
 	}
 	function actualizarCantidad(nuevaCantidad, maxStock, maxLimite) {
@@ -245,6 +270,14 @@
 			const variante = variantes.find(v => v.idColor === colorSeleccionado && v.idTalla === tallaSeleccionada);
 			if (!variante) {
 				alert('Variante no disponible');
+				return;
+			}
+			if (variante.cantidad <= 0) {
+				alert('No hay existencias de este producto');
+				return;
+			}
+			if (cantidad > variante.cantidad) {
+				alert('No puedes añadir más productos de los que hay en stock');
 				return;
 			}
 			const data = new URLSearchParams();

@@ -1,0 +1,29 @@
+@{
+    ViewBag.Title = "Cambiar Contraseña";
+}
+<h2>Cambiar contraseña</h2>
+<form asp-action="CambiarContrasena" method="post">
+    <div class="mb-3">
+        <label class="form-label">Contraseña actual</label>
+        <input name="actual" type="password" class="form-control" required />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Nueva contraseña</label>
+        <input name="nueva" type="password" class="form-control" required />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Confirmar nueva contraseña</label>
+        <input name="confirmar" type="password" class="form-control" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Cambiar contraseña</button>
+    <a href="@Url.Action("Perfil", "Usuario")" class="btn btn-secondary">Cancelar</a>
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="text-danger mt-2">
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <div>@error.ErrorMessage</div>
+            }
+        </div>
+    }
+</form>

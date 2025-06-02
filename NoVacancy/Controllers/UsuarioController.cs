@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using NoVacancy.ViewModels;
 using Microsoft.AspNetCore.Authorization; //Separar las vistas de los modelos.
+using NoVacancy.Services;
 
 
 namespace NoVacancy.Controllers
@@ -16,12 +17,14 @@ namespace NoVacancy.Controllers
         //Servicios de identity
         private readonly SignInManager<Usuario> _signInManager;
         private readonly UserManager<Usuario> _userManager;
+        private readonly EmailService _emailService;
 
-        public UsuarioController(NoVacancyDbContext context, SignInManager<Usuario> signInManager, UserManager<Usuario> userManager)
+        public UsuarioController(NoVacancyDbContext context, SignInManager<Usuario> signInManager, UserManager<Usuario> userManager, EmailService emailService)
         {
             _context = context;
             _signInManager = signInManager;
             _userManager = userManager;
+            _emailService = emailService;
         }
 
         // GET: UsuarioController
@@ -95,6 +98,9 @@ namespace NoVacancy.Controllers
                         _context.CarritosCabecera.Add(carrito);
                         await _context.SaveChangesAsync();
                     }
+
+                    // Enviar correo de bienvenida
+                    await _emailService.SendEmailAsync(model.Email, "Bienvenido a No-Vacancy", $"<h2>¡Hola {model.Nombre}!</h2><p>Tu registro fue exitoso.</p>");
 
                     // Iniciar sesión automáticamente
                     await _signInManager.SignInAsync(usuario, isPersistent: false);
@@ -216,6 +222,146 @@ namespace NoVacancy.Controllers
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
+        }
+
+        // GET: UsuarioController/Perfil
+        [Authorize(Roles = "Cliente")]
+        public async Task<IActionResult> Perfil()
+        {
+            var usuarioId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (usuarioId == null)
+                return RedirectToAction("Login");
+
+            var usuario = await _userManager.FindByIdAsync(usuarioId);
+            if (usuario == null)
+                return NotFound();
+
+            // Cargar historial de pedidos
+            var pedidos = await _context.Pedidos
+                .Include(p => p.Carrito)
+                .Where(p => p.Carrito != null && p.Carrito.Id == usuarioId)
+                .OrderByDescending(p => p.FechaHoraPedido)
+                .ToListAsync();
+
+            // Cargar detalles de cada pedido
+            var pedidoIds = pedidos.Select(p => p.idPedido).ToList();
+            var detalles = await _context.Set<Detalle>()
+                .Where(d => pedidoIds.Contains(d.idPedido))
+                .ToListAsync();
+            foreach (var pedido in pedidos)
+            {
+                pedido.Detalle = detalles.FirstOrDefault(d => d.idPedido == pedido.idPedido);
+            }
+
+            ViewBag.Pedidos = pedidos;
+            return View(usuario);
+        }
+
+        // GET: UsuarioController/EditarPerfil
+        [Authorize(Roles = "Cliente")]
+        public async Task<IActionResult> EditarPerfil()
+        {
+            var usuarioId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (usuarioId == null)
+                return RedirectToAction("Login");
+
+            var usuario = await _userManager.FindByIdAsync(usuarioId);
+            if (usuario == null)
+                return NotFound();
+
+            return View(usuario);
+        }
+
+        // POST: UsuarioController/EditarPerfil
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Cliente")]
+        public async Task<IActionResult> EditarPerfil(Usuario usuarioEditado)
+        {
+            var usuarioId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (usuarioId == null || usuarioId != usuarioEditado.Id)
+                return Unauthorized();
+
+            var usuario = await _userManager.FindByIdAsync(usuarioId);
+            if (usuario == null)
+                return NotFound();
+
+            if (ModelState.IsValid)
+            {
+                usuario.Nombre = usuarioEditado.Nombre;
+                usuario.Calle = usuarioEditado.Calle;
+                usuario.Numero = usuarioEditado.Numero;
+                usuario.Colonia = usuarioEditado.Colonia;
+                usuario.Ciudad = usuarioEditado.Ciudad;
+                usuario.Estado = usuarioEditado.Estado;
+                usuario.CodigoPostal = usuarioEditado.CodigoPostal;
+                var result = await _userManager.UpdateAsync(usuario);
+                if (result.Succeeded)
+                    return RedirectToAction("Perfil");
+                foreach (var error in result.Errors)
+                    ModelState.AddModelError(string.Empty, error.Description);
+            }
+            return View(usuarioEditado);
+        }
+
+        // GET: UsuarioController/CambiarContrasena
+        [Authorize(Roles = "Cliente")]
+        public IActionResult CambiarContrasena()
+        {
+            return View();
+        }
+
+        // POST: UsuarioController/CambiarContrasena
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Cliente")]
+        public async Task<IActionResult> CambiarContrasena(string actual, string nueva, string confirmar)
+        {
+            var usuarioId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (usuarioId == null)
+                return RedirectToAction("Login");
+
+            var usuario = await _userManager.FindByIdAsync(usuarioId);
+            if (usuario == null)
+                return NotFound();
+
+            if (nueva != confirmar)
+            {
+                ModelState.AddModelError("", "La nueva contraseña y la confirmación no coinciden.");
+                return View();
+            }
+
+            var result = await _userManager.ChangePasswordAsync(usuario, actual, nueva);
+            if (result.Succeeded)
+                return RedirectToAction("Perfil");
+            foreach (var error in result.Errors)
+                ModelState.AddModelError(string.Empty, error.Description);
+            return View();
+        }
+
+        // GET: UsuarioController/DetallesPedido/{id}
+        [Authorize(Roles = "Cliente")]
+        public async Task<IActionResult> DetallesPedido(int id)
+        {
+            var usuarioId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            var pedido = await _context.Pedidos
+                .Include(p => p.Carrito)
+                .FirstOrDefaultAsync(p => p.idPedido == id && p.Carrito != null && p.Carrito.Id == usuarioId);
+            if (pedido == null)
+                return NotFound();
+
+            var lineas = await _context.CarritosLineas
+                .Where(l => l.idCarrito == pedido.idCarrito)
+                .Include(l => l.Producto)
+                .ThenInclude(p => p.Color)
+                .Include(l => l.Producto)
+                .ThenInclude(p => p.Talla)
+                .ToListAsync();
+
+            ViewBag.Lineas = lineas;
+            var detalle = await _context.Set<Detalle>().FirstOrDefaultAsync(d => d.idPedido == pedido.idPedido);
+            ViewBag.Detalle = detalle;
+            return View(pedido);
         }
     }
 }

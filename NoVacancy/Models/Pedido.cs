@@ -27,5 +27,7 @@ namespace NoVacancy.Models
         public int idCarrito { get; set; }
         public CarritoCabecera? Carrito { get; set; }
 
+        [NotMapped]
+        public Detalle? Detalle { get; set; }
     }
 }

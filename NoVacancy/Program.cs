@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using NoVacancy.Data;
 using NoVacancy.Models;
+using NoVacancy.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +35,10 @@ builder.Services.ConfigureApplicationCookie(options =>
     //TBD si esta línea se queda (crear la vista AccessDenied) o se va.
     //options.AccessDeniedPath = "/Usuario/AccessDenied";
 });
+
+// Configuración de EmailSettings y registro del servicio de email
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+builder.Services.AddTransient<EmailService>();
 
 var app = builder.Build();
 

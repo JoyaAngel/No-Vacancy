@@ -34,20 +34,33 @@ namespace NoVacancy.Controllers
             if (usuarioId == null)
                 return RedirectToAction("Login", "Usuario");
 
+            // Buscar el carrito más reciente del usuario que tenga líneas
             var carrito = await _context.CarritosCabecera
-                .Where(c => c.Id == usuarioId && !_context.Pedidos.Any(p => p.idCarrito == c.idCarrito))
+                .Where(c => c.Id == usuarioId)
                 .OrderByDescending(c => c.idCarrito)
                 .FirstOrDefaultAsync();
             if (carrito == null)
                 return View(new List<CarritoLineaViewModel>());
 
+            // Si el carrito más reciente no tiene líneas, buscar el anterior con líneas
             var lineas = await _context.CarritosLineas
                 .Where(l => l.idCarrito == carrito.idCarrito)
                 .Include(l => l.Producto)
-                .ThenInclude(p => p.Color)
-                .Include(l => l.Producto)
-                .ThenInclude(p => p.Talla)
                 .ToListAsync();
+            if (lineas.Count == 0)
+            {
+                // Buscar el carrito anterior con líneas
+                carrito = await _context.CarritosCabecera
+                    .Where(c => c.Id == usuarioId && _context.CarritosLineas.Any(l => l.idCarrito == c.idCarrito))
+                    .OrderByDescending(c => c.idCarrito)
+                    .FirstOrDefaultAsync();
+                if (carrito == null)
+                    return View(new List<CarritoLineaViewModel>());
+                lineas = await _context.CarritosLineas
+                    .Where(l => l.idCarrito == carrito.idCarrito)
+                    .Include(l => l.Producto)
+                    .ToListAsync();
+            }
 
             // Obtener ids de productos
             var productoIds = lineas.Select(l => l.idProducto).ToList();
@@ -57,6 +70,16 @@ namespace NoVacancy.Controllers
                 .GroupBy(img => img.idProducto)
                 .Select(g => new { idProducto = g.Key, Imagen = g.FirstOrDefault() })
                 .ToListAsync();
+
+            // Cargar Color y Talla manualmente para cada producto
+            foreach (var linea in lineas)
+            {
+                if (linea.Producto != null)
+                {
+                    linea.Producto.Color = await _context.Colores.FirstOrDefaultAsync(c => c.idColor == linea.Producto.idColor);
+                    linea.Producto.Talla = await _context.Tallas.FirstOrDefaultAsync(t => t.idTalla == linea.Producto.idTalla);
+                }
+            }
 
             var viewModel = lineas.Select(linea => {
                 var imgObj = imagenes.FirstOrDefault(i => i.idProducto == linea.idProducto)?.Imagen;

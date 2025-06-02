@@ -111,7 +111,100 @@ namespace NoVacancy.Controllers
                     return View(model);
                 }
 
-                for (int i = 0; i < model.Variantes.Count; i++)
+                // VALIDACIÓN Y UNIFICACIÓN DE VARIANTES Y TALLAS
+                if (model.Variantes != null)
+                {
+                    // Unificar variantes por color (IdColor o combinación de NuevoColor+NuevoCodigo)
+                    var variantesUnificadas = new List<NoVacancy.ViewModels.VarianteViewModel>();
+                    foreach (var variante in model.Variantes)
+                    {
+                        // Validar precio no negativo
+                        if (variante.Precio < 0)
+                        {
+                            ModelState.AddModelError($"Variantes", $"El precio no puede ser negativo.");
+                            break;
+                        }
+                        // Unificar tallas repetidas dentro de la variante
+                        if (variante.Tallas != null)
+                        {
+                            var tallasUnificadas = variante.Tallas
+                                .GroupBy(t => t.IdTalla)
+                                .Select(g => new NoVacancy.ViewModels.TallaViewModel
+                                {
+                                    IdTalla = g.Key,
+                                    Cantidad = g.Sum(x => x.Cantidad < 0 ? 0 : x.Cantidad),
+                                    Limite = g.Sum(x => x.Limite.HasValue && x.Limite.Value > 0 ? x.Limite.Value : 0)
+                                })
+                                .Where(t => t.IdTalla > 0)
+                                .ToList();
+                            variante.Tallas = tallasUnificadas;
+                        }
+                        // Buscar si ya existe una variante con el mismo color
+                        bool esNuevoColor = (variante.IdColor == null || variante.IdColor == 0);
+                        string claveColor = esNuevoColor ? $"nuevo:{variante.NuevoColor}|{variante.NuevoCodigo}" : $"id:{variante.IdColor}";
+                        var existente = variantesUnificadas.FirstOrDefault(v =>
+                            ((v.IdColor == variante.IdColor && !esNuevoColor) ||
+                            (v.IdColor == null && v.NuevoColor == variante.NuevoColor && v.NuevoCodigo == variante.NuevoCodigo))
+                        );
+                        if (existente != null)
+                        {
+                            if (variante.Tallas != null)
+                            {
+                                foreach (var talla in variante.Tallas)
+                                {
+                                    var tallaExistente = existente.Tallas.FirstOrDefault(t => t.IdTalla == talla.IdTalla);
+                                    if (tallaExistente != null)
+                                    {
+                                        tallaExistente.Cantidad += talla.Cantidad;
+                                        tallaExistente.Limite = (tallaExistente.Limite ?? 0) + (talla.Limite ?? 0);
+                                    }
+                                    else
+                                    {
+                                        existente.Tallas.Add(talla);
+                                    }
+                                }
+                            }
+                            // Unificar imágenes (opcional: solo mantener una lista sin duplicados por nombre)
+                            if (variante.Imagenes != null)
+                            {
+                                if (existente.Imagenes == null) existente.Imagenes = new List<IFormFile>();
+                                foreach (var img in variante.Imagenes)
+                                {
+                                    if (!existente.Imagenes.Any(e => e.FileName == img.FileName))
+                                        existente.Imagenes.Add(img);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            variantesUnificadas.Add(variante);
+                        }
+                    }
+                    model.Variantes = variantesUnificadas;
+                }
+                // Validar que no haya valores negativos en tallas
+                if (model.Variantes != null)
+                {
+                    foreach (var variante in model.Variantes)
+                    {
+                        if (variante.Precio < 0)
+                        {
+                            ModelState.AddModelError($"Variantes", $"El precio no puede ser negativo.");
+                        }
+                        if (variante.Tallas != null)
+                        {
+                            foreach (var talla in variante.Tallas)
+                            {
+                                if (talla.Cantidad < 0)
+                                    ModelState.AddModelError($"Variantes", $"La cantidad no puede ser negativa.");
+                                if (talla.Limite.HasValue && talla.Limite.Value < 0)
+                                    ModelState.AddModelError($"Variantes", $"El límite no puede ser negativo.");
+                            }
+                        }
+                    }
+                }
+
+                for (int i = 0; model.Variantes != null && i < model.Variantes.Count; i++)
                 {
                     var variante = model.Variantes[i];
                     int colorId = 0;
@@ -241,6 +334,14 @@ namespace NoVacancy.Controllers
         {
             if (id != producto.idProducto)
                 return NotFound();
+
+            // Validación de valores negativos
+            if (producto.precio < 0)
+                ModelState.AddModelError("precio", "El precio no puede ser negativo.");
+            if (producto.cantidad < 0)
+                ModelState.AddModelError("cantidad", "La cantidad no puede ser negativa.");
+            if (producto.limite.HasValue && producto.limite.Value < 0)
+                ModelState.AddModelError("limite", "El límite no puede ser negativo.");
 
             if (ModelState.IsValid)
             {

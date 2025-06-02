@@ -9,11 +9,11 @@
 <!-- Barra de búsqueda y filtros -->
 <form method="get" asp-action="Store" class="mb-4">
     <div class="row g-2 align-items-end">
-        <div class="col-md-4">
+        <div class="col-12 col-md-4">
             <label for="search" class="form-label">Buscar producto</label>
             <input type="text" class="form-control" id="search" name="search" value="@searchValue" placeholder="Nombre del producto">
         </div>
-        <div class="col-md-2">
+        <div class="col-12 col-md-2">
             <label for="categoria" class="form-label">Categoría</label>
             <select class="form-select" id="categoria" name="categoria">
                 <option value="">Todas</option>
@@ -27,7 +27,7 @@
                 }
             </select>
         </div>
-        <div class="col-md-2">
+        <div class="col-12 col-md-2">
             <label for="color" class="form-label">Color</label>
             <select class="form-select" id="color" name="color">
                 <option value="">Todos</option>
@@ -41,7 +41,7 @@
                 }
             </select>
         </div>
-        <div class="col-md-2">
+        <div class="col-12 col-md-2">
             <label for="talla" class="form-label">Talla</label>
             <select class="form-select" id="talla" name="talla">
                 <option value="">Todas</option>
@@ -55,8 +55,8 @@
                 }
             </select>
         </div>
-        <div class="col-md-2">
-            <button type="submit" class="btn btn-dark w-100">Filtrar</button>
+        <div class="col-12 col-md-2 d-grid">
+            <button type="submit" class="btn btn-dark w-100 mt-3 mt-md-0">Filtrar</button>
         </div>
     </div>
 </form>
@@ -72,6 +72,7 @@
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
             @foreach (var item in Model.Productos)
             {
+                var stock = item.Producto?.cantidad ?? 0;
                 <div class="col">
                     <div class="card h-100 text-center shadow-sm border-0">
                         @if (item.Imagenes != null && item.Imagenes.Any() && item.Imagenes.FirstOrDefault() != null)
@@ -88,6 +89,10 @@
                             <p class="mb-0 text-muted small">@(item.Producto?.Categoria?.nombre ?? "")</p>
                             <p class="mb-0 text-muted small">Color: @(item.Producto?.Color?.nombre ?? "")</p>
                             <p class="mb-0 text-muted small">Talla: @(item.Producto?.Talla?.nombre ?? "")</p>
+                            @if (stock <= 0)
+                            {
+                                <span class="badge bg-danger mb-2">Sin existencias</span>
+                            }
                             <a href="@Url.Action("Product_detail", "Home", new { nombre = item.Producto?.nombre })" class="btn btn-outline-dark mt-2 w-100">Ver detalles</a>
                         </div>
                     </div>
@@ -104,7 +109,7 @@
                 {
                     var active = i == Model.PaginaActual ? "active" : "";
                     <li class="page-item @active">
-                        <a class="page-link" href="@Url.Action("Store", new { search = searchValue, categoria = categoriaValue, color = colorValue, talla = tallaValue, pagina = i })">@i</a>
+                        <a class="page-link" href="@Url.Action("Store", new { search = searchValue, categoria = categoriaValue, color = colorValue, talla = tallaValue, precioMin = query["precioMin"], precioMax = query["precioMax"], pagina = i })">@i</a>
                     </li>
                 }
             </ul>

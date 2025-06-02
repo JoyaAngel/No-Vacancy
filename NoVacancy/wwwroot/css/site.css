@@ -131,3 +131,72 @@ footer {
     padding: 0.5rem 1.5rem;
     border-radius: 20px;
 }
+
+.ver-tienda-btn {
+    transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 16px 0 rgba(0,0,0,0.08);
+    border: none;
+}
+.ver-tienda-btn:hover, .ver-tienda-btn:focus {
+    background: #222;
+    color: #fff;
+    transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 8px 24px 0 rgba(0,0,0,0.12);
+    text-decoration: none;
+}
+.ver-tienda-btn i {
+    margin-right: 0.5rem;
+}
+@media (max-width: 576px) {
+    .navbar-brand {
+        font-size: 1rem;
+        padding-left: 0;
+        padding-right: 0;
+    }
+    .footer-links {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+    }
+    .footer-links a {
+        margin-right: 0 !important;
+        margin-bottom: 0.5rem;
+    }
+    .container, .container-fluid {
+        padding-left: 0.5rem !important;
+        padding-right: 0.5rem !important;
+    }
+    .navbar .nav-link, .navbar .dropdown-toggle {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+    .footer {
+        font-size: 0.8rem;
+    }
+    .ver-tienda-btn {
+        font-size: 1rem;
+        padding-left: 1.5rem !important;
+        padding-right: 1.5rem !important;
+    }
+    .ver-tienda-btn i {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 400px) {
+    .navbar-brand {
+        font-size: 0.9rem;
+    }
+}
+
+/* Homologar botones */
+.btn, .add-to-cart, .size-btn, .qty-btn {
+    border-radius: 20px !important;
+    font-size: 1rem;
+}
+
+/* Homologar inputs */
+input, select, textarea {
+    border-radius: 10px !important;
+}
