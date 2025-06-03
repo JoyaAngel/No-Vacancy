@@ -2,21 +2,27 @@ using Microsoft.AspNetCore.Mvc;
 using NoVacancy.Models;
 using NoVacancy.Data;
 using Microsoft.EntityFrameworkCore;
-using NoVacancy.Services;
+using NoVacancy.Services; // Ensure this using directive is present
 using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks; // Make sure this is also present for Task
 
 namespace NoVacancy.Controllers
 {
-    
+    // Make sure the Controller is correctly attributed if this is an API controller
+    // For example, if it's purely an API, it might have [ApiController] and [Route("api/[controller]")]
+    // Based on your current [HttpGet] and [HttpPost] attributes, it appears to be a mixed controller
+    // or an API controller depending on your routing setup.
+
     public class PedidoController : Controller
     {
         private readonly NoVacancyDbContext _context;
-        private readonly EmailService _emailService;
+        private readonly IEmailService _emailService; // CHANGED: Now using the interface
         private readonly UserManager<Usuario> _userManager;
-        public PedidoController(NoVacancyDbContext context, EmailService emailService, UserManager<Usuario> userManager)
+
+        public PedidoController(NoVacancyDbContext context, IEmailService emailService, UserManager<Usuario> userManager)
         {
             _context = context;
-            _emailService = emailService;
+            _emailService = emailService; // No change needed here after the type change
             _userManager = userManager;
         }
 
@@ -44,6 +50,7 @@ namespace NoVacancy.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+
             // 1. Crear el carrito si no existe
             var carrito = await _context.CarritosCabecera.FirstOrDefaultAsync(c => c.idCarrito == pedido.idCarrito);
             if (carrito == null)
@@ -53,6 +60,7 @@ namespace NoVacancy.Controllers
                 await _context.SaveChangesAsync();
                 pedido.idCarrito = carrito.idCarrito;
             }
+
             // 2. Crear las líneas del carrito si no existen
             var lineasExistentes = await _context.CarritosLineas.Where(l => l.idCarrito == pedido.idCarrito).ToListAsync();
             if (lineasExistentes.Count == 0 && productosPedido != null)
@@ -69,6 +77,7 @@ namespace NoVacancy.Controllers
                 }
                 await _context.SaveChangesAsync();
             }
+
             // 3. Crear el pedido
             _context.Pedidos.Add(pedido);
             await _context.SaveChangesAsync();
@@ -104,7 +113,8 @@ namespace NoVacancy.Controllers
             await _context.SaveChangesAsync();
 
             // Enviar email de confirmación de pedido
-            var usuarioId = pedido.Carrito?.Id ?? carrito.Id;
+            // It's important to make sure pedido.Carrito or carrito is populated correctly with the UserId
+            var usuarioId = pedido.Carrito?.Id ?? carrito.Id; // This assumes Carrito.Id holds the UserId
             if (!string.IsNullOrEmpty(usuarioId))
             {
                 var usuario = await _userManager.FindByIdAsync(usuarioId);
@@ -125,6 +135,7 @@ namespace NoVacancy.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+
             // 1. Crear el carrito si no existe
             var carrito = await _context.CarritosCabecera.FirstOrDefaultAsync(c => c.idCarrito == pedido.idCarrito);
             if (carrito == null)
@@ -132,11 +143,13 @@ namespace NoVacancy.Controllers
                 var userId = pedido.Carrito?.Id ?? productosPedido.FirstOrDefault()?.Carrito?.Id;
                 if (string.IsNullOrEmpty(userId))
                     return BadRequest("No se proporcionó usuario para el carrito");
+
                 carrito = new CarritoCabecera { Id = userId };
                 _context.CarritosCabecera.Add(carrito);
                 await _context.SaveChangesAsync();
                 pedido.idCarrito = carrito.idCarrito;
             }
+
             // 2. Crear las líneas del carrito si no existen
             var lineasExistentes = await _context.CarritosLineas.Where(l => l.idCarrito == pedido.idCarrito).ToListAsync();
             if (lineasExistentes.Count == 0 && productosPedido != null)
@@ -153,6 +166,7 @@ namespace NoVacancy.Controllers
                 }
                 await _context.SaveChangesAsync();
             }
+
             // 3. Crear el pedido
             _context.Pedidos.Add(pedido);
             await _context.SaveChangesAsync();
@@ -211,6 +225,7 @@ namespace NoVacancy.Controllers
                 return BadRequest();
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+
             _context.Entry(pedido).State = EntityState.Modified;
             try
             {
@@ -233,6 +248,7 @@ namespace NoVacancy.Controllers
             var pedido = await _context.Pedidos.FindAsync(id);
             if (pedido == null)
                 return NotFound();
+
             _context.Pedidos.Remove(pedido);
             await _context.SaveChangesAsync();
             return NoContent();

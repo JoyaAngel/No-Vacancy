@@ -37,8 +37,8 @@ builder.Services.ConfigureApplicationCookie(options =>
 });
 
 // Configuración de EmailSettings y registro del servicio de email
-builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
-builder.Services.AddTransient<EmailService>();
+builder.Services.Configure<NoVacancy.Services.EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+builder.Services.AddTransient<IEmailService, EmailService>();
 
 var app = builder.Build();
 
