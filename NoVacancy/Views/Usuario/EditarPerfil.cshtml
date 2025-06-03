@@ -4,6 +4,8 @@
 }
 <h2>Editar datos personales</h2>
 <form asp-action="EditarPerfil" method="post">
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="Rol" />
     <div class="mb-3">
         <label class="form-label">Nombre</label>
         <input asp-for="Nombre" class="form-control" />

@@ -253,8 +253,14 @@ namespace NoVacancy.Data
                     // Pedidos y detalles
                     var pedidosSeed = new[]
                     {
-                        new Pedido { idCarrito = carrito1.idCarrito, rfc = "JUAP800101XXX", regimen = "General", codigoPostal = "12345" },
-                        new Pedido { idCarrito = carrito2.idCarrito, rfc = "ANAL900202YYY", regimen = "General", codigoPostal = "54321" }
+                        new Pedido {
+                            idCarrito = carrito1.idCarrito, rfc = "JUAP800101XXX", regimen = "General", codigoPostal = "12345",
+                            Calle = usuario1.Calle, Numero = usuario1.Numero, Colonia = usuario1.Colonia, Ciudad = usuario1.Ciudad, Estado = usuario1.Estado, CodigoPostalEnvio = usuario1.CodigoPostal
+                        },
+                        new Pedido {
+                            idCarrito = carrito2.idCarrito, rfc = "ANAL900202YYY", regimen = "General", codigoPostal = "54321",
+                            Calle = usuario2.Calle, Numero = usuario2.Numero, Colonia = usuario2.Colonia, Ciudad = usuario2.Ciudad, Estado = usuario2.Estado, CodigoPostalEnvio = usuario2.CodigoPostal
+                        }
                     };
                     foreach (var pedido in pedidosSeed)
                     {
@@ -403,7 +409,18 @@ namespace NoVacancy.Data
                 }
                 for (int i = 0; i < 3; i++)
                 {
-                    var pedido = new Pedido { idCarrito = carrito.idCarrito, rfc = $"RFC{usuario.Id.Substring(0,4)}{pedidoIndex}", regimen = "General", codigoPostal = $"{10000 + pedidoIndex}" };
+                    var pedido = new Pedido {
+                        idCarrito = carrito.idCarrito,
+                        rfc = $"RFC{usuario.Id.Substring(0,4)}{pedidoIndex}",
+                        regimen = "General",
+                        codigoPostal = $"{10000 + pedidoIndex}",
+                        Calle = usuario.Calle,
+                        Numero = usuario.Numero,
+                        Colonia = usuario.Colonia,
+                        Ciudad = usuario.Ciudad,
+                        Estado = usuario.Estado,
+                        CodigoPostalEnvio = usuario.CodigoPostal
+                    };
                     if (!context.Pedidos.Any(p => p.idCarrito == carrito.idCarrito && p.codigoPostal == pedido.codigoPostal))
                     {
                         context.Pedidos.Add(pedido);
@@ -548,7 +565,13 @@ namespace NoVacancy.Data
                         idCarrito = carrito.idCarrito,
                         rfc = $"RFC{usuario.Id.Substring(0,4)}{pedidoAutoIndex}",
                         regimen = "General",
-                        codigoPostal = $"{random.Next(10000, 99999)}"
+                        codigoPostal = $"{random.Next(10000, 99999)}",
+                        Calle = usuario.Calle,
+                        Numero = usuario.Numero,
+                        Colonia = usuario.Colonia,
+                        Ciudad = usuario.Ciudad,
+                        Estado = usuario.Estado,
+                        CodigoPostalEnvio = usuario.CodigoPostal
                     };
                     context.Pedidos.Add(pedido);
                     context.SaveChanges();

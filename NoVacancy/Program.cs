@@ -11,7 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<NoVacancyDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("NoVacancy")));
 
-builder.Services.AddControllersWithViews();
+// builder.Services.AddControllersWithViews();
 
 //Agregar identity
 builder.Services.AddIdentity<Usuario, IdentityRole>()
@@ -32,8 +32,7 @@ builder.Services.AddSession();
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/Usuario/Login";
-    //TBD si esta línea se queda (crear la vista AccessDenied) o se va.
-    //options.AccessDeniedPath = "/Usuario/AccessDenied";
+    options.AccessDeniedPath = "/Usuario/AccessDenied";
 });
 
 // Configuración de EmailSettings y registro del servicio de email

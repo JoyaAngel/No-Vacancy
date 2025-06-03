@@ -323,13 +323,28 @@ namespace NoVacancy.Controllers
                 usuario.Ciudad = usuarioEditado.Ciudad;
                 usuario.Estado = usuarioEditado.Estado;
                 usuario.CodigoPostal = usuarioEditado.CodigoPostal;
+                // Mantener el rol original
+                usuario.Rol = usuario.Rol;
                 var result = await _userManager.UpdateAsync(usuario);
                 if (result.Succeeded)
                     return RedirectToAction("Perfil");
                 foreach (var error in result.Errors)
                     ModelState.AddModelError(string.Empty, error.Description);
+            } else {
+                // Mostrar errores de validación
+                foreach (var key in ModelState.Keys)
+                {
+                    var errors = ModelState[key]?.Errors;
+                    if (errors != null)
+                    {
+                        foreach (var error in errors)
+                        {
+                            System.Diagnostics.Debug.WriteLine($"[ModelState] {key}: {error.ErrorMessage}");
+                        }
+                    }
+                }
             }
-            return View(usuarioEditado);
+            return View(usuario);
         }
 
         // GET: UsuarioController/CambiarContrasena
@@ -401,6 +416,17 @@ namespace NoVacancy.Controllers
             ViewBag.ReseniasPorProducto = reseniasPorProducto;
 
             return View(pedido);
+        }
+
+        // GET: UsuarioController/DebugIdentity
+        [AllowAnonymous]
+        public IActionResult DebugIdentity()
+        {
+            var isAuthenticated = User.Identity?.IsAuthenticated ?? false;
+            var name = User.Identity?.Name;
+            var claims = User.Claims.Select(c => $"{c.Type}: {c.Value}").ToList();
+            var roles = User.IsInRole("Cliente") ? "Cliente" : "(no Cliente)";
+            return Content($"Authenticated: {isAuthenticated}\nName: {name}\nRoles: {roles}\nClaims:\n" + string.Join("\n", claims));
         }
     }
 }

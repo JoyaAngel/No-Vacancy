@@ -1,0 +1,9 @@
+@{
+    ViewBag.Title = "Acceso Denegado";
+}
+<h2>Acceso Denegado</h2>
+<div class="alert alert-danger">
+    No tienes permisos para acceder a esta página.<br />
+    Si crees que esto es un error, contacta al administrador.
+</div>
+<a href="@Url.Action("Index", "Home")" class="btn btn-primary">Volver al inicio</a>
