@@ -433,6 +433,7 @@ namespace NoVacancy.Data
                 "playera_mlaria.webp",
                 "playera_negra.png",
                 "raton.webp",
+                "turtle.png",
                 "vestido_rojo.jpg"
             };
             var todosProductos = context.Productos.ToList();
