@@ -54,7 +54,8 @@ namespace NoVacancy.Controllers
         [AllowAnonymous]
         public IActionResult Register()
         {
-            return View();
+            var model = new RegistroUsuarioViewModel { Rol = "Cliente" };
+            return View(model);
         }
 
 
@@ -64,11 +65,16 @@ namespace NoVacancy.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Register(RegistroUsuarioViewModel model)
         {
+            System.Diagnostics.Debug.WriteLine("[DEBUG] Entró al método POST Register");
+            // Forzar el rol a 'Cliente' siempre
+            model.Rol = "Cliente";
             if (ModelState.IsValid)
             {
+                System.Diagnostics.Debug.WriteLine("[DEBUG] ModelState válido");
                 var existe = await _userManager.FindByEmailAsync(model.Email);
                 if (existe != null)
                 {
+                    System.Diagnostics.Debug.WriteLine("[DEBUG] Correo ya registrado");
                     ModelState.AddModelError("Email", "El correo ya está registrado.");
                     return View(model);
                 }
@@ -78,7 +84,13 @@ namespace NoVacancy.Controllers
                     UserName = model.Email,
                     Email = model.Email,
                     Nombre = model.Nombre,
-                    Rol = model.Rol
+                    Rol = model.Rol,
+                    Calle = model.Calle,
+                    Numero = model.Numero,
+                    Colonia = model.Colonia,
+                    Ciudad = model.Ciudad,
+                    Estado = model.Estado,
+                    CodigoPostal = model.CodigoPostal
                 };
 
                 var result = await _userManager.CreateAsync(usuario, model.Password);
@@ -118,7 +130,21 @@ namespace NoVacancy.Controllers
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
-
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("[DEBUG] ModelState inválido");
+                foreach (var key in ModelState.Keys)
+                {
+                    var errors = ModelState[key]?.Errors;
+                    if (errors != null)
+                    {
+                        foreach (var error in errors)
+                        {
+                            System.Diagnostics.Debug.WriteLine($"[ModelState] {key}: {error.ErrorMessage}");
+                        }
+                    }
+                }
+            }
             return View(model);
         }
 
@@ -133,20 +159,23 @@ namespace NoVacancy.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AllowAnonymous]
-        public async Task<IActionResult> Login(string correo, string constrasenia)
+        public async Task<IActionResult> Login(LoginViewModel model)
         {
-            var usuario = await _userManager.FindByEmailAsync(correo);
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var usuario = await _userManager.FindByEmailAsync(model.Correo);
             if (usuario != null)
             {
-                var result = await _signInManager.PasswordSignInAsync(usuario, constrasenia, isPersistent: false, lockoutOnFailure: false);
+                var result = await _signInManager.PasswordSignInAsync(usuario, model.Contrasenia, isPersistent: false, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
                     return RedirectToAction("Index", "Home");
                 }
             }
-
             ViewBag.Error = "Correo o contraseña incorrectos.";
-            return View();
+            return View(model);
         }
 
         // GET: UsuarioController/Edit/{Id}

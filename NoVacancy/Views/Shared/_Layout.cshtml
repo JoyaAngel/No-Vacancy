@@ -13,15 +13,17 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom px-2 px-md-4">
-            <div class="container-fluid d-flex justify-content-between align-items-center flex-wrap">
-                <a class="nav-link order-1 order-md-0" href="#" title="Buscar">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom px-2 px-md-4 position-relative">
+            <div class="container-fluid d-flex justify-content-between align-items-center flex-wrap position-relative">
+                <!-- Ícono de lupa (buscador) -->
+                <a class="nav-link order-1 order-md-0" href="#" title="Buscar" data-bs-toggle="modal" data-bs-target="#searchModal">
                     <i class="bi bi-search fs-4"></i>
                 </a>
 
-                <a class="navbar-brand mx-auto fw-bold order-0 order-md-1 text-center" href="@Url.Action("Index", "Home")" style="text-decoration:none;color:inherit;cursor:pointer;">No Vacancy</a>
+                <!-- Logo centrado absolutamente -->
+                <a class="navbar-brand fw-bold text-center position-absolute top-50 start-50 translate-middle" href="@Url.Action("Index", "Home")" style="text-decoration:none;color:inherit;cursor:pointer;z-index:2;">No Vacancy</a>
 
-                <div class="d-flex align-items-center order-2 order-md-2 mt-2 mt-md-0">
+                <div class="d-flex align-items-center order-2 order-md-2 mt-2 mt-md-0" style="z-index:3;">
                     <!-- Botón de Historial (SOLO para Admin, NO para Cliente) -->
                     @if (User.Identity != null && User.Identity.IsAuthenticated && User.IsInRole("Administrador"))
                     {
@@ -83,8 +85,52 @@
         <div style="border-bottom: 2px solid black"></div>
     </header>
 
+    <!-- Modal de búsqueda -->
+    <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="searchModalLabel">Buscar productos</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+          </div>
+          <div class="modal-body">
+            <form id="searchForm">
+              <div class="input-group">
+                <input type="text" class="form-control" id="searchInput" name="search" placeholder="¿Qué estás buscando?" aria-label="Buscar" autofocus>
+                <button class="btn btn-dark" type="submit"><i class="bi bi-search"></i></button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      // Enfocar el input al abrir el modal
+      var searchModal = document.getElementById('searchModal');
+      if (searchModal) {
+        searchModal.addEventListener('shown.bs.modal', function () {
+          var input = searchModal.querySelector('input');
+          if(input) input.focus();
+        });
+      }
+      // Redirigir al hacer submit en el buscador
+      var searchForm = document.getElementById('searchForm');
+      if (searchForm) {
+        searchForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          var input = document.getElementById('searchInput');
+          var value = input ? input.value.trim() : '';
+          if(value.length > 0) {
+            window.location.href = '/Home/Store?search=' + encodeURIComponent(value);
+          } else {
+            window.location.href = '/Home/Store';
+          }
+        });
+      }
+    </script>
+
     <div class="container-fluid px-2 px-md-4">
-        <main role="main" class="pb-3">
+        <main role="main" class="pb-3 mt-4">
             @RenderBody()
         </main>
     </div>
