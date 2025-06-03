@@ -1,0 +1,28 @@
+﻿@model NoVacancy.ViewModels.RecuperarContraseniaViewModel
+@{
+    ViewData["Title"] = "Olvidé mi contraseña";
+}
+
+<div class="container my-5 form-container">
+    <h4 class="fw-bold">Recuperar contraseña</h4>
+
+    @if (TempData["Mensaje"] != null)
+    {
+        <div class="alert alert-info">@TempData["Mensaje"]</div>
+    }
+
+    @using (Html.BeginForm("OlvideContrasenia", "Usuario", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="mb-3">
+            <label class="form-label">Correo electrónico</label>
+            @Html.TextBoxFor(m => m.Correo, new { @class = "form-control", type = "email", required = "required" })
+            @Html.ValidationMessageFor(m => m.Correo, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-btn-center">
+            <button type="submit" class="btn btn-dark w-100 py-2 fs-5 mt-3">Enviar enlace</button>
+        </div>
+    }
+</div>

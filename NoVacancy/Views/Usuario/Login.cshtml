@@ -26,6 +26,11 @@
 			@Html.PasswordFor(m => m.Contrasenia, new { @class = "form-control", required = "required" })
 			@Html.ValidationMessageFor(m => m.Contrasenia, "", new { @class = "text-danger" })
 		</div>
+		<div class="text-end">
+			<a href="@Url.Action("OlvideContrasenia", "Usuario")" class="text-decoration-none text-secondary small">
+				¿Olvidaste tu contraseña?
+			</a>
+		</div>
 		<div class="form-btn-center">
 			<button type="submit" class="btn btn-dark w-100 py-2 fs-5 mt-3">Iniciar sesión</button>
 		</div>

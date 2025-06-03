@@ -428,5 +428,97 @@ namespace NoVacancy.Controllers
             var roles = User.IsInRole("Cliente") ? "Cliente" : "(no Cliente)";
             return Content($"Authenticated: {isAuthenticated}\nName: {name}\nRoles: {roles}\nClaims:\n" + string.Join("\n", claims));
         }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult OlvideContrasenia()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [AllowAnonymous]
+        public async Task<IActionResult> OlvideContrasenia(RecuperarContraseniaViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var usuario = await _userManager.FindByEmailAsync(model.Correo);
+            if (usuario == null)
+            {
+                // No revelamos que el usuario no existe por seguridad
+                TempData["Mensaje"] = "Si el correo está registrado, se enviará un enlace para restablecer la contraseña.";
+                return RedirectToAction(nameof(OlvideContrasenia));
+            }
+
+            // Generar token de reseteo de contraseña
+            var token = await _userManager.GeneratePasswordResetTokenAsync(usuario);
+
+            // Crear enlace de reseteo
+            var callbackUrl = Url.Action(
+            "RestablecerContrasenia",
+            "Usuario",
+            new { email = usuario.Email, token = token },
+            protocol: HttpContext.Request.Scheme);
+
+
+            // Enviar correo con el enlace
+            var mensaje = $@"
+            <h2>Recuperar contraseña</h2>
+            <p>Haz clic en el siguiente enlace para restablecer tu contraseña:</p>
+            <p><a href='{callbackUrl}'>Restablecer contraseña</a></p>";
+
+            await _emailService.SendEmailAsync(model.Correo, "Restablecer contraseña - No-Vacancy", mensaje);
+
+            TempData["Mensaje"] = "Si el correo está registrado, se enviará un enlace para restablecer la contraseña.";
+            return RedirectToAction(nameof(OlvideContrasenia));
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult RestablecerContrasenia(string email, string token)
+        {
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(token))
+                return BadRequest("Faltan datos para restablecer la contraseña.");
+
+            var model = new RestablecerContraseniaViewModel
+            {
+                Email = email,
+                Token = token
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RestablecerContrasenia(RestablecerContraseniaViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var usuario = await _userManager.FindByEmailAsync(model.Email);
+            if (usuario == null)
+            {
+                TempData["Mensaje"] = "La cuenta no existe.";
+                return RedirectToAction("Login");
+            }
+
+            var resultado = await _userManager.ResetPasswordAsync(usuario, model.Token, model.NuevaContrasenia);
+            if (resultado.Succeeded)
+            {
+                TempData["Mensaje"] = "Tu contraseña fue restablecida correctamente.";
+                return RedirectToAction("Login");
+            }
+
+            foreach (var error in resultado.Errors)
+                ModelState.AddModelError(string.Empty, error.Description);
+
+            return View(model);
+        }
+
+
     }
 }
