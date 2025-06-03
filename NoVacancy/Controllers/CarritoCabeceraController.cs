@@ -1,15 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NoVacancy.Models;
 using NoVacancy.Data;
+using NoVacancy.Services;
+using System.Security.Claims;
 
 namespace NoVacancy.Controllers
 {
     public class CarritoCabeceraController : Controller
     {
         readonly NoVacancyDbContext _context;
-        public CarritoCabeceraController(NoVacancyDbContext context)
+        readonly IEmailService _emailService;
+
+        public CarritoCabeceraController(NoVacancyDbContext context, IEmailService emailService)
         {
             _context = context;
+            _emailService = emailService;
         }
 
         // GET: CarritosCabecera
@@ -25,14 +30,14 @@ namespace NoVacancy.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            
+
             _context.CarritosCabecera.Add(carritoCabecera);
             _context.SaveChanges();
             return Ok(carritoCabecera);
         }
 
         [HttpPost]
-        public IActionResult ConfirmarPedido(
+        public async Task<IActionResult> ConfirmarPedido(
             [FromForm] bool solicitarFactura,
             [FromForm] string? rfc,
             [FromForm] string? regimenFiscal,
@@ -44,22 +49,23 @@ namespace NoVacancy.Controllers
             [FromForm] string Estado,
             [FromForm] string CodigoPostalEnvio)
         {
-            string? usuarioId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            string? usuarioId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            string? correoUsuario = User.FindFirst(ClaimTypes.Email)?.Value;
+
             if (string.IsNullOrEmpty(usuarioId))
                 return RedirectToAction("Login", "Usuario");
 
-            // Validación de campos de factura
             if (solicitarFactura && (string.IsNullOrWhiteSpace(rfc) || string.IsNullOrWhiteSpace(regimenFiscal) || string.IsNullOrWhiteSpace(codigoPostal)))
             {
                 TempData["Error"] = "Para solicitar factura debes llenar RFC, Régimen fiscal y Código postal.";
                 return RedirectToAction("Shopping_cart", "CarritoLinea");
             }
 
-            // Buscar el carrito activo del usuario (el más reciente sin pedido asociado)
             var carrito = _context.CarritosCabecera
                 .Where(c => c.Id == usuarioId && !_context.Pedidos.Any(p => p.idCarrito == c.idCarrito))
                 .OrderByDescending(c => c.idCarrito)
                 .FirstOrDefault();
+
             if (carrito == null)
             {
                 TempData["Error"] = "No se encontró un carrito para este usuario.";
@@ -67,33 +73,31 @@ namespace NoVacancy.Controllers
             }
 
             var lineas = _context.CarritosLineas.Where(l => l.idCarrito == carrito.idCarrito).ToList();
-            // Guardar productos inválidos para reinsertar en el nuevo carrito
             var lineasInvalidas = new List<(CarritoLinea linea, int cantidadNoProcesada)>();
+
             foreach (var linea in lineas)
             {
                 var producto = _context.Productos.FirstOrDefault(p => p.idProducto == linea.idProducto);
                 if (producto == null || producto.cantidad <= 0)
                 {
-                    // No hay stock, transfiere toda la cantidad
                     lineasInvalidas.Add((linea, linea.cantidad));
                 }
                 else if (linea.cantidad > producto.cantidad)
                 {
-                    // Hay stock parcial, procesa lo posible y transfiere el resto
                     int cantidadProcesable = producto.cantidad;
                     int cantidadNoProcesada = linea.cantidad - cantidadProcesable;
                     if (cantidadNoProcesada > 0)
                         lineasInvalidas.Add((linea, cantidadNoProcesada));
-                    // Ajusta la línea para que solo procese la cantidad posible
                     linea.cantidad = cantidadProcesable;
                 }
             }
-            // 1. Si hay productos inválidos, crear el nuevo carrito y transferirlos
+
             if (lineasInvalidas.Count > 0)
             {
                 var nuevoCarrito = new CarritoCabecera { Id = usuarioId };
                 _context.CarritosCabecera.Add(nuevoCarrito);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
+
                 foreach (var (lineaInvalida, cantidadNoProcesada) in lineasInvalidas)
                 {
                     var producto = _context.Productos.FirstOrDefault(p => p.idProducto == lineaInvalida.idProducto);
@@ -107,11 +111,11 @@ namespace NoVacancy.Controllers
                         };
                         _context.CarritosLineas.Add(nuevaLinea);
                     }
-                    // Eliminar la línea inválida del carrito original
                     _context.CarritosLineas.Remove(lineaInvalida);
                 }
-                _context.SaveChanges();
-                // Actualizar la lista de líneas después de eliminar las inválidas
+
+                await _context.SaveChangesAsync();
+
                 lineas = _context.CarritosLineas.Where(l => l.idCarrito == carrito.idCarrito).ToList();
                 if (lineas.Count == 0)
                 {
@@ -120,7 +124,6 @@ namespace NoVacancy.Controllers
                 }
             }
 
-            // 2. Procesar los productos válidos (restar stock, crear pedido, detalle, etc.)
             double total = 0;
             foreach (var linea in lineas)
             {
@@ -134,7 +137,7 @@ namespace NoVacancy.Controllers
                     _context.Productos.Update(producto);
                 }
             }
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             var pedido = new Pedido
             {
@@ -151,7 +154,7 @@ namespace NoVacancy.Controllers
                 codigoPostal = solicitarFactura ? codigoPostal : null
             };
             _context.Pedidos.Add(pedido);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             var detalle = new Detalle
             {
@@ -159,14 +162,10 @@ namespace NoVacancy.Controllers
                 idPedido = pedido.idPedido
             };
             _context.Set<Detalle>().Add(detalle);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
-            // 3. Ya NO eliminar las líneas procesadas del carrito original (deja las líneas válidas para el historial)
-
-            // 4. Crear el nuevo carrito vacío para el usuario (si no se creó antes)
             if (lineasInvalidas.Count == 0)
             {
-                // Solo crear un nuevo carrito si el usuario NO tiene ya un carrito sin líneas y sin pedido asociado
                 var existeCarritoVacio = _context.CarritosCabecera
                     .Where(c => c.Id == usuarioId && !_context.Pedidos.Any(p => p.idCarrito == c.idCarrito))
                     .OrderByDescending(c => c.idCarrito)
@@ -177,8 +176,21 @@ namespace NoVacancy.Controllers
                 {
                     var nuevoCarrito = new CarritoCabecera { Id = usuarioId };
                     _context.CarritosCabecera.Add(nuevoCarrito);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                 }
+            }
+
+            // ✅ Envío de correo
+            if (!string.IsNullOrEmpty(correoUsuario))
+            {
+                string asunto = "Confirmación de tu pedido en NoVacancy";
+                string mensajeHtml = $@"
+                    <h2>¡Gracias por tu compra!</h2>
+                    <p>Tu pedido con ID <strong>{pedido.idPedido}</strong> fue confirmado correctamente el {pedido.FechaHoraPedido}.</p>
+                    <p><strong>Total:</strong> ${total:N2}</p>
+                    <p><strong>Enviado a:</strong> {Calle} {Numero}, {Colonia}, {Ciudad}, {Estado}, CP: {CodigoPostalEnvio}</p>";
+
+                await _emailService.SendEmailAsync(correoUsuario, asunto, mensajeHtml);
             }
 
             TempData["PedidoId"] = pedido.idPedido;

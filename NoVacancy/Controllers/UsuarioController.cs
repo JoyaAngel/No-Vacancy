@@ -4,9 +4,8 @@ using NoVacancy.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using NoVacancy.ViewModels;
-using Microsoft.AspNetCore.Authorization; //Separar las vistas de los modelos.
-using NoVacancy.Services;
-
+using Microsoft.AspNetCore.Authorization;
+using NoVacancy.Services; // Ensure this using directive is present
 
 namespace NoVacancy.Controllers
 {
@@ -14,12 +13,12 @@ namespace NoVacancy.Controllers
     {
         private readonly NoVacancyDbContext _context;
 
-        //Servicios de identity
+        // Servicios de identity
         private readonly SignInManager<Usuario> _signInManager;
         private readonly UserManager<Usuario> _userManager;
-        private readonly EmailService _emailService;
+        private readonly IEmailService _emailService;
 
-        public UsuarioController(NoVacancyDbContext context, SignInManager<Usuario> signInManager, UserManager<Usuario> userManager, EmailService emailService)
+        public UsuarioController(NoVacancyDbContext context, SignInManager<Usuario> signInManager, UserManager<Usuario> userManager, IEmailService emailService) // MODIFICACIÓN 2: Cambiado de EmailService a IEmailService en el constructor
         {
             _context = context;
             _signInManager = signInManager;
@@ -31,7 +30,7 @@ namespace NoVacancy.Controllers
         [AllowAnonymous]
         public IActionResult Index()
         {
-            var usuarios = _userManager.Users.ToList(); 
+            var usuarios = _userManager.Users.ToList();
             return View(usuarios);
         }
 
