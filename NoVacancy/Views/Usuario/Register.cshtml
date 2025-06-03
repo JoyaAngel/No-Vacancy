@@ -40,26 +40,32 @@
         <div class="mb-3">
             <label class="form-label">Calle</label>
             @Html.TextBoxFor(m => m.Calle, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Calle, "", new { @class = "text-danger" })
         </div>
         <div class="mb-3">
             <label class="form-label">Número</label>
             @Html.TextBoxFor(m => m.Numero, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Numero, "", new { @class = "text-danger" })
         </div>
         <div class="mb-3">
             <label class="form-label">Colonia</label>
             @Html.TextBoxFor(m => m.Colonia, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Colonia, "", new { @class = "text-danger" })
         </div>
         <div class="mb-3">
             <label class="form-label">Ciudad</label>
             @Html.TextBoxFor(m => m.Ciudad, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Ciudad, "", new { @class = "text-danger" })
         </div>
         <div class="mb-3">
             <label class="form-label">Estado</label>
             @Html.TextBoxFor(m => m.Estado, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Estado, "", new { @class = "text-danger" })
         </div>
         <div class="mb-3">
             <label class="form-label">Código Postal</label>
             @Html.TextBoxFor(m => m.CodigoPostal, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.CodigoPostal, "", new { @class = "text-danger" })
         </div>
         <div class="form-btn-center">
             <button type="submit" class="btn btn-dark w-100 py-2 fs-5 mt-3">Registrarse</button>
