@@ -10,73 +10,71 @@
 }
 
 <div class="container my-4 px-2 px-md-0">
-	<div class="row align-items-center gy-4">
-		<!-- Imagen -->
-		<div class="col-12 col-md-6 text-center mb-3 mb-md-0">
-			<div id="imagen-producto">
-				<!-- Imagen principal, cambia con el color y miniaturas -->
-			</div>
-			<div id="miniaturas" class="d-flex justify-content-center gap-2 mt-3"></div>
-		</div>
-
-		<!-- Detalles del producto -->
-		<div class="col-12 col-md-6">
-			<h4 class="fw-bold">@nombre</h4>
-			<p class="text-muted">@descripcion</p>
-			<p class="fw-semibold" id="precio-producto" style="display:none"></p>
-			<p class="mb-1">Categoría: <strong>@categoria</strong></p>
-			<p class="mb-1">Color:</p>
-			<div class="mb-3 d-flex flex-wrap gap-2" id="color-options">
-				@foreach (var color in colores)
-				{
-					<button type="button" class="color-btn" style="width:32px;height:32px;border-radius:50%;border:2px solid #ccc;background:@color.Color.codigo" data-color-id="@color.Color.idColor" title="@color.Color.nombre"></button>
-				}
-			</div>
-			<p>Elige la talla:</p>
-			<div class="mb-3 d-flex flex-wrap gap-2" id="talla-options">
-				<!-- Aquí se llenarán las tallas según el color -->
-			</div>
-			<div id="stock-info" class="mb-2" style="display:none"></div>
-			<div class="mb-2">Total: <span id="total-producto">$0.00</span></div>
-			<!-- Cantidad y carrito -->
-			<div class="d-flex flex-wrap align-items-center gap-2">
-				<button class="qty-btn" id="btn-restar">−</button>
-				<span class="mx-2" id="cantidad-seleccionada">1</span>
-				<button class="qty-btn" id="btn-sumar">+</button>
-				<button class="add-to-cart ms-0 ms-md-3 mt-2 mt-md-0" id="btn-add-cart" disabled style="background:#ccc; color:#888; cursor:not-allowed; border:1px solid #ccc;">Añadir al carrito</button>
-			</div>
-		</div>
-	</div>
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-10">
+            <div class="card shadow p-4 mb-4 border-0 rounded-4">
+                <div class="row align-items-center gy-4">
+                    <!-- Imagen -->
+                    <div class="col-12 col-md-6 text-center mb-3 mb-md-0">
+                        <div id="imagen-producto"></div>
+                        <div id="miniaturas" class="d-flex justify-content-center gap-2 mt-3"></div>
+                    </div>
+                    <!-- Detalles del producto -->
+                    <div class="col-12 col-md-6">
+                        <h4 class="fw-bold mb-2" style="font-size:2rem;">@nombre</h4>
+                        <p class="text-muted mb-2">@descripcion</p>
+                        <p class="fw-semibold fs-4 mb-1" id="precio-producto" style="display:none"></p>
+                        <p class="mb-1"><span class="fw-bold">Categoría:</span> <span class="badge bg-secondary">@categoria</span></p>
+                        <p class="mb-1"><span class="fw-bold">Color:</span></p>
+                        <div class="mb-3 d-flex flex-wrap gap-2" id="color-options"></div>
+                        <p class="mb-1"><span class="fw-bold">Elige la talla:</span></p>
+                        <div class="mb-3 d-flex flex-wrap gap-2" id="talla-options"></div>
+                        <div id="stock-info" class="mb-2" style="display:none"></div>
+                        <div class="mb-2 fs-5">Total: <span id="total-producto" class="fw-bold">$0.00</span></div>
+                        <!-- Cantidad y carrito -->
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <button class="qty-btn" id="btn-restar">−</button>
+                            <span class="mx-2 fs-5" id="cantidad-seleccionada">1</span>
+                            <button class="qty-btn" id="btn-sumar">+</button>
+                            <button class="add-to-cart ms-0 ms-md-3 mt-2 mt-md-0 btn btn-dark px-4 py-2 rounded-3" id="btn-add-cart" disabled style="background:#ccc; color:#888; cursor:not-allowed; border:1px solid #ccc;">Añadir al carrito</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Reseñas de usuarios -->
 <div class="container my-5">
-    <h5 class="fw-bold mb-3">Reseñas de clientes</h5>
-    @{
-        var resenias = ViewBag.Resenias as List<NoVacancy.Models.Resenia>;
-    }
-    @if (resenias != null && resenias.Any())
-    {
-        <ul class="list-unstyled">
-        @foreach (var r in resenias.OrderByDescending(x => x.idResenia))
-        {
-            <li class="mb-4 border-bottom pb-3">
-                <div class="d-flex align-items-center mb-1">
-                    @for (int i = 1; i <= 5; i++)
-                    {
-                        <span style="font-size:1.2rem;color:@(i <= r.calificacion ? "#ffc107" : "#ccc");">&#9733;</span>
-                    }
-                    <span class="ms-2 text-muted small">@r.Producto?.nombre</span>
-                </div>
-                <div class="mb-1">@r.resenia</div>
-            </li>
+    <div class="card shadow border-0 rounded-4 p-4">
+        <h5 class="fw-bold mb-3">Reseñas de clientes</h5>
+        @{
+            var resenias = ViewBag.Resenias as List<NoVacancy.Models.Resenia>;
         }
-        </ul>
-    }
-    else
-    {
-        <div class="alert alert-info">Este producto aún no tiene reseñas.</div>
-    }
+        @if (resenias != null && resenias.Any())
+        {
+            <ul class="list-unstyled">
+            @foreach (var r in resenias.OrderByDescending(x => x.idResenia))
+            {
+                <li class="mb-4 border-bottom pb-3">
+                    <div class="d-flex align-items-center mb-1">
+                        <span class="me-2" style="color:#ffc107; font-size:1.2rem;">
+                            @for (int i = 0; i < r.calificacion; i++) { <i class="bi bi-star-fill"></i> }
+                            @for (int i = r.calificacion; i < 5; i++) { <i class="bi bi-star"></i> }
+                        </span>
+                        <span class="fw-bold">@r.Producto?.nombre</span>
+                    </div>
+                    <div class="mb-1">@r.resenia</div>
+                </li>
+            }
+            </ul>
+        }
+        else
+        {
+            <div class="alert alert-info">Este producto aún no tiene reseñas.</div>
+        }
+    </div>
 </div>
 
 @section Scripts {
@@ -262,6 +260,41 @@
 				actualizarCantidad(cantidad + 1, variante.cantidad, variante.limite);
 			}
 		});
+		// Reemplaza confirm() por un modal Bootstrap personalizado
+function mostrarModalCarrito(callback) {
+    let modalHtml = `
+    <div class="modal fade" id="modalCarritoConfirm" tabindex="-1" aria-labelledby="modalCarritoConfirmLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalCarritoConfirmLabel">Producto agregado al carrito</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+          </div>
+          <div class="modal-body">
+            ¿Deseas seguir comprando?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-dark" id="btnSeguirComprando">Sí, seguir comprando</button>
+            <button type="button" class="btn btn-secondary" id="btnIrCarrito">Ir al carrito</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+    // Elimina si ya existe
+    let oldModal = document.getElementById('modalCarritoConfirm');
+    if (oldModal) oldModal.remove();
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+    let modal = new bootstrap.Modal(document.getElementById('modalCarritoConfirm'));
+    modal.show();
+    document.getElementById('btnSeguirComprando').onclick = function() {
+        modal.hide();
+        if (callback) callback(true);
+    };
+    document.getElementById('btnIrCarrito').onclick = function() {
+        modal.hide();
+        if (callback) callback(false);
+    };
+}
 		document.getElementById('btn-add-cart').addEventListener('click', async function() {
 			if (!colorSeleccionado || !tallaSeleccionada) {
 				alert('Selecciona color y talla');
@@ -292,17 +325,12 @@
 					},
 					body: data
 				});
-				if (response.redirected) {
-					// El backend redirige siempre, pero aquí controlamos la UX
-					const seguir = confirm('Producto agregado al carrito. ¿Deseas seguir comprando?');
-					if (!seguir) {
-						window.location.href = response.url;
-					}
-				} else if (response.ok) {
-					const seguir = confirm('Producto agregado al carrito. ¿Deseas seguir comprando?');
-					if (!seguir) {
-						window.location.href = '/CarritoLinea/Shopping_cart';
-					}
+				if (response.redirected || response.ok) {
+					mostrarModalCarrito(function(seguir) {
+						if (!seguir) {
+							window.location.href = response.redirected ? response.url : '/CarritoLinea/Shopping_cart';
+						}
+					});
 				} else if (response.status === 401) {
 					window.location.href = '/Usuario/Login';
 				} else {
