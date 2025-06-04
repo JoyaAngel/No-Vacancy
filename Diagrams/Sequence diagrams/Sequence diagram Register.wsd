@@ -1,0 +1,34 @@
+@startuml Register
+Title Proceso de registro de usuario
+actor Registrante
+participant vistaRegistro
+participant servicioRegistro
+participant conectorBase
+database tablaUsuarios
+
+== Registrar usuario ==
+vistaRegistro -> Registrante: "Ingrese un nombre de usuario:"
+Registrante -> vistaRegistro: inputUsuario
+vistaRegistro -> Registrante: "Ingrese una contraseña:"
+Registrante -> vistaRegistro: inputContraseña
+vistaRegistro -> Registrante: "Ingrese un correo electrónico:"
+Registrante -> vistaRegistro: inputCorreo
+
+vistaRegistro -> servicioRegistro: arrDatos[0] = inputUsuario
+vistaRegistro -> servicioRegistro: arrDatos[1] = inputContraseña
+vistaRegistro -> servicioRegistro: arrDatos[2] = inputCorreo
+servicioRegistro -> conectorBase: arrDatos
+
+conectorBase -> conectorBase: usuario = setUsuario(datosUsuario[0])
+conectorBase -> conectorBase: contrasenia = setContraseña(HashSHA256(datosUsuario[1]))
+conectorBase -> conectorBase: correo = setCorreo(datosUsuario[2])
+conectorBase -> conectorBase: query = "INSERT INTO tUsuario (usuario, contrasenia, correo) VALUES (@usuario, @contrasenia, @correo)"
+
+conectorBase -> tablaUsuarios: ejecutar query
+tablaUsuarios --> conectorBase: insercionCorrecta = true
+
+alt [insercionCorrecta = true]
+    conectorBase -> servicioRegistro: estatus = "Correcto"
+    servicioRegistro -> vistaRegistro: HTTP 200
+end
+@enduml

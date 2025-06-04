@@ -1,0 +1,49 @@
+@startuml Buy product
+Title Diagrama de Secuencia - Confirmación de Pedido (Sin Pago)
+
+actor Cliente as cliente
+participant "Frontend" as frontend
+participant "Backend" as backend
+participant "Servicio de Email" as email
+database "Base de Datos" as db
+
+group Navegación y Carrito (Múltiples Intentos)
+    loop Hasta finalizar selección
+        cliente -> frontend: Navega a catálogo
+        frontend -> backend: GET /productos
+        backend -> db: Consulta productos disponibles
+        db --> backend: Lista de productos
+        backend --> frontend: Muestra catálogo
+        frontend --> cliente: Muestra productos
+        
+        cliente -> frontend: Agrega producto al carrito\n{productoId, cantidad}
+        frontend -> backend: POST /carrito/agregar
+        backend -> db: Verifica stock temporal
+        alt Stock suficiente
+            backend -> db: Guarda item en carrito
+            db --> backend: OK
+            backend --> frontend: OK (Carrito actualizado)
+        else Sin stock suficiente
+            backend --> frontend: Conflict (Sin stock)
+        end
+        frontend --> cliente: Muestra notificación (éxito/error)
+    end
+end
+
+group Confirmación de Pedido
+    cliente -> frontend: Solicita confirmar compra (sin pago)
+    frontend -> backend: POST /pedidos/confirmar {carritoId}
+    
+    alt Todos los items con stock
+        backend -> db: Bloquea stock y crea pedido\n(Estado: "Pendiente Pago")
+        db --> backend: Pedido creado (pedidoId)
+        backend -> email: Enviar confirmación\n(Asunto: "Pedido #pedidoId confirmado")
+        email --> cliente: Correo recibido
+        backend --> frontend: OK (Pedido confirmado)
+        frontend --> cliente: Muestra resumen\n"Pendiente de pago"
+    else Algún item sin stock
+        backend --> frontend: Conflict (Stock insuficiente)
+        frontend --> cliente: Notifica "Productos agotados"
+    end
+end
+@enduml

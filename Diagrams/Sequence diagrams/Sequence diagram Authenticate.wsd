@@ -1,0 +1,30 @@
+@startuml Authenticate
+Title Proceso de autenticación de usuario
+actor Participante
+participant vistaAutenticar
+participant Autenticar
+participant servicioAutenticar
+database usuarios
+
+== Inicio del proceso de autenticación ==
+Participante -> vistaAutenticar: Nombre de usuario
+vistaAutenticar -> Autenticar: inputUsuario
+Participante -> vistaAutenticar: Contraseña
+vistaAutenticar -> Autenticar: inputContrasenia
+
+Autenticar -> Autenticar: credenciales = setCredenciales(inputUsuario, inputContrasenia)
+
+== Búsqueda de credenciales ==
+Autenticar -> servicioAutenticar: buscarCredenciales(credenciales)
+activate servicioAutenticar
+servicioAutenticar -> usuarios: buscarCredenciales(credenciales)
+
+alt Credenciales válidas
+usuarios --> servicioAutenticar: queryResult(): true
+servicioAutenticar --> Autenticar: cargarPaginaUsuario(inputUser)
+else Credenciales no válidas
+usuarios --> servicioAutenticar: queryResult(false)
+servicioAutenticar --> Autenticar: HTTPS status code 404\n[credenciales no encontradas]
+end
+deactivate servicioAutenticar
+@enduml

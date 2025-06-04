@@ -1,0 +1,99 @@
+@startuml entity-relationship-diagram-n0-ecommerce
+!theme plain
+
+entity cliente {
+  * idCliente : NUMERO
+  --
+  nombre : CARACTER
+  correo : CARACTER
+  contraseña : CARACTER
+}
+
+entity carritocabecera {
+  * idCarrito : NUMERO
+  --
+  idCliente : NUMERO
+}
+
+entity carritolinea {
+  * idCarrito : NUMERO
+  * idProducto : NUMERO
+  --
+  cantidadProductos : NUMERO
+}
+
+entity producto {
+  * idProducto : NUMERO
+  --
+  nombre : CARACTER
+  descripcion : CARACTER
+  cantidad : NUMERO
+  precio : NUMERO
+  limite : NUMERO
+  idCategoria : NUMERO
+  idTalla : NUMERO
+  idColor : NUMERO
+}
+
+entity talla {
+  * idTalla : NUMERO
+  --
+  nombre : CARACTER
+}
+
+entity imagen {
+  * idImagen : NUMERO
+  --
+  nombre : CARACTER
+  idProducto : NUMERO
+}
+
+entity color {
+  * idColor : NUMERO
+  --
+  nombre : CARACTER
+}
+
+entity categoria {
+  * idCategoria : NUMERO
+  --
+  nombre : CARACTER
+}
+
+entity pedido {
+  * idPedido : NUMERO
+  --
+  rfc : CARACTER
+  regimen : CARACTER
+  codigoPostal : CARACTER
+  idCarrito : NUMERO
+}
+
+entity detalle {
+  * idDetalle : NUMERO
+  --
+  monto : CARACTER
+  idPedido : NUMERO
+}
+
+entity resenia {
+  * idResenia : NUMERO
+  --
+  resenia : CARACTER
+  calificacion : NUMERO
+  idProducto : NUMERO
+}
+
+' Relaciones
+cliente ||--o{ carritocabecera : ""
+carritocabecera ||--o{ carritolinea : ""
+carritocabecera ||--o{ pedido : ""
+carritolinea }o--|| producto : ""
+producto }o--|| talla : ""
+producto }o--|| color : ""
+producto }o--|| categoria : ""
+producto ||--o{ imagen : ""
+pedido ||--o{ detalle : ""
+producto ||--o{ resenia : ""
+
+@endumlD
