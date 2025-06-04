@@ -1,18 +1,25 @@
-@startuml entity-relationship-diagram-n0-ecommerce
+@startuml entity-relationship-diagram
 !theme plain
 
-entity cliente {
-  * idCliente : NUMERO
+entity usuario {
+  * idUsuario : NUMERO
   --
   nombre : CARACTER
+  rol : CARACTER
   correo : CARACTER
   contraseña : CARACTER
+  calle : CARACTER
+  numero : CARACTER
+  colonia : CARACTER
+  ciudad : CARACTER
+  estado : CARACTER
+  codigoPostal : CARACTER
 }
 
 entity carritocabecera {
   * idCarrito : NUMERO
   --
-  idCliente : NUMERO
+  idUsuario : NUMERO
 }
 
 entity carritolinea {
@@ -85,7 +92,7 @@ entity resenia {
 }
 
 ' Relaciones
-cliente ||--o{ carritocabecera : ""
+usuario ||--o{ carritocabecera : ""
 carritocabecera ||--o{ carritolinea : ""
 carritocabecera ||--o{ pedido : ""
 carritolinea }o--|| producto : ""
@@ -96,4 +103,4 @@ producto ||--o{ imagen : ""
 pedido ||--o{ detalle : ""
 producto ||--o{ resenia : ""
 
-@endumlD
+@enduml

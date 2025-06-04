@@ -1,0 +1,96 @@
+@startuml class diagram
+
+class Usuario {
+  id: String
+  nombre: String
+  rol: String
+  calle: String
+  numero: String
+  colonia: String
+  ciudad: String
+  estado: String
+  codigoPostal: String
+}
+
+class CarritoCabecera {
+  idUsuario: String
+  idCliente: int
+  idCarrito: int
+}
+
+class CarritoLinea {
+  idCarrito: int
+  idProducto: int
+  cantidadProducto: int
+}
+
+class Producto {
+  idProducto: int
+  nombre: String
+  descripcion: String
+  cantidad: int
+  precio: float
+  limite: int
+  idCategoria: int
+  idTalla: int
+  idColor: int
+}
+
+class Color {
+  idColor: int
+  nombre: String
+}
+
+class Imagen {
+  idImagen: int
+  nombre: String
+  idProducto: int
+}
+
+class Talla {
+  idTalla: int
+  nombre: String
+}
+
+class Categoria {
+  idCategoria: int
+  nombre: String
+}
+
+class Resenia {
+  idResenia: int
+  resenia: String
+  calificacion: int
+  idProducto: int
+}
+
+class Pedido {
+  idPedido: int
+  rfc: String
+  regimen: String
+  calle: String
+  numero: String
+  colonia: String
+  ciudad: String
+  estado: String
+  codigoPostalEnvio: String
+}
+
+class Detalle {
+  idDetalle: int
+  monto: double
+  idPedido: int
+}
+
+Usuario "1" -- "0..*" CarritoCabecera : tiene >
+CarritoCabecera "1" -- "0..*" CarritoLinea : contiene >
+CarritoLinea "1" -- "1" Producto : refiere >
+Producto "1" -- "0..*" Imagen : tiene >
+Producto "1" -- "0..*" Resenia : recibe >
+Producto "1" -- "1" Color : tiene >
+Producto "1" -- "1" Talla : tiene >
+Producto "1" -- "1" Categoria : pertenece >
+CarritoCabecera "1" -- "0..*" Pedido : genera >
+Pedido "1" -- "0..*" Detalle : contiene >
+
+@enduml

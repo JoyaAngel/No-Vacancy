@@ -15,6 +15,16 @@
 
 ---
 
+## Organización del equipo
+
+El equipo de desarrollo de No-Vacancy está conformado por miembros con roles definidos para asegurar una gestión eficiente del proyecto. Cada integrante asume responsabilidades específicas en áreas como desarrollo backend, frontend, documentación, pruebas y gestión de tareas.
+
+Para la coordinación y seguimiento de actividades, utilizamos la plataforma Trello. Puedes consultar el tablero del proyecto en el siguiente enlace:
+
+[Trello - No-Vacancy](https://trello.com/invite/b/67df53a8bf41c50c9c3b7200/ATTI3eb1f6769e73e755e746e254f6308fb01C32AD1A/no-vacancy)
+
+---
+
 ## Índice
 1. [Requisitos e Instalación](#requisitos-e-instalacion)
 2. [Estructura del Proyecto](#estructura-del-proyecto)
@@ -182,11 +192,11 @@ Para dudas o soporte, contacte al equipo de desarrollo.
 
 ## Diagramas del Sistema <a name="diagramas-del-sistema"></a>
 
-A continuación se presentan los principales diagramas del sistema. Puedes encontrar los archivos fuente y versiones editables en la carpeta `Diagrams/`.
+A continuación se presentan los principales diagramas del sistema. Puedes encontrar los archivos fuente y versiones editables en la carpeta `Documentacion/Diagrams/`.
 
 ### Diagrama de Componentes
 
-![Diagrama de Componentes](Diagrams/Diagrama%20de%20componentes.png)
+![Diagrama de Componentes](Documentacion/Diagrams/Components%20Diagram/Diagrama%20de%20componentes.png)
 
 > **Descripción:**
 > Este diagrama muestra la arquitectura general del sistema, incluyendo la interacción entre la interfaz de usuario, el backend y la base de datos.
@@ -197,49 +207,49 @@ A continuación se presentan los principales diagramas del sistema. Puedes encon
 
 #### 1. Registro e Inicio de Sesión
 
-![Registro e Inicio de Sesión](Diagrams/Use%20Case%20Diagrams/sing%20in%20and%20log%20in.png)
+![Registro e Inicio de Sesión](Documentacion/Diagrams/Use%20Case%20Diagrams/sing%20in%20and%20log%20in.png)
 
 #### 2. Navegación y Búsqueda de Productos
 
-![Navegación y Búsqueda de Productos](Diagrams/Use%20Case%20Diagrams/product%20navigation%20and%20search.png)
+![Navegación y Búsqueda de Productos](Documentacion/Diagrams/Use%20Case%20Diagrams/product%20navigation%20and%20search.png)
 
 #### 3. Carrito de Compras y Pedidos
 
-![Carrito de Compras y Pedidos](Diagrams/Use%20Case%20Diagrams/shopping%20cart%20and%20orders.png)
+![Carrito de Compras y Pedidos](Documentacion/Diagrams/Use%20Case%20Diagrams/shopping%20cart%20and%20orders.png)
 
 #### 4. Gestión de Productos (Administrador)
 
-![Gestión de Productos](Diagrams/Use%20Case%20Diagrams/product%20management.png)
+![Gestión de Productos](Documentacion/Diagrams/Use%20Case%20Diagrams/product%20management.png)
 
 #### 5. Pedidos e Interacción con Reseñas
 
-![Pedidos e Interacción con Reseñas](Diagrams/Use%20Case%20Diagrams/order%20and%20review%20management.png)
+![Pedidos e Interacción con Reseñas](Documentacion/Diagrams/Use%20Case%20Diagrams/order%20and%20review%20management.png)
 
-> **Nota:** Puedes consultar los archivos fuente y versiones editables de estos diagramas en la carpeta `Diagrams/Use Case Diagrams/`.
+> **Nota:** Puedes consultar los archivos fuente y versiones editables de estos diagramas en la carpeta `Documentacion/Diagrams/Use Case Diagrams/`.
 
 ---
 
 ### Diagramas de Secuencia
 
-A continuación se muestran los principales diagramas de secuencia del sistema. Puedes encontrar los archivos fuente y versiones editables en la carpeta `Diagrams/Sequence diagrams/`.
+A continuación se muestran los principales diagramas de secuencia del sistema. Puedes encontrar los archivos fuente y versiones editables en la carpeta `Documentacion/Diagrams/Sequence diagrams/`.
 
 #### 1. Autenticación
 
-![Diagrama de Secuencia - Autenticación](Diagrams/Sequence%20diagrams/Authenticate.png)
+![Diagrama de Secuencia - Autenticación](Documentacion/Diagrams/Sequence%20diagrams/Authenticate.png)
 
 > **Descripción:**
 > Este diagrama ilustra el proceso de autenticación de usuarios, desde la introducción de credenciales hasta la validación y respuesta del sistema.
 
 #### 2. Registro de Usuario
 
-![Diagrama de Secuencia - Registro](Diagrams/Sequence%20diagrams/Register.png)
+![Diagrama de Secuencia - Registro](Documentacion/Diagrams/Sequence%20diagrams/Register.png)
 
 > **Descripción:**
 > Representa el flujo de registro de un nuevo usuario, incluyendo la validación de datos y la creación de la cuenta.
 
 #### 3. Comprar Producto
 
-![Diagrama de Secuencia - Comprar producto](Diagrams/Sequence%20diagrams/Buy%20product.png)
+![Diagrama de Secuencia - Comprar producto](Documentacion/Diagrams/Sequence%20diagrams/Buy%20product.png)
 
 > **Descripción:**
 > Muestra el proceso de compra de un producto, desde la selección en el catálogo hasta la confirmación del pedido.
@@ -248,10 +258,19 @@ A continuación se muestran los principales diagramas de secuencia del sistema. 
 
 ### Diagrama de Clases
 
-<!-- Aquí se insertará el diagrama de clases del sistema una vez generado. -->
+![Diagrama de Clases](Documentacion/Diagrams/Class%20Diagram/class%20diagram.png)
 
 > **Descripción:**
-> Este diagrama mostrará la estructura de clases principales del sistema, sus atributos, métodos y relaciones.
+> Este diagrama muestra la estructura de clases principales del sistema, sus atributos y relaciones.
+
+---
+
+### Diagrama Entidad-Relación
+
+![Diagrama Entidad-Relación](Documentacion/Diagrams/Entity-Relationship%20Diagram/Entity-Relationship%20Diagram.png)
+
+> **Descripción:**
+> Este diagrama representa la estructura lógica de la base de datos, mostrando entidades, atributos y relaciones clave.
 
 ---
 
