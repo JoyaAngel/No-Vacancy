@@ -1,0 +1,31 @@
+﻿@model NoVacancy.ViewModels.RestablecerContraseniaViewModel
+@{
+    ViewData["Title"] = "Restablecer contraseña";
+}
+
+<div class="container my-5 form-container">
+    <h4 class="fw-bold">Restablecer contraseña</h4>
+
+    @using (Html.BeginForm("RestablecerContrasenia", "Usuario", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.Email)
+        @Html.HiddenFor(m => m.Token)
+
+        <div class="mb-3">
+            <label class="form-label">Nueva contraseña</label>
+            @Html.PasswordFor(m => m.NuevaContrasenia, new { @class = "form-control", required = "required" })
+            @Html.ValidationMessageFor(m => m.NuevaContrasenia, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Confirmar contraseña</label>
+            @Html.PasswordFor(m => m.ConfirmarContrasenia, new { @class = "form-control", required = "required" })
+            @Html.ValidationMessageFor(m => m.ConfirmarContrasenia, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-btn-center">
+            <button type="submit" class="btn btn-dark w-100 py-2 fs-5 mt-3">Restablecer</button>
+        </div>
+    }
+</div>
